@@ -1,0 +1,37 @@
+{
+  "button/color/background":          { "value": "{semantic.color.action.primary}" },
+  "button/color/background-hover":    { "value": "{semantic.color.action.primary-hover}" },
+  "button/color/background-active":   { "value": "{semantic.color.action.primary-active}" },
+  "button/color/background-disabled": { "value": "{semantic.color.action.primary-disabled}" },
+  "button/color/label":               { "value": "{semantic.color.text.on-action}" },
+  "button/color/label-disabled":      { "value": "{semantic.color.text.on-action-disabled}" },
+  "button/color/border":              { "value": "{semantic.color.border.action}" },
+  "button/color/border-disabled":     { "value": "{semantic.color.border.action-disabled}" },
+
+  "button/spacing/padding-x-sm":      { "value": "{semantic.spacing.component-sm}" },
+  "button/spacing/padding-x-md":      { "value": "{semantic.spacing.component-md}" },
+  "button/spacing/padding-x-lg":      { "value": "{semantic.spacing.component-lg}" },
+  "button/spacing/padding-y-sm":      { "value": "{semantic.spacing.component-xs}" },
+  "button/spacing/padding-y-md":      { "value": "{semantic.spacing.component-sm}" },
+  "button/spacing/padding-y-lg":      { "value": "{semantic.spacing.component-md}" },
+  "button/spacing/gap":               { "value": "{semantic.spacing.component-xs}" },
+
+  "button/radius/sm":                 { "value": "{semantic.radius.component-sm}" },
+  "button/radius/md":                 { "value": "{semantic.spacing.component-md}" },
+  "button/radius/lg":                 { "value": "{semantic.radius.component-full}" },
+
+  "button/typography/label-sm/family":  { "value": "{semantic.typography.label-sm.family}" },
+  "button/typography/label-sm/size":    { "value": "{semantic.typography.label-sm.size}" },
+  "button/typography/label-sm/weight":  { "value": "{semantic.typography.label-sm.weight}" },
+  "button/typography/label-sm/leading": { "value": "{semantic.typography.label-sm.leading}" },
+
+  "button/typography/label-md/family":  { "value": "{semantic.typography.label-md.family}" },
+  "button/typography/label-md/size":    { "value": "{semantic.typography.label-md.size}" },
+  "button/typography/label-md/weight":  { "value": "{semantic.typography.label-md.weight}" },
+  "button/typography/label-md/leading": { "value": "{semantic.typography.label-md.leading}" },
+
+  "button/typography/label-lg/family":  { "value": "{semantic.typography.label-lg.family}" },
+  "button/typography/label-lg/size":    { "value": "{semantic.typography.label-lg.size}" },
+  "button/typography/label-lg/weight":  { "value": "{semantic.typography.label-lg.weight}" },
+  "button/typography/label-lg/leading": { "value": "{semantic.typography.label-lg.leading}" }
+}

@@ -1,0 +1,143 @@
+{
+  "identity": {
+    "name": "Button",
+    "category": "action",
+    "version": "0.1.0",
+    "figmaFileKey": "J6PCrb0xiyDTPxnB5hTfP3",
+    "figmaNodeId": "10:3"
+  },
+
+  "intent": "Full-width primary CTA button for banking interfaces. Use for the single most important action on a screen. Set to fill container when placed inside a layout frame. Default width is 300px, matching a standard mobile canvas. Intended for login screens, confirmation flows, and onboarding steps.",
+
+  "props": {
+    "size": {
+      "type": "enum",
+      "values": ["Small", "Medium", "Large"],
+      "default": "Small",
+      "description": "Controls padding, border radius, and typography scale. Does not change color."
+    },
+    "state": {
+      "type": "enum",
+      "values": ["Default", "Hover", "Active", "Disabled"],
+      "default": "Default",
+      "description": "Controls background, border, and label color. Does not change size or typography."
+    }
+  },
+
+  "tokens": {
+    "color": {
+      "description": "Color tokens are state-scoped. The same token applies across all sizes within a state.",
+      "byState": {
+        "Default": {
+          "background":  "button/color/background",
+          "border":      "button/color/border",
+          "label":       "button/color/label"
+        },
+        "Hover": {
+          "background":  "button/color/background-hover",
+          "border":      "button/color/border",
+          "label":       "button/color/label"
+        },
+        "Active": {
+          "background":  "button/color/background-active",
+          "border":      "button/color/border",
+          "label":       "button/color/label"
+        },
+        "Disabled": {
+          "background":  "button/color/background-disabled",
+          "border":      "button/color/border-disabled",
+          "label":       "button/color/label-disabled"
+        }
+      }
+    },
+    "spacing": {
+      "description": "Spacing and radius tokens are size-scoped. Gap is shared across all sizes.",
+      "shared": {
+        "gap":           "button/spacing/gap"
+      },
+      "bySize": {
+        "Small": {
+          "padding-x":   "button/spacing/padding-x-sm",
+          "padding-y":   "button/spacing/padding-y-sm",
+          "radius":      "button/radius/sm"
+        },
+        "Medium": {
+          "padding-x":   "button/spacing/padding-x-md",
+          "padding-y":   "button/spacing/padding-y-md",
+          "radius":      "button/radius/md"
+        },
+        "Large": {
+          "padding-x":   "button/spacing/padding-x-lg",
+          "padding-y":   "button/spacing/padding-y-lg",
+          "radius":      "button/radius/lg"
+        }
+      }
+    },
+    "typography": {
+      "description": "Typography tokens are size-scoped. Family, weight, and leading are identical across sizes; only size differs.",
+      "bySize": {
+        "Small": {
+          "family":      "button/typography/label-sm/family",
+          "size":        "button/typography/label-sm/size",
+          "weight":      "button/typography/label-sm/weight",
+          "leading":     "button/typography/label-sm/leading"
+        },
+        "Medium": {
+          "family":      "button/typography/label-md/family",
+          "size":        "button/typography/label-md/size",
+          "weight":      "button/typography/label-md/weight",
+          "leading":     "button/typography/label-md/leading"
+        },
+        "Large": {
+          "family":      "button/typography/label-lg/family",
+          "size":        "button/typography/label-lg/size",
+          "weight":      "button/typography/label-lg/weight",
+          "leading":     "button/typography/label-lg/leading"
+        }
+      }
+    }
+  },
+
+  "whenToUse": [
+    "Use for the single most important action on a screen.",
+    "Use on login screens, confirmation flows, and onboarding steps.",
+    "Use when the action is irreversible or high-stakes and must stand out.",
+    "Use at the bottom of a form or modal as the primary submit action.",
+    "Use Size=Large for full-bleed mobile layouts where the button fills the viewport width.",
+    "Use Size=Medium as the default for most screens.",
+    "Use Size=Small in compact contexts such as cards or inline confirmations."
+  ],
+
+  "whenNotToUse": [
+    "Do not use for secondary or tertiary actions — there is no secondary variant in this system.",
+    "Do not use more than one Button per screen or modal view.",
+    "Do not use for navigation — use a link or a nav element instead.",
+    "Do not use for destructive actions such as delete or cancel without a separate confirmation pattern.",
+    "Do not use State=Hover or State=Active in static implementations — these are interaction states managed by the UI layer.",
+    "Do not manually set State=Disabled without also making the button non-interactive in code."
+  ],
+
+  "constraints": [
+    "Width is full-width (fill container). Do not set a fixed width other than the 300px default unless inside a layout frame.",
+    "Label text is always center-aligned and single-line. Do not wrap the label.",
+    "All color values must resolve through the token chain — never hardcode hex values.",
+    "Typography is always Inter SemiBold (weight 600). Do not override font family or weight.",
+    "There is only one variant axis for color (state) and one for size. No other visual properties are exposed.",
+    "The token alias chain must remain unbroken: component tokens alias semantic tokens, semantic tokens alias primitives."
+  ],
+
+  "alternatives": [
+    {
+      "situation": "Secondary or ghost action needed alongside this button",
+      "recommendation": "No secondary button exists in this system yet. Add a new component to the index before implementing."
+    },
+    {
+      "situation": "Inline or text-only action",
+      "recommendation": "No link or text-action component exists in this system yet. Do not repurpose Button for this."
+    },
+    {
+      "situation": "Icon-only action",
+      "recommendation": "No icon button exists in this system yet. Do not use Button with an empty label."
+    }
+  ]
+}

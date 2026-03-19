@@ -1,0 +1,39 @@
+{
+  "version": "0.1.0",
+  "description": "Authoritative list of all components in this design system. Check this file before creating or referencing any component. Do not assume a component exists if it is not listed here.",
+  "components": [
+    {
+      "name": "Button",
+      "status": "defined",
+      "category": "action",
+      "figmaNodeId": "10:3",
+      "figmaFileKey": "J6PCrb0xiyDTPxnB5hTfP3",
+      "contract": "contracts/button.contract.json",
+      "docs": "docs/button.md",
+      "props": {
+        "size": ["Small", "Medium", "Large"],
+        "state": ["Default", "Hover", "Active", "Disabled"]
+      },
+      "tokenFiles": [
+        "tokens/component.json",
+        "tokens/semantic.json",
+        "tokens/primitives.json"
+      ],
+      "notes": "Primary CTA only. One per screen. Full-width. No secondary or icon variant exists yet."
+    }
+  ],
+  "notYetDefined": [
+    {
+      "name": "Button (Secondary)",
+      "reason": "No secondary button variant exists in the Figma file. Do not implement until defined."
+    },
+    {
+      "name": "Button (Icon)",
+      "reason": "No icon button variant exists in the Figma file. Do not implement until defined."
+    },
+    {
+      "name": "Link / Text Action",
+      "reason": "No link or text-action component exists in the Figma file. Do not implement until defined."
+    }
+  ]
+}

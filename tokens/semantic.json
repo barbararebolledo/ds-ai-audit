@@ -1,0 +1,47 @@
+{
+  "color/action/primary":          { "value": "{primitives.color.blue.600}" },
+  "color/action/primary-hover":    { "value": "{primitives.color.blue.700}" },
+  "color/action/primary-active":   { "value": "{primitives.color.blue.800}" },
+  "color/action/primary-disabled": { "value": "{primitives.color.blue.200}" },
+
+  "color/text/on-action":          { "value": "{primitives.color.neutral.0}" },
+  "color/text/on-action-disabled": { "value": "{primitives.color.neutral.400}" },
+  "color/text/primary":            { "value": "{primitives.color.neutral.900}" },
+  "color/text/secondary":          { "value": "{primitives.color.neutral.600}" },
+  "color/text/disabled":           { "value": "{primitives.color.neutral.400}" },
+
+  "color/border/action":           { "value": "{primitives.color.blue.600}" },
+  "color/border/action-disabled":  { "value": "{primitives.color.blue.200}" },
+  "color/border/subtle":           { "value": "{primitives.color.neutral.200}" },
+
+  "color/surface/page":            { "value": "{primitives.color.neutral.50}" },
+  "color/surface/overlay":         { "value": "{primitives.color.neutral.0}" },
+
+  "color/feedback/error":          { "value": "{primitives.color.red.600}" },
+  "color/feedback/success":        { "value": "{primitives.color.green.600}" },
+  "color/feedback/warning":        { "value": "{primitives.color.amber.600}" },
+
+  "spacing/component-xs":          { "value": "{primitives.spacing.2}" },
+  "spacing/component-sm":          { "value": "{primitives.spacing.3}" },
+  "spacing/component-md":          { "value": "{primitives.spacing.4}" },
+  "spacing/component-lg":          { "value": "{primitives.spacing.6}" },
+
+  "radius/component-sm":           { "value": "{primitives.radius.md}" },
+  "radius/component-md":           { "value": "{primitives.radius.lg}" },
+  "radius/component-full":         { "value": "{primitives.radius.full}" },
+
+  "typography/label-sm/family":    { "value": "{primitives.typography.family.base}" },
+  "typography/label-sm/size":      { "value": "{primitives.typography.size.sm}" },
+  "typography/label-sm/weight":    { "value": "{primitives.typography.weight.semibold}" },
+  "typography/label-sm/leading":   { "value": "{primitives.typography.leading.tight}" },
+
+  "typography/label-md/family":    { "value": "{primitives.typography.family.base}" },
+  "typography/label-md/size":      { "value": "{primitives.typography.size.md}" },
+  "typography/label-md/weight":    { "value": "{primitives.typography.weight.semibold}" },
+  "typography/label-md/leading":   { "value": "{primitives.typography.leading.tight}" },
+
+  "typography/label-lg/family":    { "value": "{primitives.typography.family.base}" },
+  "typography/label-lg/size":      { "value": "{primitives.typography.size.lg}" },
+  "typography/label-lg/weight":    { "value": "{primitives.typography.weight.semibold}" },
+  "typography/label-lg/leading":   { "value": "{primitives.typography.leading.tight}" }
+}

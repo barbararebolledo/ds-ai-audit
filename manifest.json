@@ -1,0 +1,21 @@
+{
+  "name": "ds-ai-poc",
+  "version": "0.1.0",
+  "description": "AI-ready design system POC. Banking CTA button with three-layer token architecture.",
+  "status": "poc",
+  "components": [
+    {
+      "name": "Button",
+      "contract": "contracts/button.contract.json",
+      "docs": "docs/button.md",
+      "figmaFileKey": "J6PCrb0xiyDTPxnB5hTfP3",
+      "figmaNodeId": "10:3"
+    }
+  ],
+  "tokens": {
+    "primitives": "tokens/primitives.json",
+    "semantic": "tokens/semantic.json",
+    "component": "tokens/component.json"
+  },
+  "index": "index/components.index.json"
+}
