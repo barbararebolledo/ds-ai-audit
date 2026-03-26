@@ -1,0 +1,456 @@
+{
+  "audit_metadata": {
+    "date": "2026-03-26",
+    "auditor": "Claude Code via Figma MCP",
+    "scope": "AI-readiness assessment of Toimi Foundation and Component libraries",
+    "scoring_scale": "0-4: 0=not present/broken, 1=partial/major gaps, 2=present/inconsistent, 3=present/consistent/minor issues, 4=fully implemented/scalable",
+    "figma_files": {
+      "foundation": {
+        "name": "Toimi Foundation library",
+        "fileKey": "1r3JHMHmyfNStaHMj2WLRl",
+        "url": "https://www.figma.com/design/1r3JHMHmyfNStaHMj2WLRl/Toimi-Foundation-library"
+      },
+      "component": {
+        "name": "Toimi Component library",
+        "fileKey": "RZkwkleabaJLnlPwlDsJdA",
+        "url": "https://www.figma.com/design/RZkwkleabaJLnlPwlDsJdA/Toimi-Component-library"
+      }
+    }
+  },
+  "foundation_library": {
+    "inventory": {
+      "pages": [
+        "Thumb",
+        "Foundation (separator)",
+        "Changelog",
+        "Colors",
+        "Typography",
+        "Image radius",
+        "Overlay"
+      ],
+      "variable_collections": {
+        "Colors primitives": {
+          "variable_count": 78,
+          "modes": ["Mode 1"],
+          "groups": {
+            "primary": 10,
+            "grey": 13,
+            "red": 10,
+            "green": 1,
+            "orange": 10,
+            "blue": 10,
+            "opacity/white": 12,
+            "opacity/black": 12
+          }
+        },
+        "Themes": {
+          "variable_count": 58,
+          "modes": ["Light", "Dark"],
+          "groups": {
+            "Background": 2,
+            "Foreground": 8,
+            "Surface": 9,
+            "On-surface": 8,
+            "Opacity": 5,
+            "States overlay": 7,
+            "Elevation": 1,
+            "Border": 5,
+            "Gradients": 10
+          }
+        },
+        "Typography": {
+          "variable_count": 25,
+          "modes": ["Mobile", "Tablet", "Desktop"],
+          "groups": {
+            "font/family": 2,
+            "font/weight": 3,
+            "font/size": 10,
+            "font/line height": 10
+          }
+        },
+        "Grid": {
+          "variable_count": 5,
+          "modes": ["Mobile", "Tablet", "Desktop", "Large Desktop"],
+          "groups": {
+            "Layout grid/Breakpoint max": 1,
+            "Layout grid/Breakpoint min": 1,
+            "Layout grid/Column": 1,
+            "Layout grid/Margin": 1,
+            "Layout grid/Gutter": 1
+          }
+        },
+        "Border size": {
+          "variable_count": 11,
+          "modes": ["Mode 1"],
+          "groups": {
+            "stroke": 3,
+            "radius": 7
+          }
+        },
+        "Spacing": {
+          "variable_count": 15,
+          "modes": ["Mode 1"],
+          "values": [4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 48, 56, 64, 96, 128]
+        }
+      },
+      "total_variables": 192
+    },
+    "dimensions": {
+      "token_implementation": {
+        "score": 4,
+        "finding": "All 192 tokens are implemented as Figma Variables across 6 well-structured collections. No hardcoded values at the foundation level. Each collection has appropriate mode support: Themes has Light/Dark, Typography has Mobile/Tablet/Desktop, Grid has four breakpoints.",
+        "recommendation": "No action needed. This is the gold standard for token implementation in Figma."
+      },
+      "alias_chain_integrity": {
+        "score": 4,
+        "finding": "All 58 Themes variables alias directly to Colors primitives. Every alias was resolved and verified: 100% chain integrity across both Light and Dark modes. No broken references, no orphaned aliases, no circular references.",
+        "recommendation": "No action needed. Maintain this discipline as the system grows."
+      },
+      "token_architecture_depth": {
+        "score": 3,
+        "finding": "Foundation provides two well-structured layers: primitives (Colors primitives, Spacing, Typography, Border size) and semantic (Themes). Semantic tokens alias primitives correctly. However, Foundation does not scaffold or anticipate a component-level token layer. Spacing, Typography, and Borders are consumed directly as terminal values with no intermediate aliasing possible. The architecture supports two-layer resolution but not three.",
+        "recommendation": "P2: Consider restructuring non-colour collections (Spacing, Typography, Borders) to support a semantic intermediate layer, or document that component-level overrides for these properties are not supported by the architecture."
+      },
+      "primitive_naming": {
+        "score": 2,
+        "finding": "Inconsistent across collections. Colors use clean value-based naming (color/primary/500, color/grey/200). Typography uses scale-based naming (font/size/xl). But Spacing variables are named by raw numeric value ('4', '8', '12') with no namespace or scale prefix. Border size collection mixes two concerns: stroke widths (stroke/md) and border radii (radius/radius-lg) with a redundant 'radius/' prefix. The collection name 'Colors primitives ' has a trailing space. Green colour scale has only one value (green/500) compared to 10 values for every other hue.",
+        "details": {
+          "color_naming": "color/{hue}/{scale} -- consistent, parseable",
+          "theme_naming": "{category}/{role} -- consistent, parseable",
+          "typography_naming": "font/{property}/{scale} -- consistent, parseable",
+          "spacing_naming": "bare numbers (4, 8, 12) -- no namespace, not parseable as tokens",
+          "border_naming": "mixed stroke/{size} and radius/{name} in one collection",
+          "collection_name_issue": "'Colors primitives ' has trailing space"
+        },
+        "recommendation": "P1: Rename spacing variables to spacing/{scale} or space/{value} (e.g., spacing/4, spacing/8). P2: Split Border size into two collections: Stroke and Radius. P2: Add namespace to all spacing variables. P3: Fix 'Colors primitives' trailing space. P3: Complete green colour scale (add 50-400, 600-900)."
+      },
+      "component_to_token_binding": {
+        "score": "N/A",
+        "finding": "Foundation is a token-only library with no components except decorative image ratio components on the Image radius page. Component binding is assessed at the Component library level.",
+        "recommendation": "N/A"
+      },
+      "component_description_coverage": {
+        "score": "N/A",
+        "finding": "Foundation contains 8 image ratio components (3:2, Golden ratio, 1:1, 16:9, 4:3, 21:9, 4:5, 9:16) with no descriptions. These are not core UI components.",
+        "recommendation": "Add descriptions to image ratio components stating their intended use case and constraints."
+      },
+      "naming_convention_consistency": {
+        "score": 2,
+        "finding": "Three different naming conventions coexist. Colors and Typography use slash-separated hierarchical naming (color/primary/500, font/size/xl). Spacing uses bare numbers with no namespace. Border size mixes stroke and radius concerns in one collection. Page names use emoji status markers (🟠) which is informational but not machine-parseable for status tracking. The Themes collection is well-named with clear semantic categories.",
+        "recommendation": "P1: Establish a single naming convention document. All variables should follow {collection}/{category}/{scale-or-role} pattern. P2: Rename spacing variables. P3: Split or rename Border size collection."
+      },
+      "web_readiness_gap": {
+        "score": 2,
+        "finding": "Typography has responsive modes (Mobile/Tablet/Desktop) with size scaling for larger text sizes. Grid has four responsive breakpoints (Mobile/Tablet/Desktop/Large Desktop) with column, margin, and gutter values. However: Spacing is single-mode with no responsive scaling. Border radii are single-mode. No elevation/shadow tokens exist (only one Elevation/50 colour alias in Themes). No z-index tokens. No animation/motion tokens. No platform-specific overrides for iOS/Android/Web.",
+        "details": {
+          "responsive_typography": true,
+          "responsive_grid": true,
+          "responsive_spacing": false,
+          "responsive_border_radius": false,
+          "elevation_tokens": false,
+          "z_index_tokens": false,
+          "motion_tokens": false,
+          "platform_overrides": false
+        },
+        "recommendation": "P1: Add elevation/shadow variable collection with at least 5 levels. P1: Add responsive modes to Spacing collection (at minimum Mobile/Desktop). P2: Add z-index token collection. P2: Add motion/animation token collection (duration, easing). P3: Consider platform-specific modes for native vs web rendering differences."
+      }
+    },
+    "data_gaps": [
+      "Green colour scale is incomplete (only green/500 exists). Cannot determine if this is intentional or an oversight.",
+      "Overlay page content was inventoried but individual overlay variables were not deep-inspected.",
+      "No text styles or effect styles were audited (only variables). Text styles may carry additional hardcoded values."
+    ]
+  },
+  "component_library": {
+    "inventory": {
+      "pages": {
+        "total": 35,
+        "separator_pages": 5,
+        "status_pages": 2,
+        "template_pages": 1,
+        "component_pages": 27
+      },
+      "components": {
+        "total_component_sets": 40,
+        "status_breakdown": {
+          "done": ["Accordion", "Alert", "Avatar", "Badge", "Banner", "BottomAppBar", "BottomSheet", "Buttons", "Card", "Checkbox", "CodeInput", "Docked", "Divider", "Input forms", "Keypad", "PaginationDots", "Pickers", "Progress Circle", "Progress Line", "Radio button", "RiskIndicator", "Snackbar", "Toggle"],
+          "wip": ["ListItem", "List header", "List Heading", "Tabs", "TopAppBar"],
+          "critical": ["Tab Bar", "Tag"]
+        },
+        "components_with_descriptions": 6,
+        "components_without_descriptions": 34,
+        "description_rate_percent": 15
+      },
+      "local_variables": {
+        "collections": 1,
+        "variables": 0,
+        "note": "Empty local collection. All bindings reference Foundation library variables. This is the correct architectural pattern."
+      }
+    },
+    "dimensions": {
+      "token_implementation": {
+        "score": "N/A",
+        "finding": "Component library correctly consumes Foundation variables rather than defining its own tokens. One empty local variable collection exists ('Variable collection' with 0 variables). This is architecturally sound -- component libraries should reference foundation tokens, not duplicate them.",
+        "recommendation": "Consider whether component-level tokens are needed. The current system binds components directly to Foundation semantic tokens (Themes). A third layer of component-specific tokens (e.g., button/fill/primary, button/padding/horizontal) would allow per-component overrides without affecting other components sharing the same semantic token. This is a structural decision, not a deficiency at current scale."
+      },
+      "alias_chain_integrity": {
+        "score": 4,
+        "finding": "Cross-library chain verified: all component bindings resolve correctly to Foundation collections (Themes, Spacing, Typography, Borders), and Themes variables resolve to Colors primitives. No broken references across the library boundary. Every sampled binding chain terminates at a valid Foundation variable.",
+        "details": {
+          "verified_chains": {
+            "button_fill": "Component → Themes/States overlay/lightener-enabled → Primitives/opacity/white-0",
+            "button_text_fill": "Component → Themes/Foreground/primary → Primitives/color/grey/1000",
+            "button_padding": "Component → Spacing/16 (terminal value)",
+            "button_radius": "Component → Borders/radius/radius full (terminal value)",
+            "button_stroke": "Component → Borders/stroke/xs (terminal value)",
+            "button_font_size": "Component → Typography/font/size/xs (terminal value)",
+            "button_font_family": "Component → Typography/font/family/body (terminal value)",
+            "button_line_height": "Component → Typography/font/line height/xs (terminal value)"
+          }
+        },
+        "recommendation": "No action needed. Maintain cross-library reference integrity as new components are added."
+      },
+      "token_architecture_depth": {
+        "score": 1,
+        "finding": "Components bind directly to Foundation semantic tokens (Themes) and terminal-value collections (Spacing, Typography, Borders). No component-level token collection exists. One empty local variable collection ('Variable collection' with 0 variables). There is no override point between semantic meaning and component binding. Changing a semantic token changes every component consuming it. The architecture is two-layer for colours (primitive to semantic to binding) and one-layer for everything else (primitive to binding).",
+        "recommendation": "P2: Create a component-level token collection in the Component library that aliases Foundation tokens. Components bind to component tokens; component tokens alias semantic tokens. This decouples component visual decisions from the semantic layer and enables per-component overrides."
+      },
+      "primitive_naming": {
+        "score": "N/A",
+        "finding": "Component library does not define primitives. Assessed at Foundation level.",
+        "recommendation": "N/A"
+      },
+      "component_to_token_binding": {
+        "score": 2,
+        "finding": "Binding coverage is inconsistent across components. Some components are extensively bound, others minimally. Sampled 6 components in detail.",
+        "details": {
+          "button": {
+            "binding_quality": "excellent",
+            "bound_properties": ["fills", "paddingLeft", "paddingRight", "topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius", "strokeTopWeight", "strokeBottomWeight", "strokeLeftWeight", "strokeRightWeight", "fontSize", "fontFamily", "fontStyle", "lineHeight"],
+            "unbound_issues": [],
+            "variant_count": 45,
+            "note": "Button and ActionButton both have 45 variants each (Type: Primary/Secondary/Ghost, Size: S/M/L, State: Enable + interaction states). Both are extensively bound."
+          },
+          "text_input_solid": {
+            "binding_quality": "strong",
+            "bound_properties": ["paddingLeft", "paddingTop", "paddingRight", "paddingBottom", "topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius", "fills", "fontSize", "fontFamily", "fontStyle", "lineHeight"],
+            "unbound_issues": ["Bounding box rectangle with hardcoded grey fill"],
+            "variant_count": 10
+          },
+          "alert": {
+            "binding_quality": "good",
+            "bound_properties": ["itemSpacing", "paddingLeft", "paddingTop", "paddingRight", "paddingBottom", "fills", "fontSize", "fontFamily", "fontStyle", "lineHeight"],
+            "unbound_issues": ["Bounding box rectangle with hardcoded grey fill"],
+            "variant_count": 2
+          },
+          "checkbox": {
+            "binding_quality": "moderate",
+            "bound_properties": ["topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius", "strokeTopWeight", "strokeBottomWeight", "strokeLeftWeight", "strokeRightWeight", "strokes", "fills (check icon)", "fontSize", "fontFamily", "fontStyle", "lineHeight (title)"],
+            "unbound_issues": ["Bounding box rectangle with hardcoded grey fill (r:0.85, g:0.85, b:0.85)"],
+            "variant_count": 12
+          },
+          "radio": {
+            "binding_quality": "weak",
+            "bound_properties": ["topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius", "strokes"],
+            "unbound_issues": ["No fill bindings on any node. Only radius and stroke are bound."],
+            "variant_count": 12,
+            "note": "Radio has 12 variants (Active: True/False x Status: Enable/Hover/On click/Focus/Disable/Error) but minimal variable binding. Most visual properties appear hardcoded."
+          },
+          "toggle": {
+            "binding_quality": "weak",
+            "bound_properties": ["fills (frame)", "strokes (ellipse)"],
+            "unbound_issues": ["Knob frame has hardcoded white fill (r:1, g:1, b:1)"],
+            "variant_count": 2,
+            "note": "Toggle has only 2 variants (On/Off). Switch component set on same page has 20 variants with potentially better binding -- not sampled."
+          }
+        },
+        "recommendation": "P1: Audit and bind all fill properties across Radio, Toggle, and any other components with weak binding. P1: Replace hardcoded 'Bounding box' fills with variable bindings or transparent fills if they serve as hit areas. P2: Establish a binding checklist that must be completed before a component is marked 🟢."
+      },
+      "component_description_coverage": {
+        "score": 1,
+        "finding": "6 of 40 component sets (15%) have descriptions. All 6 are on the Pickers page and appear to be carried over from Material Design 3 source components (one description includes an Apple Feedback Assistant URL). Zero original component descriptions exist. Key components with no descriptions: Button (45 variants), Checkbox (12 variants), Radio (12 variants), Alert, Banner, Toggle, TextInputSolid, TopAppBar, BottomAppBar, Accordion.",
+        "details": {
+          "components_with_descriptions": [
+            {"name": "Modal date picker", "source": "Likely M3"},
+            {"name": "Input date picker", "source": "Likely M3"},
+            {"name": ".Building Blocks/Menu button", "source": "Likely M3"},
+            {"name": ".Building Blocks/Year", "source": "Likely M3"},
+            {"name": ".Building Blocks/Local M3 calendar cell", "source": "Likely M3"},
+            {"name": "Date and time - Collapsed", "source": "Contains Apple Feedback Assistant URL -- iOS source"}
+          ],
+          "critical_components_missing_descriptions": [
+            "Button", "ActionButton", "Checkbox", "Radio", "Alert", "Banner",
+            "Toggle", "Switch", "TextInputSolid", "TextAreaSolid", "TopAppBar",
+            "BottomAppBar", "Accordion Item", "Snackbar", "Card (Square/Horizontal)",
+            "Avatar", "Badge", "Docked", "CodeInput", "ProgressBar", "ProgressCircle",
+            "ListItem", "Tag", "TabBar", "Divider", "RiskIndicator"
+          ]
+        },
+        "recommendation": "P1: Write descriptions for all 34 undescribed component sets. Each description should contain: (1) what the component is and when to use it, (2) variant/property documentation, (3) accessibility notes, (4) do/don't usage guidance. P2: Replace M3/iOS-sourced descriptions with original text specific to this system."
+      },
+      "naming_convention_consistency": {
+        "score": 2,
+        "finding": "Page naming is consistent (↪ {Name} {emoji}) but includes internal owner names (- SASKA, - SAB, - SAB / SAS) that are not meaningful outside the team. Component set naming is mostly PascalCase but inconsistent: 'TextInputSolid' has a trailing space, 'BottomAppBar' vs 'TopAppBar' are consistent, but 'ListItem' vs 'List header' vs 'ListHeading' show three different casing conventions for related components. Variant property naming (Type=Primary, Size=Small, State=Enable) is consistent across components that use it. Internal/building-block components use dot prefix (e.g., '.State Layer', '.ToggleButtonAction') -- a good convention but not documented.",
+        "details": {
+          "page_naming": "↪ {Name} {status} -- consistent but polluted with owner names",
+          "component_naming": "mostly PascalCase but List* group uses three different conventions",
+          "variant_naming": "Property=Value -- consistent where used",
+          "internal_component_prefix": "dot prefix (.Name) -- good but undocumented"
+        },
+        "recommendation": "P1: Remove owner names from page titles. P2: Standardise List component naming (ListItem, ListHeader, ListHeading should follow one convention). P2: Document the dot-prefix convention for internal components. P3: Fix 'TextInputSolid' trailing space."
+      },
+      "web_readiness_gap": {
+        "score": 1,
+        "finding": "All components are designed at mobile dimensions (402px frame width in usage examples). No responsive component variants exist. No web-specific patterns (hover states exist on some components but are not systematically applied). No container-query-ready components. No min/max width constraints. Components that would need significant adaptation for web: TopAppBar (mobile navigation pattern), BottomAppBar (no web equivalent), BottomSheet (mobile-native pattern), Docked (mobile keyboard companion). Components that could translate to web with responsive work: Button, Input forms, Alert, Banner, Card, Checkbox, Radio, Toggle, Tabs, Tag.",
+        "details": {
+          "mobile_only_components": ["TopAppBar", "BottomAppBar", "BottomSheet", "Docked", "Keypad"],
+          "web_adaptable_components": ["Button", "ActionButton", "TextInputSolid", "TextAreaSolid", "Alert", "Banner", "Card", "Checkbox", "Radio", "Toggle", "Tabs", "Tag", "Accordion", "Divider", "Badge", "Snackbar", "ProgressBar", "ProgressCircle"],
+          "missing_for_web": [
+            "No responsive component variants (small/medium/large at breakpoint level)",
+            "No web navigation components (sidebar, top nav, breadcrumbs)",
+            "No table/data grid component",
+            "No tooltip component",
+            "No dropdown/select component (only date pickers)",
+            "No modal/dialog component",
+            "No pagination component (only PaginationDots for carousels)"
+          ]
+        },
+        "recommendation": "P1: Define responsive variants for Button, Input, Card at minimum. P1: Create web navigation components (or document that they are out of scope). P2: Add table, tooltip, dropdown, modal components for web use. P2: Add min/max width constraints to components that must adapt across breakpoints."
+      }
+    },
+    "data_gaps": [
+      "Component library use_figma queries for full component inventories timed out on two attempts. Data was collected page-by-page instead. Some standalone components nested deeply may have been missed.",
+      "Only 6 of 40 component sets were sampled for binding quality. The remaining 34 may have better or worse binding coverage.",
+      "Switch component (20 variants on Toggle page) was not deep-inspected for bindings.",
+      "ActionButton (45 variants) was not deep-inspected for bindings (assumed similar to Button based on identical variant structure).",
+      "Text styles and effect styles were not audited. Components may use shared styles that carry additional structure not visible through variable binding inspection alone.",
+      "ListItem page has 71 top-level children including images and working frames -- the page may contain significant work-in-progress that affects the count."
+    ]
+  },
+  "cross_library_issues": [
+    {
+      "issue": "Two-layer token architecture limits component-level overrides",
+      "severity": "structural",
+      "detail": "Components bind directly to Foundation semantic tokens (Themes). There is no component-level token layer. Changing Themes/Foreground/primary affects every component that uses it. This works at current scale but becomes a coupling risk as the system grows. The POC repo uses a three-layer architecture (primitives → semantic → component) which provides this override capability.",
+      "recommendation": "Decide whether to introduce component-level tokens before scaling to 50+ components."
+    },
+    {
+      "issue": "Spacing tokens lack semantic naming",
+      "severity": "high",
+      "detail": "Foundation Spacing variables are named by raw value (4, 8, 12). Component bindings reference these directly (e.g., Button padding → Spacing/16). If the spacing scale changes, the variable name becomes misleading (a variable named '16' that resolves to 20). This is a maintenance trap.",
+      "recommendation": "Rename to scale-based names (spacing/xs, spacing/sm, spacing/md) or at minimum add a namespace (spacing/4, spacing/8)."
+    },
+    {
+      "issue": "No component-level token collection exists in either library",
+      "severity": "medium",
+      "detail": "Foundation defines primitives and semantic tokens. Component library binds to them. But there is no intermediate layer where component-specific decisions are recorded. If button/fill/primary needs to differ from the semantic Foreground/primary, there is no place to express that without breaking other consumers.",
+      "recommendation": "Create a component tokens collection in the Component library that aliases Foundation Themes tokens. Components bind to component tokens; component tokens alias semantic tokens."
+    },
+    {
+      "issue": "Inconsistent binding depth across components",
+      "severity": "high",
+      "detail": "Button has 15+ bound properties per variant. Radio has 5. Toggle has 2. This inconsistency means some components will respond correctly to theme changes and token updates while others will not. An AI agent generating code from these components will produce inconsistent output quality.",
+      "recommendation": "Establish a minimum binding standard: all fills, all strokes, all spacing, all typography properties must be bound to variables before a component is marked done (🟢)."
+    },
+    {
+      "issue": "Foundation collection naming inconsistency propagates to component bindings",
+      "severity": "low",
+      "detail": "Foundation collection 'Border size' appears as 'Borders' when referenced from the Component library. This is a Figma library-linking behaviour, not a bug, but it means the names an AI agent sees depend on which file it reads from. The trailing space in 'Colors primitives ' is also a potential parsing issue.",
+      "recommendation": "Clean up collection names in Foundation. Ensure names are consistent, trimmed, and documented."
+    }
+  ],
+  "scoring_scale": {
+    "description": "Each score measures how ready the dimension is for an AI agent to consume the system reliably.",
+    "levels": {
+      "0": {"label": "Not present", "meaning": "The dimension is missing or entirely broken. An AI agent cannot use this."},
+      "1": {"label": "Major gaps", "meaning": "Partially present but unreliable. An agent would produce inconsistent or wrong output."},
+      "2": {"label": "Inconsistent", "meaning": "Present but not uniform. An agent could use some parts but would need human correction on others."},
+      "3": {"label": "Minor issues", "meaning": "Consistent and functional. An agent can use this reliably with occasional edge cases."},
+      "4": {"label": "Scalable", "meaning": "Fully implemented. An agent can consume this with no caveats."}
+    }
+  },
+  "summary_scores": {
+    "foundation": {
+      "token_implementation": 4,
+      "alias_chain_integrity": 4,
+      "token_architecture_depth": 3,
+      "primitive_naming": 2,
+      "component_to_token_binding": "N/A",
+      "component_description_coverage": "N/A",
+      "naming_convention_consistency": 2,
+      "web_readiness_gap": 2,
+      "applicable_average": 3.0
+    },
+    "component": {
+      "token_implementation": "N/A",
+      "alias_chain_integrity": 4,
+      "token_architecture_depth": 1,
+      "primitive_naming": "N/A",
+      "component_to_token_binding": 2,
+      "component_description_coverage": 1,
+      "naming_convention_consistency": 2,
+      "web_readiness_gap": 1,
+      "applicable_average": 1.8
+    },
+    "system": {
+      "token_implementation": 4,
+      "alias_chain_integrity": 4,
+      "token_architecture_depth": 1,
+      "primitive_naming": 2,
+      "component_to_token_binding": 2,
+      "component_description_coverage": 1,
+      "naming_convention_consistency": 2,
+      "web_readiness_gap": 1,
+      "system_average": 2.1,
+      "readiness_percent": 53
+    }
+  },
+  "documentation_standard": {
+    "description": "Required structure for component documentation. Any agent writing or assessing component descriptions must validate against this schema.",
+    "component_description": {
+      "required_fields": {
+        "purpose": {
+          "description": "One sentence: what this component is and its primary use case.",
+          "example": "A tappable control that triggers a primary or secondary action. Use for form submission, navigation confirmation, and call-to-action placement."
+        },
+        "variants": {
+          "description": "All variant properties and their values with usage guidance per value.",
+          "example": "Type: Primary (high-emphasis single action per screen), Secondary (medium-emphasis supporting actions), Ghost (low-emphasis inline actions)."
+        },
+        "property_constraints": {
+          "description": "What is configurable and what is not. Include limits.",
+          "example": "Label text is required. Icon is optional. Maximum label length: 24 characters for Small, 32 for Medium/Large."
+        },
+        "state_behaviour": {
+          "description": "How the component responds to each interaction state. Which tokens drive each state change.",
+          "example": "Enable: Surface/brand fill, Foreground/primary-inverted text. Hover: States overlay/darkener-hover applied. Disabled: Surface/disabled fill, On-surface/disabled text."
+        },
+        "accessibility": {
+          "description": "Minimum touch target size, colour contrast compliance level, screen reader label requirements.",
+          "example": "Minimum touch target: 44x44pt. Contrast: WCAG AA (4.5:1 for text). Screen reader: announce label text and disabled state."
+        },
+        "usage_guidance": {
+          "description": "When to use this component vs alternatives. Dos and don'ts.",
+          "example": "Do: use Primary for the single most important action per screen. Don't: place two Primary buttons in the same view."
+        }
+      }
+    },
+    "foundation_documentation": {
+      "required_fields": {
+        "scale_rationale": "Why these specific values were chosen for the scale (e.g., spacing: base-4 system).",
+        "mode_relationship": "How modes across collections relate (e.g., Typography Mobile maps to Grid Mobile).",
+        "token_usage_rules": "When to use semantic tokens vs primitives, enforced by scoping or documented as convention."
+      }
+    },
+    "priority_components": [
+      {"name": "Button", "variants": 45, "reason": "Core action component, 3 types, 3 sizes, 5+ states"},
+      {"name": "ActionButton", "variants": 45, "reason": "Identical structure to Button, needs differentiation explanation"},
+      {"name": "Checkbox", "variants": 12, "reason": "Form component with Active/Status matrix"},
+      {"name": "Radio", "variants": 12, "reason": "Form component with Active/Status matrix"},
+      {"name": "Switch", "variants": 20, "reason": "Complex state matrix"},
+      {"name": "CodeInput", "variants": 20, "reason": "Specialised input with many states"},
+      {"name": "Icon badge", "variants": 15, "reason": "Multiple badge types need usage differentiation"},
+      {"name": "ProgressBar", "variants": 11, "reason": "Multiple progress states"}
+    ]
+  }
+}
