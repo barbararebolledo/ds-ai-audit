@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
-  "$id": "audit-schema_v1.4.json",
+  "$id": "audit-schema.json",
   "title": "AI-Readiness Audit v1.4",
   "$comment": "Additive extension of v1.3. No breaking changes. New in v1.4: accessibility_intent_coverage and platform_readiness_gap dimension keys, sub_check_scores on DimensionEntry, phase_readiness_detail on Summary, AIC and PRG finding abbreviations. v1.3 consumers can still read v1.4 output by ignoring unknown optional fields.",
 
@@ -435,7 +435,7 @@
       "properties": {
         "path": {
           "type": "string",
-          "$comment": "Relative path from the repo root to the weights config, e.g. 'config/scoring-weights_v1.4.json'. Weights are not embedded in the audit output — they are per-client and change independently of the schema version."
+          "$comment": "Relative path from the repo root to the weights config, e.g. 'config/scoring-weights.json'. Weights are not embedded in the audit output — they are per-client and change independently of the schema version."
         },
         "version": {
           "type": "string",

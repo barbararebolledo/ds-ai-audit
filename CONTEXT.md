@@ -62,11 +62,11 @@ follows in Release 2.1 for a more realistic real-world test.
 Every finding in the audit JSON must reference which contract field it relates to:
 token definition, component contract, documentation contract, or governance rule.
 This is required for future codegen pipeline compatibility. The finding structure was
-designed in the schema session and written to disk as audit-schema_v1.3.json.
+designed in the schema session and written to disk as audit-schema.json (originally audit-schema_v1.3.json).
 
 ### JSON schema is the continuity layer
 
-The audit JSON schema (schema/audit-schema_v1.3.json) is the continuity layer across
+The audit JSON schema (audit/schema/audit-schema.json) is the continuity layer across
 all releases. Additive changes only after v1.3. Every release produces a versioned
 prompt file committed alongside the findings it produced. The prompt version is
 recorded in the audit JSON.

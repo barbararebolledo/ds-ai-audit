@@ -108,9 +108,9 @@ Note: community Figma files must be published to a team library before
   comprehensively. Use REST API for all four calls before scoring. Use MCP for
   spot-checks on sampled components to verify node-level bindings (Dimension 5).
 
-- **Prompt files are versioned and committed.** Every audit run is paired with the
-  prompt version that produced it. Prompt files live in `prompts/` and are never
-  deleted. The prompt version is recorded in the audit JSON output.
+- **Prompt files are committed and tagged.** Every audit run is paired with the
+  git tag (release) that produced it. Prompt files live in `prompts/` and are
+  never deleted. The release tag is recorded in the audit JSON output.
 
 - **Findings reference contract fields.** Every finding in the audit JSON must
   reference which contract field it relates to: token definition, component contract,
@@ -118,7 +118,7 @@ Note: community Figma files must be published to a team library before
   compatibility.
 
 - **Scoring weights are configurable, not hardcoded.** Dimension weights live in
-  `config/scoring-weights_vX.X.json`. Not embedded in the script or the prompt.
+  `config/scoring-weights.json`. Not embedded in the script or the prompt.
   Adjusted per client context without touching core logic.
 
 - **Client variants are separate files.** Client-specific prompt variants and scoring
@@ -303,7 +303,7 @@ ds-ai-poc/
 │       └── button.md
 ├── audit/                           # Audit outputs
 │   ├── schema/                      # Audit output schema definitions
-│   │   └── audit-schema_vX.X.json   # Versioned -- additive changes only after v1.3
+│   │   └── audit-schema.json        # Additive changes only after v1.3
 │   ├── toimi/                       # Toimi library audits (initial POC)
 │   │   ├── v1.0/
 │   │   └── v1.2/
@@ -312,10 +312,10 @@ ds-ai-poc/
 │   ├── baseline/                    # Baseline run for diff comparison
 │   ├── latest/                      # Most recent run
 │   └── diffs/                       # Diff reports between runs
-├── prompts/                         # Versioned audit prompt files
-│   └── audit-prompt_vX.X.md
+├── prompts/                         # Audit prompt files
+│   └── audit-prompt.md
 ├── config/                          # Configurable parameters
-│   └── scoring-weights_vX.X.json    # Dimension weights -- adjusted per client
+│   └── scoring-weights.json         # Dimension weights -- adjusted per client
 ├── decisions/                       # Architecture decision records (numbered)
 │   ├── 001-audit-methodology-v1.0.md
 │   ├── 002-governance-dimension.md
@@ -333,10 +333,12 @@ ds-ai-poc/
 
 ## Naming conventions
 
-- Versioned files use the pattern `filename_vX.X` before the extension.
-- Client-specific variants append the client name: `filename_vX.X-clientname`.
-- Audit output files include the test vehicle and version:
-  `[vehicle]_findings_v[X.X].json`, `[vehicle]_report_v[X.X].md`.
+- Core files (schema, prompt, scoring weights) use unversioned names. Git tags
+  mark each release. The audit JSON output records the git tag that produced it.
+- Client-specific variants append the client name: `audit-prompt-[clientname].md`,
+  `scoring-weights-[clientname].json`.
+- Audit output files include the test vehicle and are organised by release tag
+  in subdirectories: `audit/[vehicle]/[tag]/`.
 - Do not use abbreviations in token or component names. Full words and slashes only.
 
 ---
@@ -346,8 +348,8 @@ ds-ai-poc/
 To apply this tool to a specific client or project:
 
 1. Duplicate the repo.
-2. Create a client-specific prompt variant: `prompts/audit-prompt_vX.X-[clientname].md`
-3. Create a client-specific scoring config: `config/scoring-weights_vX.X-[clientname].json`
+2. Create a client-specific prompt variant: `prompts/audit-prompt-[clientname].md`
+3. Create a client-specific scoring config: `config/scoring-weights-[clientname].json`
 4. Inspect the client file structure before running anything. Document variable
    collection naming, documentation frame conventions, component description coverage,
    and code token format in `decisions/`.
@@ -366,8 +368,8 @@ Update this section at the end of each release session.
 |---|---|
 | Current release | 2.0 (in progress) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
-| Last prompt version | v1.3 |
-| Schema version | v1.3 |
+| Last prompt version | v1.4 (now prompts/audit-prompt.md) |
+| Schema version | v1.4 (now audit/schema/audit-schema.json) |
 | Last audit run | Material UI v1.3 -- 44.3/100 not ready |
 | Dimensions | 7 clusters / 44 dimensions (restructured v2.0) |
 | Nordea status | Access pending -- adaptation sprint is Release 3.0 |

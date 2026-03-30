@@ -42,7 +42,7 @@ Scoring methodology formalised and weight redistribution based on MUI v1.3 audit
 
 ### Schema
 
-- audit-schema_v1.4.json: additive extension of v1.3.
+- audit-schema.json (was audit-schema_v1.4.json): additive extension of v1.3.
 - Added accessibility_intent_coverage and platform_readiness_gap dimension keys.
 - Added sub_check_scores (optional) to DimensionEntry.
 - Added phase_readiness_detail (optional) to Summary.
@@ -58,8 +58,9 @@ Scoring methodology formalised and weight redistribution based on MUI v1.3 audit
 
 ### Config
 
-- scoring-weights_v1.4.json: scoring_methodology, severity_thresholds,
-  sub_checks blocks added. Dimension weights updated to tiered distribution.
+- scoring-weights.json (was scoring-weights_v1.4.json): scoring_methodology,
+  severity_thresholds, sub_checks blocks added. Dimension weights updated to
+  tiered distribution.
 
 ## [v1.3] -- 2026-03-30
 
@@ -93,7 +94,7 @@ Dimensions expanded from 10 to 11:
 
 ### Schema
 
-- audit-schema_v1.3.json designed and written to disk.
+- audit-schema.json (originally audit-schema_v1.3.json) designed and written to disk.
 - Findings now reference contract fields (type, level, path, field) for future
   codegen pipeline compatibility.
 - contract_id gap identified: contracts currently referenced by path only. Adding a

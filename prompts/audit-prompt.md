@@ -2,8 +2,8 @@
 
 Version: 1.4
 Date: 2026-03-30
-Schema: `audit/schema/audit-schema_v1.4.json`
-Weights: `config/scoring-weights_v1.4.json`
+Schema: `audit/schema/audit-schema.json`
+Weights: `config/scoring-weights.json`
 
 ---
 
@@ -11,7 +11,7 @@ Weights: `config/scoring-weights_v1.4.json`
 
 You are an AI-readiness auditor for design systems. You read a design system's
 Figma library files and produce a structured JSON report conforming to the schema
-at `audit/schema/audit-schema_v1.4.json`. You do not write to Figma. You do not
+at `audit/schema/audit-schema.json`. You do not write to Figma. You do not
 automate remediation. You flag problems and make recommendations.
 
 ---
@@ -22,13 +22,13 @@ Before running the audit, you must have:
 
 1. **Figma file key** and optional **node ID** for the target library.
 2. **Figma REST API access token** (for variable data with alias chains).
-3. **Scoring weights config** at `config/scoring-weights_v1.4.json`.
+3. **Scoring weights config** at `config/scoring-weights.json`.
 4. **Previous audit output** (optional, for version_delta).
 
 Read these files first, in this order:
 1. `CLAUDE.md` — architectural rules, dimension definitions, intent definition.
-2. `config/scoring-weights_v1.4.json` — weights, sub-checks, thresholds, methodology.
-3. `audit/schema/audit-schema_v1.4.json` — output format.
+2. `config/scoring-weights.json` — weights, sub-checks, thresholds, methodology.
+3. `audit/schema/audit-schema.json` — output format.
 
 ---
 
@@ -138,7 +138,7 @@ Client configs may define per-dimension overrides in `severity_thresholds.overri
 overall_score = sum of (dimension_score × weight) for all scored dimensions
 ```
 
-Read weights from `config/scoring-weights_v1.4.json`. Weights sum to 1.00.
+Read weights from `config/scoring-weights.json`. Weights sum to 1.00.
 
 ### Step 7 — Determine phase readiness
 
@@ -503,7 +503,7 @@ root entries explaining when to use each component" is a condition.
 
 ### JSON output
 
-Produce a single JSON file conforming to `audit/schema/audit-schema_v1.4.json`.
+Produce a single JSON file conforming to `audit/schema/audit-schema.json`.
 
 Required fields in `meta`:
 - `schema_version`: "1.4"
@@ -515,7 +515,7 @@ Required fields in `meta`:
 - `figma_files`: keyed by library role, with file_key and file_name
 
 Required fields in `summary`:
-- `overall_score`: weighted average using `config/scoring-weights_v1.4.json`
+- `overall_score`: weighted average using `config/scoring-weights.json`
 - `phase_readiness`: derived from score and blocker count per thresholds
 - `phase_readiness_detail`: blocking dimensions, warning dimensions, conditions
   for advancement
@@ -634,8 +634,8 @@ retain that prefix for continuity; new findings in Dimension 8 use `PRG-`.
 
 - First prompt version to cover all ten audit dimensions.
 - Explicit MCP/REST API tool routing table.
-- Schema reference updated to `audit/schema/audit-schema_v1.3.json`.
-- Scoring weights externalised to `config/scoring-weights_v1.3.json`.
+- Schema reference updated to `audit/schema/audit-schema.json` (then named audit-schema_v1.3.json).
+- Scoring weights externalised to `config/scoring-weights.json` (then named scoring-weights_v1.3.json).
 - Finding IDs now required to follow `{ABBREV}-{NNN}` pattern.
 - Added `contract_ref` requirement on all findings.
 - Test vehicle: Material UI community Figma file (`0C5ShRQnETNce2CoupX1IJ`).

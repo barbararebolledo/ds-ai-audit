@@ -188,7 +188,7 @@ Tier 2 craft dimensions (4.16-4.27) use a simplified scale:
 
 ### Cluster scores
 
-Each cluster produces a weighted average of its dimensions. Weights are configurable in `config/scoring-weights_vX.X.json`. Cluster 0 is a gate: if it scores below 2, all downstream clusters carry a conditional validity flag.
+Each cluster produces a weighted average of its dimensions. Weights are configurable in `config/scoring-weights.json` (client variants use `scoring-weights-[clientname].json`). Cluster 0 is a gate: if it scores below 2, all downstream clusters carry a conditional validity flag.
 
 ### Partial evidence
 

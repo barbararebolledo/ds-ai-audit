@@ -57,7 +57,7 @@ report from it?
 
 - Confirm the canonical Material UI Figma community file URL. Record in
   `decisions/003-material-ui-test-vehicle.md`.
-- Locate and read `schema/audit-schema_v1.3.json` before writing any code.
+- Locate and read `audit/schema/audit-schema.json` before writing any code.
   The schema drives the output structure -- do not invent structure.
 - Implement the MCP / REST API split explicitly in script logic:
   MCP for component metadata, style metadata, and component descriptions;
@@ -77,8 +77,8 @@ report from it?
 ```
 audit/mui/v1.3/mui_findings_v1.3.json
 audit/mui/v1.3/mui_report_v1.3.md
-prompts/audit-prompt_v1.3.md
-schema/audit-schema_v1.3.json       (already designed, confirm on disk)
+prompts/audit-prompt.md
+audit/schema/audit-schema.json       (already designed, confirm on disk)
 ```
 
 ---
@@ -110,8 +110,8 @@ not just list findings?
 ```
 audit/mui/v1.4/mui_findings_v1.4.json
 audit/mui/v1.4/mui_report_v1.4.md
-prompts/audit-prompt_v1.4.md
-config/scoring-weights_v1.4.json
+prompts/audit-prompt.md
+config/scoring-weights.json
 ```
 
 ---
@@ -159,7 +159,7 @@ Two workstreams, both required for this release.
 ```
 audit/mui/v2.0/mui_findings_v2.0.json
 audit/mui/v2.0/mui_report_v2.0.md
-prompts/audit-prompt_v2.0.md
+prompts/audit-prompt.md
 ```
 
 ---
@@ -188,7 +188,7 @@ system? What breaks?
 ```
 audit/studio/v2.1/studio_findings_v2.1.json
 audit/studio/v2.1/studio_report_v2.1.md
-prompts/audit-prompt_v2.1.md
+prompts/audit-prompt.md
 decisions/XXX-studio-adaptation-notes.md
 ```
 
@@ -215,7 +215,7 @@ decisions/XXX-studio-adaptation-notes.md
 
 **Deliverables:**
 ```
-prompts/audit-prompt_v2.2.md
+prompts/audit-prompt.md
 audit/baseline/  (baseline JSON stored here)
 audit/diffs/     (diff reports stored here)
 ```
@@ -250,8 +250,8 @@ adaptation and application.
 
 **Deliverables:**
 ```
-prompts/audit-prompt_v3.0-[clientname].md
-config/scoring-weights_v3.0-[clientname].json
+prompts/audit-prompt-[clientname].md
+config/scoring-weights-[clientname].json
 audit/[clientname]/v3.0/[client]_findings_v3.0.json
 audit/[clientname]/v3.0/[client]_report_v3.0.md
 decisions/XXX-[clientname]-adaptation-notes.md
@@ -281,17 +281,16 @@ Do not build either until this decision point is reached with evidence.
 
 ## Prompt versioning convention
 
-Each release produces a prompt file committed to the repo:
-`prompts/audit-prompt_vX.X.md`
-
-The file contains:
+The audit prompt lives at `prompts/audit-prompt.md`. Each release is
+marked with a git tag. The prompt file contains:
 - The prompt itself
 - A changelog section (what changed from the previous version and why)
 - A reference to the audit output it produced
 - The schema version it targets (noted at the top)
 
-Prompt files are never deleted. The evolution of the prompt is as much an
-artefact of this work as the JSON output.
+The prompt evolves in place. Git tags and history preserve earlier
+versions. Client-specific variants are separate files:
+`prompts/audit-prompt-[clientname].md`.
 
 ---
 
