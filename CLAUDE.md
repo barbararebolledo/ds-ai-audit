@@ -176,81 +176,113 @@ drift.
 
 ---
 
-## Audit dimensions
+## Audit dimensions (restructured v2.0)
 
-These are the eleven dimensions the audit scores against. They are the stable
-definition of what this system measures. Prompt files reference these dimensions --
-they do not redefine them. If a dimension changes, update it here first, then update
-the prompt.
+These are the dimensions the audit scores against, organised into seven clusters.
+Each dimension documents its evidence sources (Figma, Code, or Both). When a code
+repository is not available, code-only dimensions score null (not assessed) and
+cluster scores are calculated from available dimensions only.
 
-**1. Token implementation**
-Are design tokens implemented as Figma Variables? Are hardcoded values present where
-tokens should be used?
+Prompt files reference these dimensions. They do not redefine them. If a dimension
+changes, update it here first, then update the prompt.
 
-**2. Alias chain integrity**
-Are semantic tokens correctly aliased to primitive tokens? Are alias chains intact,
-unbroken, and resolvable? Requires REST API -- MCP returns resolved values only.
+**Cluster 0: Prerequisites**
+Scored first. A failing score (below 2) flags all downstream clusters as
+conditionally valid.
 
-**3. Token architecture depth**
-Does the system implement all three layers: primitive, semantic, and component-level
-tokens? Are the layers correctly separated or collapsed?
+- 0.1 Platform Architecture Clarity -- coherent, documented platform strategy
+  legible to an AI agent. Evidence: Figma + Code
 
-**4. Primitive naming**
-Do primitive tokens follow a defined, machine-parseable naming convention using full
-words and slashes? Is the primitive scale defined rather than an exhaustive numeric
-range?
+**Cluster 1: Token and Variable System**
+The foundation layer. If this cluster fails, nothing above it can be trusted.
 
-**5. Component-to-token binding**
-Are component properties (fill, stroke, spacing, typography) bound to tokens rather
-than hardcoded values? The REST API confirms what components exist. MCP spot-checks
-on a sample of components are required to verify actual node-level bindings. Both
-sources must be used -- REST API alone is insufficient for a complete score on this
-dimension.
+- 1.1 Token implementation (Figma Variables vs hardcoded values). Evidence: Figma
+- 1.2 Alias chain integrity (three-layer chain intact and resolvable). Evidence: Figma
+- 1.3 Token architecture depth (primitive, semantic, component layers). Evidence: Figma + Code
+- 1.4 Primitive naming (machine-parseable, full words, intent-based). Evidence: Figma + Code
+- 1.5 Token format and machine-readability (code-side format). Evidence: Code
+- 1.6 Token documentation (descriptions and metadata on definitions). Evidence: Figma + Code
 
-**6. Component description coverage**
-Do components have descriptions that capture functional intent? Scores coverage:
-what percentage of components have a description, and of those, what percentage
-carry functional intent rather than visual description or implementation detail.
-See intent definition above. Distinct from Dimension 10 -- this dimension asks
-whether intent exists, not whether it is well-structured.
+**Cluster 2: Component Quality**
+The structural layer built on top of tokens.
 
-**7. Naming convention consistency**
-Are naming conventions consistent across tokens, components, and styles? Do names use
-full words and slashes for machine parseability? Are there deviations that would break
-automated parsing?
+- 2.1 Component-to-token binding (properties bound to tokens). Evidence: Figma (REST + MCP)
+- 2.2 Component API composability (typed, constrained, composable APIs). Evidence: Code only
+- 2.3 Variant completeness (all meaningful states as named variants). Evidence: Figma + Code
+- 2.4 Escape hatch usage (className/style override frequency). Evidence: Code only
 
-**8. Platform-readiness gap**
-Are there gaps between the Figma representation and what the target platform requires
-for implementation? The specific checks are configured per client context in the
-scoring config -- ARIA roles and keyboard navigation for web, accessibility labels
-and touch targets for mobile, and so on. The core question is platform-agnostic:
-does the Figma file carry the metadata the target platform needs?
+**Cluster 3: Documentation and Intent**
+Whether the system can explain itself to an agent.
 
-**9. Governance**
-Is there evidence of governance rules being applied: naming enforcement, token usage
-constraints, role definitions? Are the rules machine-readable or only implicit?
+- 3.1 Component description coverage (percentage with descriptions and intent). Evidence: Figma + Code
+- 3.2 Documentation structure and machine-readability. Evidence: Code
+- 3.3 Intent quality (functional purpose vs visual description). Evidence: Figma + Code
+- 3.4 Usage guidance formalisation (rules vs qualitative guidance). Evidence: Code
+- 3.5 Documentation frame metadata (structural data from Figma pages). Evidence: Figma
 
-**10. Documentation quality and intent coverage**
-Does component documentation capture intent rather than visual description? Scores
-quality: is it present, appropriately concise, free of redundancy, and useful to an
-agent rather than just a developer? Reads from the component description field first;
-falls back to documentation frames in the file if the description is absent or below
-threshold. Distinct from Dimension 6 -- this dimension asks whether the documentation
-is well-structured and complete, not just whether intent exists. See intent definition
-above. The documentation frame reader is adapted per client or test vehicle.
+**Cluster 4: Craft Baseline**
+Universal quality criteria scored without client context. Two tiers.
 
-**11. Accessibility intent coverage**
-Does the component documentation and structure communicate accessibility requirements?
-Scores structural accessibility signals in the Figma file: whether focus states are
-defined as variants, whether touch target sizes meet minimum guidelines (44x44px
-mobile, 24x24px web), whether colour contrast is derivable from the token alias chain,
-whether interactive components define keyboard navigation behaviour, and whether
-component descriptions mention accessibility considerations.
-This dimension scores what is auditable from the Figma file -- structural signals,
-not runtime compliance. Actual rendered contrast ratios and screen reader output
-require a plugin or manual inspection and are deferred to a later phase.
-Platform-specific thresholds (WCAG AA vs AAA, mobile vs web target sizes) are
-configured in the client scoring config.
+Tier 1 (scored 0-4):
+- 4.1 Interaction targets (touch/click minimums per platform)
+- 4.2 Contrast ratios (WCAG AA derivable from token chain)
+- 4.3 Type scale consistency (mathematical relationship between steps)
+- 4.4 Type completeness (size, line height, letter spacing, weight, case per role)
+- 4.5 Spacing scale regularity (base unit, consistent progression)
+- 4.6 Grid and layout system (columns, gutters, margins, breakpoints)
+- 4.7 Motion duration ranges (100-500ms, entries slower than exits)
+- 4.8 Motion easing (standard easing defined, linear flagged)
+- 4.9 Focus state presence (every interactive component)
+- 4.10 Error state coverage (error, success, disabled on inputs)
+- 4.11 Loading state coverage (async actions have loading patterns)
+- 4.12 Empty state coverage (data-dependent views have empty states)
+- 4.13 Colour system structure (defined steps, role-based semantic naming)
+- 4.14 Icon sizing consistency (defined scale aligned with spacing)
+- 4.15 Elevation/shadow system (defined scale, not arbitrary)
+
+Tier 2 (scored 0/1/2: not addressed / partially / systematically):
+- 4.16 Visibility of system status
+- 4.17 Match between system and real world
+- 4.18 User control and freedom
+- 4.19 Consistency and standards
+- 4.20 Error prevention
+- 4.21 Recognition rather than recall
+- 4.22 Flexibility and efficiency
+- 4.23 Aesthetic and minimalist design
+- 4.24 Error recovery
+- 4.25 Help and documentation
+- 4.26 Visual hierarchy
+- 4.27 Visual rhythm and proportion
+
+Evidence for Cluster 4: Figma + Code (tokens, variants, documentation, APIs)
+
+**Cluster 5: Governance and Ecosystem**
+The system's ability to maintain itself over time.
+
+- 5.1 Naming convention consistency. Evidence: Figma + Code
+- 5.2 Versioning and changelog discipline. Evidence: Code
+- 5.3 Contribution standards. Evidence: Code
+- 5.4 Deprecation patterns. Evidence: Figma + Code
+- 5.5 Test coverage (visual regression, unit, accessibility). Evidence: Code only
+- 5.6 Adoption visibility (dependency tracking, version consumption). Evidence: Code only
+- 5.7 Code consistency and pattern predictability. Evidence: Code only
+
+**Cluster 6: Design-to-Code Parity**
+Cross-platform coherence. Requires both evidence sources. When code repo is absent,
+the entire cluster scores null (not assessed).
+
+- 6.1 Token value parity (Figma Variable values vs code token values)
+- 6.2 Token naming parity (Figma Variable names vs code token names)
+- 6.3 Component naming parity (Figma component names vs code component names)
+- 6.4 Variant and state coverage parity (Figma variants vs code states)
+- 6.5 Behaviour parity (coded behaviours vs Figma specifications, both directions)
+- 6.6 Documentation of parity gaps (known gaps tracked and documented)
+
+Evidence for Cluster 6: Both required.
+
+Full dimension definitions with scoring criteria are in
+`docs/audit-dimensions-v2.0.md` and in
+`decisions/005-release-2.0-research-scan.md`.
 
 ---
 
@@ -332,13 +364,14 @@ Update this section at the end of each release session.
 
 | Field | Value |
 |---|---|
-| Current release | 1.4 (next) |
+| Current release | 2.0 (in progress) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
 | Last prompt version | v1.3 |
 | Schema version | v1.3 |
 | Last audit run | Material UI v1.3 -- 44.3/100 not ready |
-| Dimensions | 11 (updated post Release 1.3) |
+| Dimensions | 7 clusters / 44 dimensions (restructured v2.0) |
 | Nordea status | Access pending -- adaptation sprint is Release 3.0 |
+| Release 2.0 planning | Complete -- decision record 005, dimensions restructured |
 
 ---
 
