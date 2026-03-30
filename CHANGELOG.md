@@ -1,6 +1,16 @@
 # Changelog
 
-## [v1.3] -- in progress
+## [v1.3] -- 2026-03-30
+
+Audit complete: Material UI 44.3/100 not ready
+Four blockers: token architecture depth, component-to-token binding, component description coverage, documentation quality
+Key finding: 96.2% of existing MUI descriptions are code snippets not functional intent -- validates intent hypothesis
+REST API required for all calls including component enumeration, not just variables
+Three token scopes required: file_content:read, file_variables:read, library_content:read
+Dimensions expanded from 10 to 11:
+- Dimension 8 renamed from web-readiness gap to platform-readiness gap
+- Dimension 11 added: accessibility intent coverage
+- Intent defined explicitly as a standalone reference in CLAUDE.md
 
 ### Reorientation and planning
 

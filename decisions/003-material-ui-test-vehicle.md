@@ -18,6 +18,20 @@ known gaps between Figma and code representations. No access friction.
 Reproducible by anyone reading the case study.
 
 ## Notes
+
+**Required token scopes (all three needed):**
+- file_content:read -- file structure, page list
+- file_variables:read -- variable collections and alias chains
+- library_content:read -- published components and styles
+
+**Community file must be published to a team** before /components and 
+/styles endpoints return data. Unpublished community duplicates return 
+empty arrays for both endpoints.
+
+**MCP cannot enumerate components.** REST API is the primary data source 
+for comprehensive audits. MCP is only useful for spot-checking specific 
+nodes by ID.
+
 Community version only. Full version (paid) is not required for the audit.
 Code-side token locations confirmed at Release 2.0:
 - packages/mui-material/src/styles/
