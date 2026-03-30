@@ -17,6 +17,7 @@
  */
 
 import { createTheme } from '@mui/material/styles';
+import * as muiColors from '@mui/material/colors';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -55,11 +56,30 @@ function serialise(obj, seen = new WeakSet()) {
 
 const serialisable = serialise(theme);
 
+// Extract the full material colour palette from @mui/material/colors.
+// These are the primitive colour values that Figma stores in the
+// material/colors variable collection.
+const colorPalette = {};
+for (const [hueName, hueObj] of Object.entries(muiColors)) {
+  if (hueName === 'default' || typeof hueObj !== 'object') continue;
+  colorPalette[hueName] = { ...hueObj };
+}
+
+const output = {
+  theme: serialisable,
+  materialColors: colorPalette,
+};
+
 mkdirSync(outputDir, { recursive: true });
-writeFileSync(outputPath, JSON.stringify(serialisable, null, 2), 'utf-8');
+writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf-8');
 
 // Summary statistics for verification.
-const keys = Object.keys(serialisable);
+const themeKeys = Object.keys(serialisable);
+const colorHues = Object.keys(colorPalette);
+const totalColorValues = colorHues.reduce(
+  (sum, h) => sum + Object.keys(colorPalette[h]).length, 0
+);
 console.log(`Theme extracted successfully.`);
-console.log(`Top-level keys: ${keys.join(', ')}`);
+console.log(`Top-level theme keys: ${themeKeys.join(', ')}`);
+console.log(`Material colour hues: ${colorHues.length} (${totalColorValues} values)`);
 console.log(`Output: ${outputPath}`);
