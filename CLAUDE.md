@@ -426,14 +426,15 @@ Update this section at the end of each release session.
 
 | Field | Value |
 |---|---|
-| Current release | 2.1 (schema and prompt complete, validation run pending) |
+| Current release | 2.1 (complete) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
 | Last prompt version | v2.1 (prompts/audit-prompt.md) |
 | Schema version | v2.1 (audit/schema/audit-schema.json) |
-| Last audit run | Material UI v2.0 -- 55.3/100 not ready, 10 blockers |
-| Dimensions | 7 clusters / 44 dimensions (47 scored, 9 code-only null) |
+| Scoring weights | v2.1 (config/scoring-weights.json) -- cluster-based, 7 clusters sum to 1.00 |
+| Last audit run | Material UI v2.1 -- 55.3/100 not ready, 10 blockers (zero drift from v2.0) |
+| Dimensions | 7 clusters / 44 dimensions (38 scored, 9 code-only null) |
 | Nordea status | Access pending -- adaptation sprint is Release 3.0 |
-| Release 2.1 planning | Complete -- decision record 006 |
+| Release 2.1 | Complete -- decision record 006, validation run confirmed zero drift |
 
 ---
 

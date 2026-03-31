@@ -1,28 +1,27 @@
 {
-  "$comment": "Scoring weights for AI-readiness audit v1.4. Weights are normalized to sum to 1.00. Organised into three tiers based on observed impact on AI agent operability from the MUI v1.3 audit. v1.4 introduces formalised sub-checks and a documented aggregation formula. v1.3 and v1.4 scores are not directly comparable.",
-  "version": "1.4",
+  "$comment": "Scoring weights for AI-readiness audit v2.1. Organised by cluster, matching the 7-cluster / 44-dimension structure. Cluster weights sum to 1.00. Within each cluster, dimension weights are relative (sum to 1.00 per cluster). The overall score is: sum of (cluster_score x cluster_weight). v2.1 replaces the v1.4 flat dimension weights.",
+  "version": "2.1",
 
   "scoring_methodology": {
-    "$comment": "New in v1.4. Documents the two-layer scoring system. v1.3 used implicit aggregation. v1.4 formalises sub-checks and the aggregation formula. Scores from v1.3 and v1.4 are not directly comparable.",
-    "sub_check_scale": "0-4 integers: 0=not present, 1=major gaps, 2=inconsistent, 3=minor issues, 4=fully implemented",
-    "dimension_score_formula": "average of sub-check scores x 25, rounded to nearest integer, producing 0-100",
-    "overall_score_formula": "sum of (dimension_score x weight) across all dimensions",
-    "override_rule": "If any sub-check within a dimension scores 0, dimension severity is forced to blocker regardless of composite score"
+    "dimension_scale": "0-4 integers: 0=not present, 1=major gaps, 2=inconsistent, 3=minor issues, 4=fully implemented. Tier 2 craft dimensions use 0/1/2.",
+    "cluster_score_formula": "average of scored dimension scores (null excluded) x 25, producing 0-100",
+    "overall_score_formula": "sum of (cluster_score x cluster_weight) across all clusters with scored dimensions",
+    "override_rule": "If any sub-check within a dimension scores 0, dimension severity is forced to blocker regardless of composite score",
+    "severity_from_score": "0-1=blocker, 2=warning, 3=note, 4=pass"
   },
 
   "severity_thresholds": {
-    "$comment": "Default severity boundaries applied per dimension. Client scoring configs may override individual dimensions with stricter or more lenient thresholds.",
+    "$comment": "Applied per dimension based on raw 0-4 score. Client configs may override.",
     "default": {
-      "blocker": { "below": 30 },
-      "warning": { "min": 30, "below": 60 },
-      "note":    { "min": 60, "below": 80 },
-      "pass":    { "min": 80 }
+      "blocker": { "below": 2 },
+      "warning": { "at": 2 },
+      "note":    { "at": 3 },
+      "pass":    { "at": 4 }
     },
     "overrides": {}
   },
 
   "phase_readiness_thresholds": {
-    "$comment": "Phase readiness logic. The blocker gate does the heavy lifting: a system with any dimension-level blocker is not ready regardless of overall score.",
     "pass": {
       "overall_minimum": 75,
       "max_blockers": 0,
@@ -31,339 +30,167 @@
     "conditional_pass": {
       "overall_minimum": 50,
       "max_blockers": 0,
-      "max_warnings": null,
-      "$comment": "Also applies when overall < 50 but zero blockers: warnings present but no structural failures"
+      "max_warnings": null
     },
     "not_ready": {
       "$comment": "Any dimension-level blocker OR overall < 50"
     }
   },
 
-  "dimensions": {
+  "clusters": {
 
-    "token_architecture_depth": {
-      "weight": 0.14,
-      "tier": 1,
-      "$comment": "Tier 1: agent cannot operate. Highest weight. Without three-layer architecture, an agent cannot map semantic intent to component properties — it must guess which token applies where. MUI scored 30 here and it was the top blocker. v1.3 weight was 0.12; raised to 0.14 because the MUI audit proved this dimension determined the verdict more than token implementation did."
-    },
-    "component_to_token_binding": {
-      "weight": 0.14,
-      "tier": 1,
-      "$comment": "Tier 1: agent cannot operate. Tied highest weight. Unbound component properties force the agent to infer token relationships — a primary source of hallucination. MUI scored 25 and it was the second blocker. v1.3 weight was 0.12; raised to 0.14 for the same reason as token_architecture_depth."
-    },
-    "component_description_coverage": {
-      "weight": 0.12,
-      "tier": 1,
-      "$comment": "Tier 1: agent cannot operate. Without descriptions carrying functional intent, an agent cannot decide which component fits a use case. MUI scored 15 — 64.2% had no description, 96.2% of existing descriptions were code snippets. v1.3 weight was 0.07; raised significantly because the MUI audit showed this dimension was a blocker, not a nice-to-have."
-    },
-    "documentation_quality": {
-      "weight": 0.12,
-      "tier": 1,
-      "$comment": "Tier 1: agent cannot operate. Distinct from coverage (Dimension 6): this scores whether documentation is structured, concise, and useful to an agent — not just whether it exists. MUI scored 10 — the lowest of all dimensions. v1.3 weight was 0.06 (lowest); doubled because the MUI audit proved documentation quality was a blocker equal to coverage."
-    },
-
-    "token_implementation": {
-      "weight": 0.10,
-      "tier": 2,
-      "$comment": "Tier 2: agent operates, output quality degrades. Tokens are the foundation, but MUI scored 72 here and was still not ready. The presence of tokens is necessary but not sufficient — architecture and binding matter more. v1.3 weight was 0.15 (highest); reduced because the MUI evidence showed high token implementation did not prevent a not-ready verdict."
-    },
-    "alias_chain_integrity": {
-      "weight": 0.08,
-      "tier": 2,
-      "$comment": "Tier 2: agent operates, output quality degrades. Broken chains produce wrong values, but MUI scored 55 and the alias issues were warnings, not blockers. The real failures were architectural. v1.3 weight was 0.15 (tied highest); reduced because the MUI audit showed this was a quality issue, not a blocking one."
-    },
-    "accessibility_intent_coverage": {
-      "weight": 0.08,
-      "tier": 2,
-      "$comment": "Tier 2: agent operates, output quality degrades. New in v1.4. Accessibility signals (focus states, touch targets, contrast, keyboard navigation) determine whether generated code meets WCAG requirements. Without them, an agent produces visually correct but inaccessible output. Weighted equal to alias chain integrity — both degrade output quality without blocking operation entirely."
-    },
-    "platform_readiness_gap": {
-      "weight": 0.07,
-      "tier": 2,
-      "$comment": "Tier 2: agent operates, output quality degrades. Renamed from web_readiness_gap in v1.4 per decision 004. Platform-specific metadata (ARIA roles for web, accessibility labels for mobile) determines whether generated code is production-ready for the target platform. v1.3 weight was 0.08; slightly reduced as some concerns moved to the new accessibility dimension."
-    },
-
-    "primitive_naming": {
-      "weight": 0.06,
-      "tier": 3,
-      "$comment": "Tier 3: system hygiene. Machine-parseable naming improves automated mapping but an agent can compensate if bindings and aliases are intact. v1.3 weight was 0.10; reduced because the MUI audit showed naming issues were notes, not blockers or warnings that affected the verdict."
-    },
-    "naming_convention_consistency": {
+    "0_prerequisites": {
       "weight": 0.05,
-      "tier": 3,
-      "$comment": "Tier 3: system hygiene. Inconsistent naming degrades pattern matching but does not block agent use. v1.3 weight was 0.08; reduced for the same reason as primitive naming."
+      "$comment": "Gate cluster. Low weight but a failing score (below 2) flags all downstream clusters as conditionally valid.",
+      "dimensions": {
+        "0.1_platform_architecture_clarity": {
+          "weight": 1.00,
+          "evidence": "Figma + Code"
+        }
+      }
     },
-    "governance": {
-      "weight": 0.04,
-      "tier": 3,
-      "$comment": "Tier 3: system hygiene. Governance rules improve long-term maintainability and drift detection but their absence does not impair a single audit or code generation run. v1.3 weight was 0.07; reduced as the lowest-impact dimension for agent operability."
+
+    "1_token_and_variable_system": {
+      "weight": 0.25,
+      "$comment": "Foundation layer. Highest cluster weight. If tokens fail, nothing above can be trusted.",
+      "dimensions": {
+        "1.1_token_implementation": {
+          "weight": 0.20,
+          "evidence": "Figma"
+        },
+        "1.2_alias_chain_integrity": {
+          "weight": 0.15,
+          "evidence": "Figma"
+        },
+        "1.3_token_architecture_depth": {
+          "weight": 0.25,
+          "evidence": "Figma + Code"
+        },
+        "1.4_primitive_naming": {
+          "weight": 0.10,
+          "evidence": "Figma + Code"
+        },
+        "1.5_token_format_machine_readability": {
+          "weight": 0.10,
+          "evidence": "Code"
+        },
+        "1.6_token_documentation": {
+          "weight": 0.20,
+          "evidence": "Figma + Code"
+        }
+      }
+    },
+
+    "2_component_quality": {
+      "weight": 0.15,
+      "$comment": "Structural layer built on tokens.",
+      "dimensions": {
+        "2.1_component_to_token_binding": {
+          "weight": 0.40,
+          "evidence": "Figma (REST + MCP)"
+        },
+        "2.2_component_api_composability": {
+          "weight": 0.20,
+          "evidence": "Code only"
+        },
+        "2.3_variant_completeness": {
+          "weight": 0.25,
+          "evidence": "Figma + Code"
+        },
+        "2.4_escape_hatch_usage": {
+          "weight": 0.15,
+          "evidence": "Code only"
+        }
+      }
+    },
+
+    "3_documentation_and_intent": {
+      "weight": 0.25,
+      "$comment": "Tied highest cluster weight with tokens. Whether the system can explain itself to an agent. MUI v2.0 scored 16.7 here -- the worst cluster.",
+      "dimensions": {
+        "3.1_component_description_coverage": {
+          "weight": 0.25,
+          "evidence": "Figma + Code"
+        },
+        "3.2_documentation_structure_machine_readability": {
+          "weight": 0.15,
+          "evidence": "Code"
+        },
+        "3.3_intent_quality": {
+          "weight": 0.30,
+          "evidence": "Figma + Code",
+          "$comment": "Highest weight in cluster. Scored against six-level documentation hierarchy."
+        },
+        "3.4_usage_guidance_formalisation": {
+          "weight": 0.15,
+          "evidence": "Code"
+        },
+        "3.5_documentation_frame_metadata": {
+          "weight": 0.15,
+          "evidence": "Figma"
+        }
+      }
+    },
+
+    "4_design_quality_baseline": {
+      "weight": 0.10,
+      "$comment": "Universal quality criteria. Lower cluster weight because these are quality signals, not blocking factors for agent operation. 27 dimensions across two tiers.",
+      "dimensions": {
+        "4.1_interaction_targets":              { "weight": 0.05, "tier": 1, "evidence": "Figma + Code" },
+        "4.2_contrast_ratios":                  { "weight": 0.05, "tier": 1, "evidence": "Figma + Code" },
+        "4.3_type_scale_consistency":           { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.4_type_completeness":                { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.5_spacing_scale_regularity":         { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.6_grid_and_layout_system":           { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.7_motion_duration_ranges":           { "weight": 0.03, "tier": 1, "evidence": "Figma + Code" },
+        "4.8_motion_easing":                    { "weight": 0.03, "tier": 1, "evidence": "Figma + Code" },
+        "4.9_focus_state_presence":             { "weight": 0.05, "tier": 1, "evidence": "Figma + Code" },
+        "4.10_error_state_coverage":            { "weight": 0.05, "tier": 1, "evidence": "Figma + Code" },
+        "4.11_loading_state_coverage":          { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.12_empty_state_coverage":            { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.13_colour_system_structure":         { "weight": 0.04, "tier": 1, "evidence": "Figma + Code" },
+        "4.14_icon_sizing_consistency":         { "weight": 0.03, "tier": 1, "evidence": "Figma + Code" },
+        "4.15_elevation_shadow_system":         { "weight": 0.03, "tier": 1, "evidence": "Figma + Code" },
+        "4.16_visibility_of_system_status":     { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.17_match_between_system_and_real_world": { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.18_user_control_and_freedom":        { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.19_consistency_and_standards":        { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.20_error_prevention":                { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.21_recognition_rather_than_recall":  { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.22_flexibility_and_efficiency":      { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.23_aesthetic_and_minimalist_design":  { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.24_error_recovery":                  { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.25_help_and_documentation":          { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.26_visual_hierarchy":                { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" },
+        "4.27_visual_rhythm_and_proportion":    { "weight": 0.03, "tier": 2, "evidence": "Figma + Code" }
+      }
+    },
+
+    "5_governance_and_ecosystem": {
+      "weight": 0.08,
+      "$comment": "System hygiene. Low weight because governance does not directly impair a single audit or code generation run.",
+      "dimensions": {
+        "5.1_naming_convention_consistency":              { "weight": 0.20, "evidence": "Figma + Code" },
+        "5.2_versioning_and_changelog_discipline":       { "weight": 0.15, "evidence": "Code" },
+        "5.3_contribution_standards":                    { "weight": 0.15, "evidence": "Code" },
+        "5.4_deprecation_patterns":                      { "weight": 0.15, "evidence": "Figma + Code" },
+        "5.5_test_coverage":                             { "weight": 0.15, "evidence": "Code only" },
+        "5.6_adoption_visibility":                       { "weight": 0.10, "evidence": "Code only" },
+        "5.7_code_consistency_and_pattern_predictability": { "weight": 0.10, "evidence": "Code only" }
+      }
+    },
+
+    "6_design_to_code_parity": {
+      "weight": 0.12,
+      "$comment": "Cross-platform coherence. Requires both Figma and code evidence. Entire cluster scores null when code repo is absent.",
+      "dimensions": {
+        "6.1_token_value_parity":                { "weight": 0.25, "evidence": "Both" },
+        "6.2_token_naming_parity":               { "weight": 0.15, "evidence": "Both" },
+        "6.3_component_naming_parity":           { "weight": 0.15, "evidence": "Both" },
+        "6.4_variant_and_state_coverage_parity": { "weight": 0.15, "evidence": "Both" },
+        "6.5_behaviour_parity":                  { "weight": 0.15, "evidence": "Both" },
+        "6.6_documentation_of_parity_gaps":      { "weight": 0.15, "evidence": "Both" }
+      }
     }
-  },
-
-  "sub_checks": {
-
-    "token_implementation": [
-      {
-        "id": "1a",
-        "description": "Colour tokens implemented as Variables",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "1b",
-        "description": "Spacing tokens implemented as Variables",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "1c",
-        "description": "Typography tokens as Variables, not duplicated as text styles",
-        "data_source": "REST API variables/local + styles"
-      },
-      {
-        "id": "1d",
-        "description": "Elevation/effect tokens as Variables, not legacy styles only",
-        "data_source": "REST API variables/local + styles"
-      }
-    ],
-
-    "alias_chain_integrity": [
-      {
-        "id": "2a",
-        "description": "Local alias chains resolve without breaks",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "2b",
-        "description": "Remote alias references documented and resolvable",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "2c",
-        "description": "All token categories have semantic-to-primitive alias chains",
-        "data_source": "REST API variables/local"
-      }
-    ],
-
-    "token_architecture_depth": [
-      {
-        "id": "3a",
-        "description": "Primitive token layer exists and is populated",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "3b",
-        "description": "Semantic token layer exists and aliases to primitives",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "3c",
-        "description": "Component-level token layer exists and aliases to semantic",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "3d",
-        "description": "Non-colour categories (spacing, typography, elevation) have layered architecture",
-        "data_source": "REST API variables/local"
-      }
-    ],
-
-    "primitive_naming": [
-      {
-        "id": "4a",
-        "description": "Token names use full words and slash separators",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "4b",
-        "description": "Naming convention consistent within each collection",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "4c",
-        "description": "Names include namespace or category prefix",
-        "data_source": "REST API variables/local"
-      }
-    ],
-
-    "component_to_token_binding": [
-      {
-        "id": "5a",
-        "description": "Component fills bound to tokens",
-        "data_source": "MCP spot-check (sampled)"
-      },
-      {
-        "id": "5b",
-        "description": "Component strokes bound to tokens",
-        "data_source": "MCP spot-check (sampled)"
-      },
-      {
-        "id": "5c",
-        "description": "Component spacing bound to tokens",
-        "data_source": "MCP spot-check (sampled)"
-      },
-      {
-        "id": "5d",
-        "description": "Component typography bound to tokens",
-        "data_source": "MCP spot-check (sampled)"
-      },
-      {
-        "id": "5e",
-        "description": "Component-level token layer provides explicit binding documentation",
-        "data_source": "REST API variables/local"
-      }
-    ],
-
-    "component_description_coverage": [
-      {
-        "id": "6a",
-        "description": "Percentage of components with any description",
-        "data_source": "REST API /components",
-        "scoring_bands": {
-          "0": "below 20%",
-          "1": "20-40%",
-          "2": "40-60%",
-          "3": "60-80%",
-          "4": "above 80%"
-        }
-      },
-      {
-        "id": "6b",
-        "description": "Percentage of descriptions carrying functional intent",
-        "data_source": "REST API /components",
-        "scoring_bands": {
-          "0": "below 20%",
-          "1": "20-40%",
-          "2": "40-60%",
-          "3": "60-80%",
-          "4": "above 80%"
-        }
-      },
-      {
-        "id": "6c",
-        "description": "Description present on component set root entries (not only variants)",
-        "data_source": "REST API /components",
-        "scoring_bands": {
-          "0": "below 20%",
-          "1": "20-40%",
-          "2": "40-60%",
-          "3": "60-80%",
-          "4": "above 80%"
-        }
-      }
-    ],
-
-    "naming_convention_consistency": [
-      {
-        "id": "7a",
-        "description": "Naming convention consistent across token collections",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "7b",
-        "description": "Naming convention consistent across component sets",
-        "data_source": "REST API /components"
-      },
-      {
-        "id": "7c",
-        "description": "Names are machine-parseable, no special characters that break parsing",
-        "data_source": "REST API variables/local + /components + /styles"
-      }
-    ],
-
-    "platform_readiness_gap": [
-      {
-        "id": "8a",
-        "description": "Target platform metadata present in component properties",
-        "data_source": "REST API /components"
-      },
-      {
-        "id": "8b",
-        "description": "State variants map to platform interaction states",
-        "data_source": "REST API /components"
-      },
-      {
-        "id": "8c",
-        "description": "Platform-specific documentation exists in descriptions",
-        "data_source": "REST API /components"
-      }
-    ],
-
-    "governance": [
-      {
-        "id": "9a",
-        "description": "Naming conventions are enforced",
-        "data_source": "REST API file structure"
-      },
-      {
-        "id": "9b",
-        "description": "Variable collections correctly scoped",
-        "data_source": "REST API variables/local"
-      },
-      {
-        "id": "9c",
-        "description": "Naming validation prevents errors",
-        "data_source": "REST API file structure + /components"
-      },
-      {
-        "id": "9d",
-        "description": "Governance rules are machine-readable",
-        "data_source": "REST API file structure"
-      },
-      {
-        "id": "9e",
-        "description": "Contributor roles are defined",
-        "data_source": "REST API file structure"
-      }
-    ],
-
-    "documentation_quality": [
-      {
-        "id": "10a",
-        "description": "Documentation captures functional intent (when to use, when not to use)",
-        "data_source": "REST API /components + MCP"
-      },
-      {
-        "id": "10b",
-        "description": "Documentation is structured and concise",
-        "data_source": "REST API /components + MCP"
-      },
-      {
-        "id": "10c",
-        "description": "Documentation useful to an agent (could it make a component selection decision?)",
-        "data_source": "REST API /components + MCP"
-      }
-    ],
-
-    "accessibility_intent_coverage": [
-      {
-        "id": "11a",
-        "description": "Focus states defined as component variants",
-        "data_source": "REST API /components",
-        "wcag_ref": "2.4.7 (Focus Visible)"
-      },
-      {
-        "id": "11b",
-        "description": "Touch target sizes meet minimum guidelines",
-        "data_source": "MCP spot-check (sampled)",
-        "wcag_ref": "2.5.8 (AA: 24x24px min)"
-      },
-      {
-        "id": "11c",
-        "description": "Colour contrast derivable from token alias chain",
-        "data_source": "REST API variables/local",
-        "wcag_ref": "1.4.3 (AA: 4.5:1 normal, 3:1 large)"
-      },
-      {
-        "id": "11d",
-        "description": "Keyboard navigation behaviour documented in descriptions",
-        "data_source": "REST API /components",
-        "wcag_ref": "2.1.1, 2.4.3"
-      },
-      {
-        "id": "11e",
-        "description": "Accessibility considerations mentioned in component descriptions",
-        "data_source": "REST API /components",
-        "wcag_ref": "4.1.2"
-      }
-    ]
   }
 }
