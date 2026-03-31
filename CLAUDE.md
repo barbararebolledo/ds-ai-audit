@@ -366,12 +366,12 @@ Update this section at the end of each release session.
 
 | Field | Value |
 |---|---|
-| Current release | 2.0 (in progress) |
+| Current release | 2.0 (complete) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
-| Last prompt version | v1.4 (now prompts/audit-prompt.md) |
-| Schema version | v1.4 (now audit/schema/audit-schema.json) |
-| Last audit run | Material UI v1.3 -- 44.3/100 not ready |
-| Dimensions | 7 clusters / 44 dimensions (restructured v2.0) |
+| Last prompt version | v1.4 (prompts/audit-prompt.md) |
+| Schema version | v2.0 (audit/schema/audit-schema.json) |
+| Last audit run | Material UI v2.0 -- 55.3/100 not ready, 10 blockers |
+| Dimensions | 7 clusters / 44 dimensions (47 scored, 9 code-only null) |
 | Nordea status | Access pending -- adaptation sprint is Release 3.0 |
 | Release 2.0 planning | Complete -- decision record 005, dimensions restructured |
 
