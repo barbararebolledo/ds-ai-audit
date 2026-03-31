@@ -1,5 +1,66 @@
 # Changelog
 
+## [v2.1] -- 2026-03-31
+
+Schema iteration, two-phase audit, token reduction, documentation dimension update.
+
+### Schema (Workstream 1)
+
+- Schema aligned with v2.0 cluster-based output structure. Breaking change from
+  v1.4: top-level `dimensions` replaced with `clusters` containing nested dimensions.
+  Dimension scores are 0-4 integers, not 0-100.
+- Remediation section added: quick_wins, foundational_blockers, post_migration.
+  Each item has action, affected cluster/dimensions, effort estimate, ownership,
+  and projected score improvement.
+- severity_rank integer (0-3) mandatory on all findings for sorting.
+- cluster_summary string mandatory on all clusters.
+- Recommendations mandatory on all findings. No finding without a recommendation.
+- Schema versioning rule updated: additive only within a major version.
+
+### Two-phase audit (Workstream 2)
+
+- Phase 1 (discovery): runs REST API calls, produces summary with component count,
+  variable collection count, style count, page list, and per-cluster evidence
+  availability. Presented to user before scoring.
+- Phase 2 (targeted scoring): scores only dimensions with evidence. Skips entire
+  clusters when no data. Single-component files skip statistical dimensions.
+- Prompt rewritten from v1.4 to v2.1: two-phase procedure, cluster-based dimension
+  references, expanded finding ID conventions for all 44 dimensions.
+
+### Token reduction (Workstream 3)
+
+- REST API response filtering: strip thumbnails, user metadata, version history,
+  canvas positions, plugin data, export settings.
+- get_variable_defs preferred over get_design_context for token-only MCP checks.
+- Pre-compute cache pattern formalised: filtered REST API data cached in
+  scripts/output/ before scoring engine runs.
+
+### Documentation (Workstream 4)
+
+- Dimension 3.3 (intent quality) scored against six-level documentation hierarchy:
+  purpose, structure, intended behaviour, main use cases, error handling, edge cases.
+  Components emphasise purpose/structure; patterns emphasise use cases/error handling.
+- Patterns (loading, empty state, error recovery, validation, navigation, dismissal)
+  are first-class audit targets alongside components.
+- Cluster 4 renamed from "Craft Baseline" to "Design Quality Baseline".
+- Documentation meta-principles added to CLAUDE.md: thorough, succinct, plain
+  language, no duplication, document once and link, link to external frameworks.
+
+### Files changed
+
+- `audit/schema/audit-schema.json` -- rewritten for v2.1
+- `prompts/audit-prompt.md` -- rewritten for v2.1
+- `CLAUDE.md` -- documentation hierarchy, meta-principles, two-phase audit,
+  Cluster 4 rename, schema versioning rule, cache reference
+- `docs/audit-dimensions-v2.0.md` -- Dimension 3.3 expanded, Cluster 4 renamed
+- `decisions/005-release-2.0-research-scan.md` -- Cluster 4 renamed
+- `decisions/006-release-2.1-schema-iteration.md` -- new decision record
+
+## [v2.0] -- 2026-03-31
+
+Audit restructured to 7 clusters / 44 dimensions. Code-side token diff and
+documentation frame reader added. Material UI 55.3/100 not ready, 10 blockers.
+
 ## [v1.4] -- 2026-03-30
 
 Scoring methodology formalised and weight redistribution based on MUI v1.3 audit evidence.

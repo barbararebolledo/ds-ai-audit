@@ -1,7 +1,7 @@
-# AI-Readiness Audit Prompt v1.4
+# AI-Readiness Audit Prompt v2.1
 
-Version: 1.4
-Date: 2026-03-30
+Version: 2.1
+Date: 2026-03-31
 Schema: `audit/schema/audit-schema.json`
 Weights: `config/scoring-weights.json`
 
@@ -42,44 +42,180 @@ This is a hard rule. Using the wrong tool produces silently incorrect data.
 | Published component metadata | REST API `GET /v1/files/{key}/components` | Names, descriptions, variant properties |
 | Published style metadata | REST API `GET /v1/files/{key}/styles` | Text styles, effect styles |
 | Variable collections and values | REST API `GET /v1/files/{key}/variables/local` | Alias chains, mode values |
-| Component node-level bindings | MCP `get_design_context` | Spot-check sampled components (Dims 5, 11) |
+| Component node-level bindings | MCP `get_design_context` | Spot-check sampled components (Dims 2.1, 4.1, 4.9) |
 | Component screenshots | MCP `get_screenshot` | Visual inspection when needed |
 
 **Never use MCP for variable alias data.** MCP resolves aliases before returning
 values. The alias chain is invisible. REST API returns raw alias references
 (`variableAlias` type) that can be walked.
 
-**REST API is the primary data source.** Run all four REST API calls before
-scoring any dimension. MCP is used only for spot-checks on sampled components
-to verify node-level bindings (Dimension 5) and accessibility signals
-(Dimension 11).
+**REST API is the primary data source.** Phase 1 runs all four REST API calls
+to produce the discovery summary. Phase 2 uses MCP only for spot-checks on
+sampled components to verify node-level bindings (Dimension 2.1) and
+accessibility signals (Cluster 4 dimensions).
+
+**Use `get_variable_defs` for token-only checks.** When the MCP call is only
+checking token bindings (not full component structure), use `get_variable_defs`
+instead of `get_design_context`. It returns variable definitions without the
+full node tree, reducing payload size significantly.
 
 ---
 
-## Audit procedure
+## Token reduction
 
-Execute the following steps in order. Record data gaps as you encounter them —
-do not skip a dimension because data is incomplete. Score what you can and log
-what you cannot.
+REST API responses contain data that is not needed for scoring. Filter before
+processing to reduce token spend and context window pressure.
 
-### Step 1 — Collect data via REST API
+### Response filtering
 
-Run all four required REST API calls:
+Strip the following from REST API responses before passing to the scoring engine:
+
+- Thumbnail URLs (`thumbnailUrl`, `thumbnail_url`)
+- User metadata (`user`, `lastModifiedBy`, `creator`)
+- File version history (`versions`, `version`)
+- Canvas position data (`absoluteBoundingBox`, `absoluteRenderBounds`) unless
+  needed for touch target checks (Dimension 4.1)
+- Plugin data (`pluginData`, `sharedPluginData`)
+- Export settings (`exportSettings`)
+
+**Keep:**
+- Component names, descriptions, and variant properties
+- Variable collection names, variable names, values, and alias references
+- Style names and definitions
+- Page names and IDs
+- Node IDs (for MCP follow-up)
+
+### Pre-compute cache
+
+All REST API data is cached as filtered JSON files in `scripts/output/` before
+the scoring engine runs. The scoring engine reads cached files, not live API
+responses. This ensures:
+
+1. Reproducibility -- the same cached data produces the same scores.
+2. Token efficiency -- filtering happens once, not on every dimension.
+3. Debuggability -- cached files can be inspected to trace scoring decisions.
+
+**Cache file convention:**
+
+| REST API call | Cache file |
+|---|---|
+| `GET /v1/files/{key}?depth=1` | `scripts/output/{target}-file-structure.json` |
+| `GET /v1/files/{key}/components` | `scripts/output/{target}-components.json` |
+| `GET /v1/files/{key}/styles` | `scripts/output/{target}-styles.json` |
+| `GET /v1/files/{key}/variables/local` | `scripts/output/{target}-variables.json` |
+
+The `{target}` prefix matches the target system slug (e.g. `mui`). Existing
+cached files from v2.0 (`mui-figma-variables-raw.json`,
+`mui-figma-variables-normalised.json`, `mui-default-theme.json`,
+`mui-doc-frames.json`) remain valid and are not renamed.
+
+Phase 1 produces the cache files. Phase 2 reads from them. If a cache file
+exists and is recent (same Figma file version), Phase 1 may skip the
+corresponding API call.
+
+---
+
+## Audit procedure -- two-phase approach
+
+The audit runs in two phases. Phase 1 (discovery) is fast and cheap: one REST
+API call plus counts. Phase 2 (targeted scoring) uses the discovery summary to
+skip clusters and dimensions that have no evidence, avoiding wasted API calls
+and token spend.
+
+Record data gaps as you encounter them. Score what you can and log what you
+cannot.
+
+---
+
+### Phase 1 -- Discovery
+
+**Goal:** Determine what the file contains and which clusters have evidence.
+
+**Step 1.1 -- File structure call**
+
+Run one REST API call:
 
 ```
-GET /v1/files/{key}?depth=1          → file structure, page list
-GET /v1/files/{key}/components       → published component inventory
-GET /v1/files/{key}/styles           → published style inventory
-GET /v1/files/{key}/variables/local  → variable collections, alias chains
+GET /v1/files/{key}?depth=1          -> file structure, page list
 ```
+
+From the response, extract:
+- Page list (names and IDs)
+- Top-level structure (number of pages, any documentation or cover pages)
+
+**Step 1.2 -- Component, style, and variable counts**
+
+Run the remaining REST API calls:
+
+```
+GET /v1/files/{key}/components       -> published component inventory
+GET /v1/files/{key}/styles           -> published style inventory
+GET /v1/files/{key}/variables/local  -> variable collections, alias chains
+```
+
+From the responses, extract counts:
+- Published component count
+- Published style count (text styles, effect styles, colour styles)
+- Variable collection count and names
+- Total variable count per collection
 
 If any call fails or times out, record a data gap with reason `access_denied`
-or `timeout` and note the impact on each affected dimension.
+or `timeout`.
 
-### Step 2 — Spot-check via MCP
+**Step 1.3 -- Produce discovery summary**
 
-Select a sample of components for MCP inspection. The sample must include:
-- At least one component from each ❖ component page (or equivalent).
+Output a discovery summary before proceeding to Phase 2:
+
+```json
+{
+  "component_count": 0,
+  "variable_collection_count": 0,
+  "variable_count": 0,
+  "style_count": 0,
+  "page_list": [],
+  "evidence_available": {
+    "cluster_0": true,
+    "cluster_1": true,
+    "cluster_2": true,
+    "cluster_3": true,
+    "cluster_4": true,
+    "cluster_5": true,
+    "cluster_6": false
+  },
+  "skip_reasons": {
+    "cluster_6": "No code repository provided"
+  },
+  "single_component_file": false
+}
+```
+
+**Skip logic:**
+- If a cluster has no evidence source available, mark it as skipped with a
+  reason. Skipped clusters score null in the output.
+- If `component_count` is 0 or 1, set `single_component_file: true`. In
+  Phase 2, skip statistical dimensions (coverage percentages are meaningless
+  for n <= 1): dimensions 3.1 (description coverage), 5.1 (naming consistency).
+- Cluster 6 (Design-to-Code Parity) requires both Figma and code evidence.
+  Skip the entire cluster if no code repository is provided.
+- Code-only dimensions (2.2, 2.4, 3.2, 3.4, 5.3, 5.5, 5.6, 5.7) score null
+  when no code repository is available. Do not skip the parent cluster; score
+  remaining dimensions within it.
+
+Present the discovery summary to the user before proceeding. If the user
+requests changes to scope (e.g. skip a cluster, add a code repo), adjust
+before entering Phase 2.
+
+---
+
+### Phase 2 -- Targeted scoring
+
+**Goal:** Score only the dimensions that have evidence.
+
+**Step 2.1 -- MCP spot-checks (if needed)**
+
+If Cluster 2 or Cluster 4 dimensions require MCP data, select a sample of
+components for inspection. The sample must include:
+- At least one component from each component page (or equivalent).
 - At least one interactive component (button, checkbox, text field, or similar).
 - At least one non-interactive component (card, avatar, badge, or similar).
 
@@ -88,35 +224,27 @@ Use MCP `get_design_context` on each sampled component to inspect:
 - Focus state variants and touch target sizes.
 - Accessibility-relevant structure.
 
-Record which components were sampled and which were not (data gap if sampling
-is limited by MCP timeouts or page size).
+Skip this step entirely if the discovery summary shows no components.
 
-### Step 3 — Score each sub-check
+**Step 2.2 -- Score each dimension**
 
-For each of the eleven dimensions, score every sub-check on the 0-4 scale:
+For each dimension not skipped in the discovery summary, score on the 0-4 scale:
 
 | Score | Meaning |
 |---|---|
-| 0 | Not present — the capability does not exist in the file |
-| 1 | Major gaps — capability exists but coverage is below 25% or fundamentally broken |
-| 2 | Inconsistent — coverage is 25-60% or the implementation is unreliable |
-| 3 | Minor issues — coverage is 60-90% with small gaps or edge cases |
-| 4 | Fully implemented — coverage above 90%, consistent, no significant issues |
+| 0 | Not present -- the capability does not exist in the file |
+| 1 | Major gaps -- capability exists but coverage is below 25% or fundamentally broken |
+| 2 | Inconsistent -- coverage is 25-60% or the implementation is unreliable |
+| 3 | Minor issues -- coverage is 60-90% with small gaps or edge cases |
+| 4 | Fully implemented -- coverage above 90%, consistent, no significant issues |
 
-Record each sub-check score in the `sub_check_scores` field of the
-DimensionEntry.
+Tier 2 dimensions (4.16-4.27) use a simplified scale: 0 = not addressed,
+1 = partially addressed, 2 = systematically addressed.
 
-### Step 4 — Calculate dimension scores
+For dimensions with sub-checks, record each sub-check score in the
+`sub_check_scores` field.
 
-For each dimension:
-
-1. Average the sub-check scores.
-2. Multiply by 25 to produce a 0-100 value.
-3. Round to the nearest integer.
-
-Example: sub-checks score [3, 2, 0, 2] → average 1.75 → dimension score 44.
-
-### Step 5 — Determine dimension severity
+**Step 2.3 -- Determine dimension severity**
 
 Apply severity in this order (first match wins):
 
@@ -125,22 +253,28 @@ Apply severity in this order (first match wins):
    critical capability is entirely absent.
 2. **Threshold lookup:** Read the severity thresholds from the scoring weights
    config. Apply the dimension score against the thresholds:
-   - Score below 30 → `blocker`
-   - Score 30 to below 60 → `warning`
-   - Score 60 to below 80 → `note`
-   - Score 80 or above → `pass`
+   - Score 0 or 1 -> `blocker`
+   - Score 2 -> `warning`
+   - Score 3 -> `note`
+   - Score 4 -> `pass`
 
 Client configs may define per-dimension overrides in `severity_thresholds.overrides`.
 
-### Step 6 — Calculate overall score
+**Step 2.4 -- Calculate cluster scores**
+
+For each cluster, calculate the cluster score from its scored dimensions
+(exclude null dimensions). The cluster score is the average of dimension
+scores, normalised to 0-100 (average x 25).
+
+**Step 2.5 -- Calculate overall score**
 
 ```
-overall_score = sum of (dimension_score × weight) for all scored dimensions
+overall_score = weighted average of cluster scores
 ```
 
-Read weights from `config/scoring-weights.json`. Weights sum to 1.00.
+Read weights from `config/scoring-weights.json`.
 
-### Step 7 — Determine phase readiness
+**Step 2.6 -- Determine phase readiness**
 
 Read thresholds from `phase_readiness_thresholds` in the scoring weights config.
 
@@ -154,13 +288,34 @@ If conditions for both `conditional_pass` and `not_ready` are met (e.g. overall
 score >= 50 but a blocker exists), `not_ready` takes precedence. The blocker
 gate always wins.
 
+**Step 2.7 -- Build remediation plan**
+
+Derive the remediation section from findings. Categorise each remediation item:
+
+- **Quick wins:** effort_estimate = hours, projected score improvement is
+  immediate. Typically: adding descriptions, fixing naming, documenting gaps.
+- **Foundational blockers:** effort_estimate = days or weeks, required for
+  phase advancement. Typically: building token layers, restructuring
+  architecture, writing intent documentation.
+- **Post-migration:** deferred improvements that do not block advancement.
+  Typically: migrating legacy styles, adding Tier 2 craft patterns.
+
+Every finding with severity blocker or warning must appear in at least one
+remediation item. Findings with severity note may be grouped.
+
 ---
 
 ## Dimensions
 
-The canonical dimension definitions live in CLAUDE.md. If there is a conflict
-between this prompt and CLAUDE.md, CLAUDE.md wins. The sub-checks below define
-the scoring methodology for each dimension.
+The canonical dimension definitions live in CLAUDE.md, organised into seven
+clusters (0 through 6). If there is a conflict between this prompt and
+CLAUDE.md, CLAUDE.md wins. The sub-checks below define the scoring methodology
+for dimensions that were present in v1.4. For dimensions added in v2.0
+(Clusters 0, 4, 5, 6 and new dimensions in Clusters 1-3), see
+`docs/audit-dimensions-v2.0.md` for full definitions.
+
+Dimensions skipped by the Phase 1 discovery summary are not scored. Their
+DimensionEntry has score: null, severity: null, and an empty finding_ids array.
 
 ### 1. Token implementation (slug: `token_implementation`, weight: 0.10)
 
@@ -449,27 +604,28 @@ MCP for spot-checking touch target sizes on sampled components.
 
 ## Scoring instructions summary
 
-1. Score each sub-check 0-4 per the guidance above.
-2. Calculate dimension score: average of sub-check scores × 25, rounded to
-   nearest integer.
+1. Run Phase 1 discovery. Present the summary. Confirm scope with the user.
+2. For each dimension not skipped, score 0-4 per the guidance above.
 3. Apply override rule: if any sub-check scores 0, force dimension severity to
    `blocker`.
-4. Apply severity thresholds from the scoring weights config to determine
-   dimension severity (if not already forced to blocker by override rule).
-5. Calculate overall score: sum of (dimension_score × weight) across all eleven
-   dimensions.
-6. Determine phase readiness from thresholds in the scoring weights config.
+4. Apply severity thresholds to determine dimension severity (if not already
+   forced to blocker by override rule).
+5. Calculate cluster scores from scored dimensions (null dimensions excluded).
+6. Calculate overall score as weighted average of cluster scores.
+7. Determine phase readiness from thresholds in the scoring weights config.
+8. Build remediation plan from findings.
 
-**Important:** v1.3 and v1.4 scores are not directly comparable. v1.3 used
-implicit aggregation. v1.4 uses formalised sub-checks. If a version_delta block
-is included, the narrative must note this methodology change.
+**Important:** v1.4 and v2.1 scores are not directly comparable. v1.4 used
+0-100 dimension scores derived from sub-checks x 25. v2.1 uses 0-4 raw
+dimension scores with cluster-level aggregation. If a version_delta block is
+included, the narrative must note this methodology change.
 
 ---
 
 ## Phase readiness recommendation (required output)
 
-The findings JSON must include `phase_readiness_detail` in the summary block.
-This is a required output in v1.4.
+The audit JSON must include `phase_readiness_detail` in the summary block
+and a `remediation` section at the top level. Both are required in v2.1.
 
 Populate the following fields:
 
@@ -506,34 +662,47 @@ root entries explaining when to use each component" is a condition.
 Produce a single JSON file conforming to `audit/schema/audit-schema.json`.
 
 Required fields in `meta`:
-- `schema_version`: "1.4"
-- `audit_id`: format `{target}-v1.4-{YYYY-MM-DD}`
+- `schema_version`: "2.1"
+- `audit_id`: format `{target}-v2.1-{YYYY-MM-DD}`
 - `timestamp`: ISO 8601 UTC, when the audit completed
 - `auditor`: "Claude Code via Figma REST API + MCP"
-- `prompt_version`: "1.4"
+- `prompt_version`: "2.1"
+- `git_tag`: the release tag that produced this output
 - `target_system`: name of the design system being audited
 - `figma_files`: keyed by library role, with file_key and file_name
+- `evidence_sources`: array of data sources used
 
 Required fields in `summary`:
-- `overall_score`: weighted average using `config/scoring-weights.json`
+- `overall_score`: weighted average, 0-100
 - `phase_readiness`: derived from score and blocker count per thresholds
 - `phase_readiness_detail`: blocking dimensions, warning dimensions, conditions
   for advancement
 - `top_blockers`: up to 3 finding IDs with severity=blocker
-- `dimension_scores`: flat {slug: score} map
-- `dimensions_scored`: array of dimension slugs included in this run
+- `blocker_count`: total dimension-level blockers
+- `dimension_scores`: flat {dimension_key: score} map (score or null)
+- `cluster_scores`: flat {cluster_key: score} map
+- `dimensions_scored`: integer count of scored dimensions
+- `dimensions_total`: integer total dimensions
+- `dimensions_null`: integer count of null dimensions
+
+Required fields in each ClusterEntry:
+- `cluster_name`: human-readable name
+- `cluster_summary`: one-sentence headline (new in v2.1)
+- `cluster_score`: 0-100 from scored dimensions
+- `dimensions`: object of DimensionEntry
 
 Required fields in each DimensionEntry:
-- `score`: 0-100 derived from sub-checks
-- `severity`: derived from thresholds and override rule
+- `score`: 0-4 integer or null
+- `score_max`: 4 (standard) or 2 (Tier 2 craft)
+- `severity`: derived from thresholds and override rule, or null
 - `narrative`: prose summary
+- `evidence_sources`: array of data sources
 - `finding_ids`: array of finding IDs
-- `sub_check_scores`: {sub-check ID: 0-4 score} map
 
 Every finding must have:
 - A stable `id` following the pattern `{DIMENSION_ABBREV}-{NNN}`
-- A `contract_ref` (or null with justification)
-- Verbatim `evidence` — quote what you observed, not a summary
+- A `severity_rank` integer: 0=pass, 1=note, 2=warning, 3=blocker (new in v2.1)
+- A `recommendation` -- mandatory, no finding without a recommendation (new in v2.1)
 
 Every data gap must have:
 - An `id` following the pattern `GAP-{NNN}`
@@ -541,18 +710,28 @@ Every data gap must have:
   not_auditable, page_size
 - An `impact` statement explaining how the gap affects scoring
 
+Required `remediation` section (new in v2.1):
+- `quick_wins`: array of RemediationItem
+- `foundational_blockers`: array of RemediationItem
+- `post_migration`: array of RemediationItem
+
+Each RemediationItem must have: `action`, `affected_cluster`,
+`affected_dimensions`, `effort_estimate` (hours/days/weeks), `ownership`
+(design/engineering/both). Optional: `projected_score_improvement`, `finding_ids`.
+
 ### Markdown report
 
 After producing the JSON, generate a Markdown report derived from it. The
-Markdown is a rendering of the JSON — never the other way around. The JSON is
+Markdown is a rendering of the JSON -- never the other way around. The JSON is
 the source of truth.
 
 The Markdown report should include:
 - Executive summary with overall score and phase readiness
 - Phase readiness detail: blocking dimensions, warning dimensions, conditions
   for advancement
-- Dimension-by-dimension breakdown with scores, severity, sub-check scores,
-  and narrative
+- Cluster-by-cluster breakdown with cluster summary, score, and dimensions
+- Each dimension: score, severity, narrative, finding IDs
+- Remediation roadmap: quick wins, foundational blockers, post-migration
 - Top blockers section
 - Data gaps section
 - Finding detail table
@@ -565,18 +744,36 @@ Write the JSON first. Then render the Markdown from it.
 
 | Dimension | Abbreviation |
 |---|---|
-| token_implementation | TI |
-| alias_chain_integrity | AC |
-| token_architecture_depth | TA |
-| primitive_naming | PN |
-| component_to_token_binding | CTB |
-| component_description_coverage | CDC |
-| naming_convention_consistency | NC |
-| platform_readiness_gap | PRG |
-| web_readiness_gap (deprecated) | WR |
-| governance | GOV |
-| documentation_quality | DQ |
-| accessibility_intent_coverage | AIC |
+| 0.1 platform_architecture_clarity | PAC |
+| 1.1 token_implementation | TI |
+| 1.2 alias_chain_integrity | AC |
+| 1.3 token_architecture_depth | TA |
+| 1.4 primitive_naming | PN |
+| 1.5 token_format_machine_readability | TFM |
+| 1.6 token_documentation | TD |
+| 2.1 component_to_token_binding | CTB |
+| 2.2 component_api_composability | CAC |
+| 2.3 variant_completeness | VC |
+| 2.4 escape_hatch_usage | EH |
+| 3.1 component_description_coverage | CDC |
+| 3.2 documentation_structure | DS |
+| 3.3 intent_quality | IQ |
+| 3.4 usage_guidance_formalisation | UGF |
+| 3.5 documentation_frame_metadata | DFM |
+| 4.x (Cluster 4 dimensions) | CB-{nn} |
+| 5.1 naming_convention_consistency | NC |
+| 5.2 versioning_and_changelog | VCL |
+| 5.3 contribution_standards | CS |
+| 5.4 deprecation_patterns | DEP |
+| 5.5 test_coverage | TC |
+| 5.6 adoption_visibility | AV |
+| 5.7 code_consistency | CC |
+| 6.1 token_value_parity | TVP |
+| 6.2 token_naming_parity | TNP |
+| 6.3 component_naming_parity | CNP |
+| 6.4 variant_state_parity | VSP |
+| 6.5 behaviour_parity | BP |
+| 6.6 documentation_of_parity_gaps | DPG |
 
 Example: `AIC-001` is the first finding in the accessibility intent coverage
 dimension.
@@ -603,6 +800,29 @@ retain that prefix for continuity; new findings in Dimension 8 use `PRG-`.
 ---
 
 ## Changelog
+
+### v2.1 (2026-03-31)
+
+- **Two-phase audit.** Phase 1 (discovery) runs REST API calls and produces a
+  summary with component, variable, and style counts. Phase 2 (targeted scoring)
+  scores only dimensions with evidence. Skips entire clusters when no data.
+  Single-component files skip statistical dimensions.
+- **Schema aligned with v2.0 cluster structure.** Top-level `dimensions` replaced
+  with `clusters` containing nested dimensions. Dimension scores are 0-4 integers
+  (not 0-100). Breaking change from v1.4.
+- **Remediation section** added as required output. Three categories: quick wins,
+  foundational blockers, post-migration. Each item has action, affected cluster
+  and dimensions, effort estimate, ownership, and projected score improvement.
+- **severity_rank** integer (0-3) mandatory on all findings for sorting.
+- **cluster_summary** string mandatory on all clusters.
+- **Recommendation mandatory** on all findings. No finding without a recommendation.
+- **Dimension 3.3** (intent quality) scored against a six-level documentation
+  hierarchy: purpose, structure, intended behaviour, main use cases, error
+  handling, edge cases.
+- **Patterns** are first-class audit targets alongside components.
+- **Cluster 4 renamed** from "Craft Baseline" to "Design Quality Baseline".
+- **Documentation meta-principles** added to CLAUDE.md.
+- **Finding ID conventions** expanded to cover all 44 dimensions.
 
 ### v1.4 (2026-03-30)
 

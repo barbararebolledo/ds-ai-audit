@@ -106,7 +106,7 @@ Whether the system can explain itself to an agent.
 
 Evidence: Figma (description fields, documentation frames) + Code (Storybook, MDX, README, inline docs)
 
-**Cluster 4: Craft Baseline**
+**Cluster 4: Design Quality Baseline**
 Universal quality criteria scored without client context.
 
 - 4.1 Interaction targets (touch/click target minimums per platform)

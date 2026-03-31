@@ -90,6 +90,11 @@ by ID. For comprehensive file enumeration, always use the REST API.
 - `GET /v1/files/{key}/styles` -- published style inventory
 - `GET /v1/files/{key}/variables/local` -- variable collections and alias chains
 
+REST API responses are filtered and cached as JSON in `scripts/output/` before
+scoring. The scoring engine reads cached files, not live API responses. See
+the token reduction section in `prompts/audit-prompt.md` for filtering rules
+and cache file conventions.
+
 Note: community Figma files must be published to a team library before
 `/components` and `/styles` return data. Unpublished files return empty arrays.
 
@@ -100,13 +105,20 @@ Note: community Figma files must be published to a team library before
 - **Markdown is always derived from JSON.** Never write the markdown report
   independently. The JSON is the source of truth. The markdown is a rendering of it.
 
-- **Schema changes are additive only after v1.3.** No breaking changes to the audit
-  schema once v1.3 is committed. New fields are optional. Existing fields are not
-  removed or renamed.
+- **Schema changes are additive only within a major version.** v2.1 is a breaking
+  change from v1.4 (clusters replace flat dimensions). Within v2.x, changes are
+  additive only. New fields are optional. Existing fields are not removed or
+  renamed.
+
+- **Two-phase audit.** Phase 1 (discovery) runs REST API calls and produces a
+  summary: component count, variable collection count, style count, page list.
+  Phase 2 (targeted scoring) scores only dimensions with evidence. Skip entire
+  clusters when discovery shows no relevant data. For single-component files,
+  skip statistical dimensions.
 
 - **REST API is the primary data source.** MCP cannot enumerate components or styles
-  comprehensively. Use REST API for all four calls before scoring. Use MCP for
-  spot-checks on sampled components to verify node-level bindings (Dimension 5).
+  comprehensively. Use REST API for all four calls in Phase 1. Use MCP for
+  spot-checks on sampled components in Phase 2 (Dimension 2.1, Cluster 4).
 
 - **Prompt files are committed and tagged.** Every audit run is paired with the
   git tag (release) that produced it. Prompt files live in `prompts/` and are
@@ -150,14 +162,53 @@ incomplete, not when the action is unavailable."
 - `import { Button } from '@mui/material'` -- implementation detail
 - A code snippet showing usage syntax -- implementation detail
 
-Dimensions 6 and 10 both score intent coverage but measure different things.
-Dimension 6 scores coverage: does intent exist at all in the description field?
-Dimension 10 scores quality: is the documentation well-structured, appropriately
-concise, and free of redundancy -- useful to an agent, not just a developer?
+Dimensions 3.1 and 3.3 both score intent but measure different things.
+Dimension 3.1 scores coverage: does intent exist at all in the description field?
+Dimension 3.3 scores quality: does the documentation follow the six-level
+hierarchy, is it well-structured, appropriately concise, and free of redundancy
+-- useful to an agent, not just a developer?
 
 The absence of intent is not the same as the absence of a description. A description
 can exist and still carry no intent. The MUI audit found that 96.2% of existing
 descriptions were code snippets -- descriptions were present but intent was absent.
+
+---
+
+## Documentation hierarchy
+
+Dimension 3.3 (intent quality) scores documentation against a six-level hierarchy.
+Each level adds depth. A component or pattern does not need all six levels to score
+well, but the levels it does cover must be substantive.
+
+1. **Purpose** -- what it does, its scope, what is explicitly out of scope.
+2. **Structure** -- anatomy: the named parts and how they relate.
+3. **Intended behaviour** -- states, transitions, and what triggers them.
+4. **Main use cases** -- the two or three scenarios this component is designed for.
+5. **Error handling** -- what happens when things go wrong, and how the component
+   communicates failure.
+6. **Edge cases** -- boundary conditions, empty states, overflow, truncation,
+   internationalisation considerations.
+
+**Weight shift by type:**
+- Components emphasise levels 1 and 2 (purpose and structure). A well-documented
+  component always has these.
+- Patterns emphasise levels 4 and 5 (use cases and error handling). A pattern
+  without use cases is not useful.
+
+---
+
+## Documentation meta-principles
+
+These principles apply to all documentation produced or scored by the audit:
+
+- **Thorough.** Cover what matters. Do not leave gaps that force a reader to guess.
+- **Succinct.** Say it once, clearly. Remove words that do not add information.
+- **Plain language.** Write for a reader who knows the domain but not this system.
+  Avoid jargon, abbreviations, and insider shorthand.
+- **No duplication.** Do not repeat information that exists elsewhere. Document
+  once and link.
+- **Link to external frameworks.** When a pattern follows an established standard
+  (WCAG, Material Design, platform HIG), reference it rather than restating it.
 
 ---
 
@@ -216,11 +267,18 @@ Whether the system can explain itself to an agent.
 
 - 3.1 Component description coverage (percentage with descriptions and intent). Evidence: Figma + Code
 - 3.2 Documentation structure and machine-readability. Evidence: Code
-- 3.3 Intent quality (functional purpose vs visual description). Evidence: Figma + Code
+- 3.3 Intent quality -- scored against a six-level documentation hierarchy
+  (see Documentation hierarchy below). Components emphasise purpose and
+  structure; patterns emphasise use cases and error handling. Evidence: Figma + Code
 - 3.4 Usage guidance formalisation (rules vs qualitative guidance). Evidence: Code
 - 3.5 Documentation frame metadata (structural data from Figma pages). Evidence: Figma
 
-**Cluster 4: Craft Baseline**
+Patterns are a first-class audit target alongside components. The audit checks
+whether documented interaction patterns exist (loading, empty state, error
+recovery, validation, navigation, dismissal) and whether they follow the same
+documentation hierarchy as components.
+
+**Cluster 4: Design Quality Baseline**
 Universal quality criteria scored without client context. Two tiers.
 
 Tier 1 (scored 0-4):
@@ -354,8 +412,10 @@ To apply this tool to a specific client or project:
    collection naming, documentation frame conventions, component description coverage,
    and code token format in `decisions/`.
 5. Adapt the documentation frame reader for the client's specific frame structure.
-6. Configure platform-specific thresholds for Dimension 8 and Dimension 11 in the
-   client scoring config.
+6. Configure platform-specific thresholds in the client scoring config:
+   Cluster 4 dimensions 4.1 (interaction targets), 4.2 (contrast ratios),
+   4.9 (focus states), and Cluster 0 dimension 0.1 (platform architecture
+   clarity).
 7. Do not modify the base prompt, base schema, or base scoring config.
 
 ---
@@ -366,14 +426,14 @@ Update this section at the end of each release session.
 
 | Field | Value |
 |---|---|
-| Current release | 2.0 (complete) |
+| Current release | 2.1 (schema and prompt complete, validation run pending) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
-| Last prompt version | v1.4 (prompts/audit-prompt.md) |
-| Schema version | v2.0 (audit/schema/audit-schema.json) |
+| Last prompt version | v2.1 (prompts/audit-prompt.md) |
+| Schema version | v2.1 (audit/schema/audit-schema.json) |
 | Last audit run | Material UI v2.0 -- 55.3/100 not ready, 10 blockers |
 | Dimensions | 7 clusters / 44 dimensions (47 scored, 9 code-only null) |
 | Nordea status | Access pending -- adaptation sprint is Release 3.0 |
-| Release 2.0 planning | Complete -- decision record 005, dimensions restructured |
+| Release 2.1 planning | Complete -- decision record 006 |
 
 ---
 
@@ -386,8 +446,12 @@ Full plan in `docs/exploration-plan.md`.
 - **1.4** -- Scoring thresholds, phase readiness recommendation, eleven dimensions
   active.
 - **2.0** -- Code-side token diff (Figma vs repository). Documentation frame reader.
-- **2.1** -- Studio library application. First real-world stress test.
-- **2.2** -- Repeatability and baseline diff mode.
+  Dimension restructure to 7 clusters / 44 dimensions.
+- **2.1** -- Schema iteration (cluster-based, remediation section, severity_rank).
+  Two-phase audit. Token reduction. Documentation hierarchy for Dimension 3.3.
+  Validation run pending.
+- **2.2** -- Studio library application. First real-world stress test.
+- **2.3** -- Repeatability and baseline diff mode.
 - **3.0+** -- Client application sprint. Agent wrapper decision point.
 
 ---

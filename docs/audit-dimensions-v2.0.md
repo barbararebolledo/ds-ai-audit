@@ -158,6 +158,26 @@ redundancy, and useful to an agent rather than just a developer? Distinct
 from 3.1 (which asks whether intent exists). This dimension asks whether it
 is good.
 
+Scored against a six-level documentation hierarchy:
+
+1. **Purpose** -- what it does, its scope, what is explicitly out of scope.
+2. **Structure** -- anatomy: the named parts and how they relate.
+3. **Intended behaviour** -- states, transitions, and what triggers them.
+4. **Main use cases** -- the two or three scenarios this is designed for.
+5. **Error handling** -- what happens when things go wrong, and how the
+   component or pattern communicates failure.
+6. **Edge cases** -- boundary conditions, empty states, overflow, truncation,
+   internationalisation considerations.
+
+Weight shift by type:
+- Components emphasise levels 1 and 2 (purpose and structure).
+- Patterns emphasise levels 4 and 5 (use cases and error handling).
+
+Patterns are a first-class audit target alongside components. The audit checks
+whether documented interaction patterns exist (loading, empty state, error
+recovery, validation, navigation, dismissal) and whether they follow the same
+documentation hierarchy.
+
 Evidence: Figma + Code
 
 ### 3.4 Usage guidance formalisation
@@ -178,7 +198,7 @@ Evidence: Figma (MCP inspection of documentation frames)
 
 ---
 
-## Cluster 4: Craft Baseline
+## Cluster 4: Design Quality Baseline
 
 Universal quality criteria scored without client context. Two tiers.
 

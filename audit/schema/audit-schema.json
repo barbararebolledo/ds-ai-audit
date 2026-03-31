@@ -1,74 +1,56 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "audit-schema.json",
-  "title": "AI-Readiness Audit v1.4",
-  "$comment": "Additive extension of v1.3. No breaking changes. New in v1.4: accessibility_intent_coverage and platform_readiness_gap dimension keys, sub_check_scores on DimensionEntry, phase_readiness_detail on Summary, AIC and PRG finding abbreviations. v1.3 consumers can still read v1.4 output by ignoring unknown optional fields.",
+  "title": "AI-Readiness Audit v2.1",
+  "$comment": "v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
 
   "type": "object",
-  "required": ["meta", "summary", "dimensions", "findings", "data_gaps", "config_ref"],
+  "required": ["meta", "summary", "clusters", "findings", "data_gaps", "config_ref"],
   "additionalProperties": false,
 
   "properties": {
 
     "meta": {
-      "$comment": "Provenance block. Everything needed to reproduce or trace the audit run. Kept separate from summary so CI systems can assert run identity without parsing results.",
+      "$comment": "Provenance block. Everything needed to reproduce or trace the audit run.",
       "$ref": "#/$defs/Meta"
     },
 
     "summary": {
-      "$comment": "Decision-making block. Consumed by stakeholders and CI gates. Contains no raw findings — only aggregated scores and ID references into the findings array. v1.4 adds phase_readiness_detail for remediation-path consumers.",
+      "$comment": "Decision-making block. Consumed by stakeholders and CI gates. Contains no raw findings, only aggregated scores and ID references.",
       "$ref": "#/$defs/Summary"
     },
 
-    "dimensions": {
-      "$comment": "Keyed by dimension slug. Each entry holds a score, severity, narrative, and an array of finding IDs pointing into the top-level findings array. This indirection allows one finding to be referenced by more than one dimension. All dimension keys are optional at the property level. A partial audit omits unscored dimensions. summary.dimensions_scored records which were included. v1.4 adds platform_readiness_gap (replacing web_readiness_gap) and accessibility_intent_coverage.",
+    "clusters": {
+      "$comment": "Primary structure. Seven clusters (0 through 6), each containing its dimensions. Replaces the v1.4 flat dimensions object. Cluster keys follow the pattern {number}_{slug}.",
       "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "token_implementation":            { "$ref": "#/$defs/DimensionEntry" },
-        "alias_chain_integrity":           { "$ref": "#/$defs/DimensionEntry" },
-        "token_architecture_depth":        { "$ref": "#/$defs/DimensionEntry" },
-        "primitive_naming":                { "$ref": "#/$defs/DimensionEntry" },
-        "component_to_token_binding":      { "$ref": "#/$defs/DimensionEntry" },
-        "component_description_coverage":  { "$ref": "#/$defs/DimensionEntry" },
-        "naming_convention_consistency":   { "$ref": "#/$defs/DimensionEntry" },
-        "web_readiness_gap":               {
-          "$ref": "#/$defs/DimensionEntry",
-          "$comment": "Deprecated in v1.4. Use platform_readiness_gap for new audits. Retained for backward compatibility with v1.3 audit outputs."
-        },
-        "platform_readiness_gap":          {
-          "$ref": "#/$defs/DimensionEntry",
-          "$comment": "New in v1.4. Replaces web_readiness_gap. Platform-specific checks are configured in the client scoring config."
-        },
-        "governance":                      { "$ref": "#/$defs/DimensionEntry" },
-        "documentation_quality":           { "$ref": "#/$defs/DimensionEntry" },
-        "accessibility_intent_coverage":   {
-          "$ref": "#/$defs/DimensionEntry",
-          "$comment": "New in v1.4. Scores structural accessibility signals in the Figma file: focus states, touch targets, contrast derivability, keyboard navigation, accessibility mentions in descriptions."
-        }
-      }
+      "additionalProperties": { "$ref": "#/$defs/ClusterEntry" }
     },
 
     "findings": {
-      "$comment": "Flat canonical list. Dimensions reference finding IDs, not the other way around. Flat structure lets the codegen pipeline iterate all findings without traversing the dimension tree.",
+      "$comment": "Flat canonical list. Dimensions reference finding IDs, not the other way around. Flat structure lets the codegen pipeline iterate all findings without traversing the cluster tree.",
       "type": "array",
       "items": { "$ref": "#/$defs/Finding" },
       "uniqueItems": true
     },
 
+    "remediation": {
+      "$comment": "New in v2.1. Prioritised remediation plan derived from findings. Three categories: quick wins (low effort, immediate improvement), foundational blockers (high effort, required for advancement), and post-migration improvements (deferred, nice-to-have). Each item references affected clusters and dimensions.",
+      "$ref": "#/$defs/Remediation"
+    },
+
     "data_gaps": {
-      "$comment": "Explicit record of what could not be inspected. A consumer must not treat absence of findings as a clean result — data gaps explain the omissions.",
+      "$comment": "Explicit record of what could not be inspected. A consumer must not treat absence of findings as a clean result.",
       "type": "array",
       "items": { "$ref": "#/$defs/DataGap" }
     },
 
     "config_ref": {
-      "$comment": "Pointer to the external weights config. Weights are never embedded in the audit output. This decouples client-specific weight adjustments from schema versioning.",
+      "$comment": "Pointer to the external weights config. Weights are never embedded in the audit output.",
       "$ref": "#/$defs/ConfigRef"
     },
 
     "version_delta": {
-      "$comment": "Optional. Present when a previous audit run exists. Records score changes and their causes. Stored in the audit output — not the config — because it is a factual record of measurement.",
+      "$comment": "Optional. Present when a previous audit run exists. Records score changes and their causes.",
       "$ref": "#/$defs/VersionDelta"
     }
 
@@ -84,44 +66,49 @@
 
         "schema_version": {
           "type": "string",
-          "const": "1.4",
-          "$comment": "Must match the $id version. Allows consumers to assert schema compatibility before parsing."
+          "const": "2.1",
+          "$comment": "Must match the title version. Allows consumers to assert schema compatibility before parsing."
         },
 
         "audit_id": {
           "type": "string",
-          "$comment": "Unique run identifier. Recommended format: {target}-v{version}-{date}, e.g. 'material-ui-v1.4-2026-04-01'. Referenced by version_delta.previous_audit_id in subsequent runs."
+          "$comment": "Unique run identifier. Recommended format: {target}-v{version}-{date}, e.g. 'material-ui-v2.1-2026-04-01'."
         },
 
         "timestamp": {
           "type": "string",
           "format": "date-time",
-          "$comment": "ISO 8601 UTC. When the audit script completed, not when it started."
+          "$comment": "ISO 8601 UTC. When the audit completed, not when it started."
         },
 
         "auditor": {
           "type": "string",
-          "$comment": "Who or what ran the audit, e.g. 'Claude Code via Figma MCP + REST API'."
+          "$comment": "Who or what ran the audit, e.g. 'Claude Code via Figma REST API + MCP'."
         },
 
         "script_version": {
           "type": "string",
-          "$comment": "Optional. Semantic version of the audit script. Lets you trace findings to a specific script revision when script and prompt versions diverge."
+          "$comment": "Optional. Semantic version of the audit script."
         },
 
         "prompt_version": {
           "type": "string",
-          "$comment": "Optional. Version of the prompt template used. Separate from script_version because the prompt can change independently of the execution logic."
+          "$comment": "Optional. Version of the prompt template used."
+        },
+
+        "git_tag": {
+          "type": "string",
+          "$comment": "Optional. Git tag of the audit tool release that produced this output. New in v2.0."
         },
 
         "target_system": {
           "type": "string",
-          "$comment": "Name of the design system being audited, e.g. 'Material UI for Figma (Community)'."
+          "$comment": "Name of the design system being audited."
         },
 
         "figma_files": {
           "type": "object",
-          "$comment": "Keyed by library role (e.g. 'foundation', 'component'). Records the Figma file key and version at the time of the audit so results can be traced back to a specific file state.",
+          "$comment": "Keyed by library role (e.g. 'foundation', 'component').",
           "additionalProperties": {
             "type": "object",
             "required": ["file_key"],
@@ -129,9 +116,15 @@
             "properties": {
               "file_key":     { "type": "string" },
               "file_version": { "type": "string", "$comment": "Optional. Figma file version string." },
-              "file_name":    { "type": "string", "$comment": "Optional. Human-readable file name for the report." }
+              "file_name":    { "type": "string", "$comment": "Optional. Human-readable file name." }
             }
           }
+        },
+
+        "evidence_sources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "$comment": "Optional. List of data sources used in this audit run. New in v2.0."
         }
 
       }
@@ -139,7 +132,7 @@
 
     "Summary": {
       "type": "object",
-      "required": ["overall_score", "phase_readiness", "top_blockers", "dimension_scores"],
+      "required": ["overall_score", "phase_readiness", "top_blockers", "dimension_scores", "cluster_scores"],
       "additionalProperties": false,
       "properties": {
 
@@ -147,13 +140,13 @@
           "type": "number",
           "minimum": 0,
           "maximum": 100,
-          "$comment": "Weighted average of all scored dimensions, 0-100. Weights come from the file referenced by config_ref — not from this document. In v1.4, this is computed as sum of (dimension_score x weight) where dimension_score = average of sub-check scores x 25."
+          "$comment": "Weighted average of all scored dimensions, 0-100. Weights come from the file referenced by config_ref."
         },
 
         "phase_readiness": {
           "type": "string",
           "enum": ["pass", "conditional_pass", "not_ready"],
-          "$comment": "Derived from overall_score and blocker count. 'pass' = score above threshold and zero blockers. 'conditional_pass' = warnings present but no blockers. 'not_ready' = one or more blocker-severity findings. Thresholds are defined in the weights config."
+          "$comment": "Derived from overall_score and blocker count. Thresholds are defined in the weights config."
         },
 
         "phase_readiness_detail": {
@@ -163,43 +156,98 @@
             "blocking_dimensions": {
               "type": "array",
               "items": { "type": "string" },
-              "$comment": "Dimension slugs with severity=blocker. These must be resolved before the system can advance."
+              "$comment": "Dimension keys with severity=blocker."
             },
             "warning_dimensions": {
               "type": "array",
               "items": { "type": "string" },
-              "$comment": "Dimension slugs with severity=warning. These degrade agent output quality but do not block advancement."
+              "$comment": "Dimension keys with severity=warning."
             },
             "conditions_for_advancement": {
               "type": "array",
               "items": { "type": "string" },
-              "$comment": "Explicit list of what must change for the system to advance from current phase_readiness. E.g. 'Resolve TA-001: create component-level token layer'. Each condition references a specific finding ID and describes the required action."
+              "$comment": "Explicit list of what must change for the system to advance. Each condition references a finding ID."
             }
-          },
-          "$comment": "New in v1.4. Detail behind the phase_readiness enum. Consumers that only need pass/fail can ignore this. Consumers showing remediation paths use conditions_for_advancement."
+          }
         },
 
         "top_blockers": {
           "type": "array",
           "items": { "type": "string" },
           "maxItems": 3,
-          "$comment": "Up to three finding IDs with severity=blocker, ordered by impact. These are the items that must be resolved before the system can advance. maxItems=3 enforces the editorial discipline of naming only the most critical issues."
+          "$comment": "Up to three finding IDs with severity=blocker, ordered by impact."
+        },
+
+        "blocker_count": {
+          "type": "integer",
+          "minimum": 0,
+          "$comment": "Total number of dimension-level blockers. New in v2.0."
         },
 
         "dimension_scores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["number", "null"]
+          },
+          "$comment": "Flat {dimension_key: score} lookup. Score is 0-100 (dimension score x 25) or null for not-assessed dimensions. Mirrors scores inside cluster entries."
+        },
+
+        "cluster_scores": {
           "type": "object",
           "additionalProperties": {
             "type": "number",
             "minimum": 0,
             "maximum": 100
           },
-          "$comment": "Flat {dimension_slug: score} lookup. Mirrors the score field inside each DimensionEntry. Provided here so dashboards and CI gates can read scores without traversing the full dimensions block."
+          "$comment": "Flat {cluster_key: score} lookup. Each cluster score is derived from its constituent dimensions. New in v2.0."
         },
 
         "dimensions_scored": {
-          "type": "array",
-          "items": { "type": "string" },
-          "$comment": "Optional. Dimension slugs included in this run. Lets consumers detect partial audits — a slug absent here was not scored, not that it scored zero."
+          "type": "integer",
+          "$comment": "Count of dimensions that were scored (not null). New in v2.0. Replaces the v1.4 array of slugs."
+        },
+
+        "dimensions_total": {
+          "type": "integer",
+          "$comment": "Total number of dimensions in the schema. New in v2.0."
+        },
+
+        "dimensions_null": {
+          "type": "integer",
+          "$comment": "Count of dimensions scored null (not assessed, typically code-only). New in v2.0."
+        }
+
+      }
+    },
+
+    "ClusterEntry": {
+      "$comment": "A cluster groups related dimensions. New in v2.0, replacing the flat dimensions object.",
+      "type": "object",
+      "required": ["cluster_name", "cluster_score", "dimensions"],
+      "additionalProperties": false,
+      "properties": {
+
+        "cluster_name": {
+          "type": "string",
+          "$comment": "Human-readable cluster name, e.g. 'Token and Variable System'."
+        },
+
+        "cluster_summary": {
+          "type": "string",
+          "$comment": "New in v2.1. One-sentence headline summarising the cluster's state. Used in executive summaries and dashboards."
+        },
+
+        "cluster_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "$comment": "Weighted average of dimension scores within the cluster, 0-100. Calculated from scored dimensions only (null dimensions excluded)."
+        },
+
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/DimensionEntry" },
+          "$comment": "Keyed by dimension ID following the pattern {cluster_number}.{dimension_number}_{slug}, e.g. '1.1_token_implementation'."
         }
 
       }
@@ -207,32 +255,51 @@
 
     "DimensionEntry": {
       "type": "object",
-      "required": ["score", "severity", "narrative", "finding_ids"],
+      "required": ["score", "score_max", "severity", "narrative", "finding_ids"],
       "additionalProperties": false,
       "properties": {
 
         "score": {
-          "type": "number",
+          "type": ["integer", "null"],
           "minimum": 0,
-          "maximum": 100,
-          "$comment": "0-100 scale. In v1.4, derived from sub-check scores: average of sub-checks x 25, rounded to nearest integer. v1.3 used implicit scoring without sub-checks."
+          "maximum": 4,
+          "$comment": "0-4 scale. Null for dimensions that cannot be assessed (e.g. code-only dimensions when no code repo is available)."
+        },
+
+        "score_max": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4,
+          "$comment": "Maximum possible score. 4 for standard dimensions, 2 for Tier 2 craft baseline dimensions (4.16-4.27). New in v2.0."
         },
 
         "severity": {
-          "type": "string",
-          "enum": ["blocker", "warning", "note", "pass"],
-          "$comment": "Dimension-level severity. In v1.4, derived from severity_thresholds in the scoring weights config AND the override rule: if any sub-check scores 0, severity is forced to blocker regardless of composite score. 'pass' is explicit — a dimension with no findings uses 'pass'."
+          "type": ["string", "null"],
+          "enum": ["blocker", "warning", "note", "pass", null],
+          "$comment": "Dimension-level severity. Null when score is null (not assessed). Derived from score thresholds and the override rule: any sub-check at 0 forces blocker."
+        },
+
+        "tier": {
+          "type": "integer",
+          "enum": [1, 2],
+          "$comment": "Optional. Present on Cluster 4 dimensions. Tier 1 (4.1-4.15): scored 0-4. Tier 2 (4.16-4.27): scored 0/1/2."
         },
 
         "narrative": {
           "type": "string",
-          "$comment": "Prose summary of this dimension's state. Used verbatim in the Markdown report. Should read as a standalone paragraph — it is the only dimension content that appears in the executive summary."
+          "$comment": "Prose summary of this dimension's state. Used verbatim in the Markdown report."
+        },
+
+        "evidence_sources": {
+          "type": "array",
+          "items": { "type": "string" },
+          "$comment": "Which data sources contributed to this dimension's score. New in v2.0."
         },
 
         "finding_ids": {
           "type": "array",
           "items": { "type": "string" },
-          "$comment": "IDs pointing into the top-level findings array. Empty array is valid and means no issues found. A dimension with issues must list them here — the narrative alone is not sufficient for codegen consumers."
+          "$comment": "IDs pointing into the top-level findings array. Empty array means no issues found."
         },
 
         "sub_check_scores": {
@@ -242,26 +309,26 @@
             "minimum": 0,
             "maximum": 4
           },
-          "$comment": "New in v1.4. Keyed by sub-check ID (e.g. '1a', '3c'). Each value is a 0-4 integer per the scale in the scoring weights config. The dimension score is derived from these via the formula: average x 25. Optional: omit for dimensions not yet using sub-check scoring or for v1.3-era audit outputs."
+          "$comment": "Optional. Keyed by sub-check ID. Each value is a 0-4 integer."
         },
 
         "library_scope": {
           "type": "string",
           "enum": ["foundation", "component", "system", "cross_library"],
-          "$comment": "Optional. Which library this score applies to. 'system' is an aggregate across libraries. 'cross_library' is used for findings that span both (e.g. text styles bypassing the variable architecture)."
+          "$comment": "Optional. Which library this score applies to."
         },
 
         "checks": {
           "type": "array",
           "items": { "$ref": "#/$defs/GovernanceCheck" },
-          "$comment": "Optional. Present only on dimensions that use programmatic pass/fail checks. Currently only 'governance' uses this. Not applicable to qualitative dimensions."
+          "$comment": "Optional. Present only on dimensions that use programmatic pass/fail checks."
         }
 
       }
     },
 
     "GovernanceCheck": {
-      "$comment": "A single programmatic check within a dimension. Modelled after the v1.2 governance scoring (5 checks, pass/fail). Extracted into its own definition so it can be reused if other dimensions add programmatic checks in future.",
+      "$comment": "A single programmatic check within a dimension.",
       "type": "object",
       "required": ["id", "description", "result"],
       "additionalProperties": false,
@@ -270,53 +337,59 @@
         "description": { "type": "string" },
         "result": {
           "type": "string",
-          "enum": ["pass", "fail", "not_applicable"],
-          "$comment": "'not_applicable' when a check cannot be run due to a data gap — not a failure, but not a pass either."
+          "enum": ["pass", "fail", "not_applicable"]
         },
         "detail": {
           "type": "string",
-          "$comment": "Optional. Specific detail about the result, e.g. '10 of 33 pages have owner name suffixes'."
+          "$comment": "Optional. Specific detail about the result."
         }
       }
     },
 
     "Finding": {
-      "$comment": "The atomic unit of the audit. Everything a codegen pipeline needs to know about one issue: what it is, where it is, how severe it is, and which contract field it relates to.",
+      "$comment": "The atomic unit of the audit. Every finding must have a recommendation (mandatory in v2.1) and a severity_rank for sorting.",
       "type": "object",
-      "required": ["id", "dimension", "severity", "description", "evidence", "recommendation"],
+      "required": ["id", "dimension", "severity", "severity_rank", "description", "recommendation"],
       "additionalProperties": false,
       "properties": {
 
         "id": {
           "type": "string",
           "pattern": "^[A-Z]+-[0-9]{3}$",
-          "$comment": "Stable unique identifier. Format: {DIMENSION_ABBREV}-{NNN}. Abbreviations: TI=token_implementation, AC=alias_chain_integrity, TA=token_architecture_depth, PN=primitive_naming, CTB=component_to_token_binding, CDC=component_description_coverage, NC=naming_convention_consistency, WR=web_readiness_gap (deprecated, use PRG), PRG=platform_readiness_gap, GOV=governance, DQ=documentation_quality, AIC=accessibility_intent_coverage. IDs must be stable across audit versions — if the same finding recurs in v1.5, it keeps the same ID."
+          "$comment": "Stable unique identifier. Format: {DIMENSION_ABBREV}-{NNN}. IDs must be stable across audit versions."
         },
 
         "dimension": {
           "type": "string",
-          "$comment": "Primary dimension this finding belongs to. Must match a key in the dimensions object. A finding that spans two dimensions lists the one where it is most severe as primary."
+          "$comment": "Primary dimension this finding belongs to. A finding that spans two dimensions lists the most severe as primary."
         },
 
         "severity": {
           "type": "string",
-          "enum": ["blocker", "warning", "note"],
-          "$comment": "'blocker' = agent output will be wrong or missing; codegen cannot proceed. 'warning' = agent output will be inconsistent; human correction required on some outputs. 'note' = does not block agent use but reduces quality or maintainability."
+          "enum": ["blocker", "warning", "note", "pass"],
+          "$comment": "'blocker' = agent output will be wrong or missing. 'warning' = agent output will be inconsistent. 'note' = does not block but reduces quality. 'pass' = informational, no action required."
+        },
+
+        "severity_rank": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "$comment": "New in v2.1. Integer for sorting findings by severity. 0=pass, 1=note, 2=warning, 3=blocker."
         },
 
         "node_id": {
           "type": ["string", "null"],
-          "$comment": "Figma node ID of the affected element. Null for architectural findings with no single node (e.g. 'no component-level token layer exists')."
+          "$comment": "Optional. Figma node ID of the affected element. Null for architectural findings."
         },
 
         "node_name": {
           "type": ["string", "null"],
-          "$comment": "Human-readable Figma node name. Null when node_id is null."
+          "$comment": "Optional. Human-readable Figma node name. Null when node_id is null."
         },
 
         "description": {
           "type": "string",
-          "$comment": "What the problem is. One to three sentences, written for a developer. Should be self-contained — a reader who has not read the dimension narrative can understand the issue from this field alone."
+          "$comment": "What the problem is. One to three sentences, self-contained."
         },
 
         "evidence": {
@@ -324,12 +397,12 @@
             { "type": "string" },
             { "type": "array", "items": { "type": "string" } }
           ],
-          "$comment": "The observed data supporting the finding. Array when there are multiple observations. Verbatim where possible: 'Bounding box:fill=rgb(217,217,217) x18' is better than 'many hardcoded fills'."
+          "$comment": "Optional. The observed data supporting the finding. Verbatim where possible."
         },
 
         "recommendation": {
           "type": "string",
-          "$comment": "What to do to fix it. Actionable and specific. Should reference token names, file paths, or Figma operations where relevant. Not a restatement of the description."
+          "$comment": "Mandatory in v2.1. What to do to fix it. Actionable and specific. No finding without a recommendation."
         },
 
         "contract_ref": {
@@ -337,25 +410,102 @@
             { "$ref": "#/$defs/ContractRef" },
             { "type": "null" }
           ],
-          "$comment": "Which contract field this finding relates to. This is the codegen hook — a pipeline joins findings to contracts via this field to know what to regenerate. Null for governance or naming findings with no direct contract reference."
+          "$comment": "Optional. Which contract field this finding relates to. Null for findings with no direct contract reference."
         },
 
         "affected_components": {
           "type": "array",
           "items": { "type": "string" },
-          "$comment": "Optional. Component names affected by this finding. Required when the finding is cross-cutting. Omit for single-component findings where node_name is sufficient."
+          "$comment": "Optional. Component names affected by this finding."
         },
 
         "auto_fixable": {
           "type": "boolean",
-          "$comment": "Optional. True if a script could apply the fix without human judgment — e.g. rename a token, remove a trailing space. False or absent if the fix requires a design decision."
+          "$comment": "Optional. True if a script could apply the fix without human judgement."
+        }
+
+      }
+    },
+
+    "Remediation": {
+      "$comment": "New in v2.1. Prioritised remediation plan derived from findings. Consumers use this to build a roadmap.",
+      "type": "object",
+      "required": ["quick_wins", "foundational_blockers", "post_migration"],
+      "additionalProperties": false,
+      "properties": {
+
+        "quick_wins": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/RemediationItem" },
+          "$comment": "Low effort, immediate score improvement. Typically days or hours."
+        },
+
+        "foundational_blockers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/RemediationItem" },
+          "$comment": "High effort, required for advancement. These must be resolved before the system can pass."
+        },
+
+        "post_migration": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/RemediationItem" },
+          "$comment": "Deferred improvements. Nice-to-have after the system reaches conditional_pass or pass."
+        }
+
+      }
+    },
+
+    "RemediationItem": {
+      "$comment": "New in v2.1. A single remediation action with effort estimate and projected impact.",
+      "type": "object",
+      "required": ["action", "affected_cluster", "affected_dimensions", "effort_estimate", "ownership"],
+      "additionalProperties": false,
+      "properties": {
+
+        "action": {
+          "type": "string",
+          "$comment": "What to do. Actionable and specific. References finding IDs where relevant."
+        },
+
+        "affected_cluster": {
+          "type": "string",
+          "$comment": "Cluster key this action primarily affects, e.g. '1_token_and_variable_system'."
+        },
+
+        "affected_dimensions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "$comment": "Dimension keys this action would improve."
+        },
+
+        "effort_estimate": {
+          "type": "string",
+          "enum": ["hours", "days", "weeks"],
+          "$comment": "Order-of-magnitude effort. 'hours' = less than a day. 'days' = 1-5 days. 'weeks' = more than a week."
+        },
+
+        "ownership": {
+          "type": "string",
+          "enum": ["design", "engineering", "both"],
+          "$comment": "Who is responsible for this action."
+        },
+
+        "projected_score_improvement": {
+          "type": "string",
+          "$comment": "Optional. Expected impact on cluster or overall score, e.g. 'Cluster 1 score from 54 to 70' or 'Overall from 55 to 62'."
+        },
+
+        "finding_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "$comment": "Optional. Finding IDs that this remediation action addresses."
         }
 
       }
     },
 
     "ContractRef": {
-      "$comment": "Points a finding at the specific contract field it relates to. Compatible with the Spain team's primitive/composite/pattern contract architecture at the level field.",
+      "$comment": "Points a finding at the specific contract field it relates to.",
       "type": "object",
       "required": ["type"],
       "additionalProperties": false,
@@ -368,31 +518,30 @@
             "component_contract",
             "documentation_contract",
             "governance_rule"
-          ],
-          "$comment": "'token_definition' = finding is about a value or alias in the token files. 'component_contract' = finding relates to a prop, state, or token binding in a contract file. 'documentation_contract' = finding relates to a description, intent, whenToUse, or constraints field. 'governance_rule' = finding relates to a process or convention with no file equivalent."
+          ]
         },
 
         "level": {
           "type": ["string", "null"],
           "enum": ["primitive", "composite", "pattern", null],
-          "$comment": "Spain team architecture compatibility. 'primitive' = single-property token or foundational element. 'composite' = component with multiple tokens and states. 'pattern' = multi-component pattern or template. Null for governance_rule and documentation_contract types where level is not applicable."
+          "$comment": "Contract architecture level. Null where not applicable."
         },
 
         "path": {
           "type": ["string", "null"],
-          "$comment": "Relative path from the repo root to the contract file, e.g. 'system/contracts/button.contract.json'. Null when the contract does not exist yet — the finding implies one should be created."
+          "$comment": "Relative path from repo root to the contract file. Null when the contract does not exist yet."
         },
 
         "field": {
           "type": ["string", "null"],
-          "$comment": "Dot-notation path to the specific field within the contract, e.g. 'tokens.color.byState.Disabled.background'. Null when the finding applies to the whole contract rather than a specific field."
+          "$comment": "Dot-notation path to the specific field within the contract. Null when the finding applies to the whole contract."
         }
 
       }
     },
 
     "DataGap": {
-      "$comment": "A named gap in audit coverage. Each gap has an ID, a reason enum, and an impact field so consumers know whether a gap likely inflates or deflates a score.",
+      "$comment": "A named gap in audit coverage.",
       "type": "object",
       "required": ["id", "description", "reason"],
       "additionalProperties": false,
@@ -400,7 +549,7 @@
 
         "id": {
           "type": "string",
-          "$comment": "Unique gap ID, e.g. 'GAP-001'. Stable across runs if the same gap recurs."
+          "$comment": "Unique gap ID, e.g. 'GAP-001'. Stable across runs."
         },
 
         "description": {
@@ -411,13 +560,13 @@
         "reason": {
           "type": "string",
           "enum": ["timeout", "access_denied", "scope_excluded", "not_auditable", "page_size"],
-          "$comment": "'timeout' = MCP timed out. 'access_denied' = API or permission restriction. 'scope_excluded' = deliberately out of scope for this audit version. 'not_auditable' = structurally unreadable by the tool. 'page_size' = page has too many nodes for the MCP to traverse."
+          "$comment": "'timeout' = MCP timed out. 'access_denied' = API or permission restriction. 'scope_excluded' = deliberately out of scope. 'not_auditable' = structurally unreadable. 'page_size' = too many nodes for MCP."
         },
 
         "affected_components": {
           "type": "array",
           "items": { "type": "string" },
-          "$comment": "Optional. Component or node names that fall inside this gap."
+          "$comment": "Optional. Component or node names inside this gap."
         },
 
         "impact": {
@@ -435,11 +584,11 @@
       "properties": {
         "path": {
           "type": "string",
-          "$comment": "Relative path from the repo root to the weights config, e.g. 'config/scoring-weights.json'. Weights are not embedded in the audit output — they are per-client and change independently of the schema version."
+          "$comment": "Relative path to the weights config, e.g. 'config/scoring-weights.json'."
         },
         "version": {
           "type": "string",
-          "$comment": "Optional. Version of the weights config active when this audit ran. Useful when multiple clients use different weight profiles."
+          "$comment": "Optional. Version of the weights config active when this audit ran."
         }
       }
     },
@@ -451,8 +600,7 @@
       "properties": {
 
         "previous_audit_id": {
-          "type": "string",
-          "$comment": "The audit_id of the previous run. Used to trace score changes to a specific prior output file."
+          "type": "string"
         },
 
         "previous_score": {
@@ -477,7 +625,7 @@
               "dimension":      { "type": "string" },
               "previous_score": {
                 "oneOf": [{ "type": "number" }, { "type": "string" }],
-                "$comment": "String to accommodate 'not_scored' for dimensions that are new in this version."
+                "$comment": "String to accommodate 'not_scored' for new dimensions."
               },
               "current_score": {
                 "oneOf": [{ "type": "number" }, { "type": "string" }]
@@ -485,18 +633,17 @@
               "reason": { "type": "string" }
             }
           },
-          "$comment": "Only dimensions where the score changed. Unchanged dimensions are omitted to keep the delta compact."
+          "$comment": "Only dimensions where the score changed."
         },
 
         "dimensions_added": {
           "type": "array",
-          "items": { "type": "string" },
-          "$comment": "Dimension slugs that are new in this audit version. These will always appear in dimensions_changed with previous_score='not_scored'."
+          "items": { "type": "string" }
         },
 
         "narrative": {
           "type": "string",
-          "$comment": "Optional. Prose summary of what changed and why. Used verbatim in the Markdown version delta section."
+          "$comment": "Optional. Prose summary of what changed and why."
         }
 
       }
