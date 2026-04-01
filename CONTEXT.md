@@ -85,3 +85,56 @@ numbered ADR files. Key items pending: reading the Edenspiekermann audit-design-
 skill source, reading the Firebender sync-figma-token skill source, confirming the
 Material UI Figma community file URL, confirming the MUI code token format, and
 aligning the schema with the colleague working on the write side of the POC.
+
+## Session update — April 2026 (Release 2.2-schema)
+
+### Front-end pre-handoff decisions
+
+This session prepares the audit schema and supporting data for the front-end build
+(Konsta). Five tasks completed in sequence.
+
+**React framework for front-end.** The front-end will be a React application consuming
+the audit JSON directly. No markdown rendering. JSON is the source of truth. The
+framework choice aligns with Konsta's stack and with the audit tool's JSON-primary
+architecture.
+
+**Static JSON loading.** The front-end loads audit JSON files statically (file import
+or fetch from a known path). No API server. No database. The audit tool produces JSON;
+the front-end reads it. This keeps the architecture simple and the front-end
+deployable as a static site.
+
+**Manifest approach for benchmarks.** When multiple audit outputs exist (different
+systems or versions), a manifest file lists available audits. The front-end reads the
+manifest to populate a selector. The manifest is a simple JSON array with metadata
+(system_name, audit_date, run_id, file path), not embedded in the audit schema.
+
+**Comparison model.** Score comparison between two audit runs uses the existing
+version_delta structure in the schema. The front-end renders delta as a side-by-side
+or overlay view. No new schema structure needed.
+
+**Dimension reference extraction.** All 56 dimensions extracted from CLAUDE.md and
+scoring criteria into `data/dimension-reference.json`. Keyed by dimension ID, each
+entry has name, cluster, description, evidence_sources, and score_levels. The
+front-end reads this file to render scoring rubrics without parsing CLAUDE.md. Note:
+the actual count is 56 dimensions (not 44 as previously stated -- the count increased
+when Tier 2 dimensions were expanded in v2.0 but the summary text was not updated).
+
+**Finding summary field.** Each finding now has a `summary` field (one-line overview)
+distinct from `description` (full detail). Summary is used in list views; description
+in drill-down views. Added to schema v2.2 and backfilled on all 14 MUI v2.1 findings.
+
+**New meta fields.** Three fields added to the meta block:
+- `system_name` (string, required) -- human-readable name for display.
+- `audit_date` (string, ISO 8601 date, required) -- for date-level grouping.
+- `run_id` (string, required) -- UUID for deduplication and cross-referencing.
+These complement the existing `audit_id` and `timestamp` fields but serve
+front-end display and data management needs specifically.
+
+### Dimension count correction
+
+The CLAUDE.md and exploration plan previously stated "44 dimensions." The actual
+count is 56: 1 (Cluster 0) + 6 (Cluster 1) + 4 (Cluster 2) + 5 (Cluster 3) +
+27 (Cluster 4: 15 Tier 1 + 12 Tier 2) + 7 (Cluster 5) + 6 (Cluster 6). The MUI
+v2.1 audit output already scored all 56. The discrepancy was a documentation lag
+from the v2.0 restructure where Tier 2 dimensions (4.16-4.27) were added but the
+summary count was not updated. Current state section in CLAUDE.md corrected to 56.

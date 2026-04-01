@@ -1,6 +1,9 @@
 {
   "meta": {
-    "schema_version": "2.1",
+    "schema_version": "2.2",
+    "system_name": "Material UI",
+    "audit_date": "2026-03-31",
+    "run_id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
     "audit_id": "material-ui-v2.1-2026-03-31",
     "timestamp": "2026-03-31T18:00:00Z",
     "auditor": "Claude Code via Figma REST API + MCP (get_variable_defs) + cached token diff + cached doc frames",
@@ -514,6 +517,7 @@
       "dimension": "token_implementation",
       "severity": "note",
       "severity_rank": 1,
+      "summary": "Elevation and typography sub-properties not implemented as Figma Variables",
       "description": "Elevation/shadow implemented as 24 effect styles rather than Figma Variables. Typography properties beyond fontSize (lineHeight, letterSpacing) stored as text style properties rather than variables.",
       "recommendation": "Migrate elevation values to Variables when Figma supports effect variables. Document the text style / variable split as an intentional architectural decision."
     },
@@ -522,6 +526,7 @@
       "dimension": "alias_chain_integrity",
       "severity": "warning",
       "severity_rank": 2,
+      "summary": "Spacing, shape, and breakpoint variables lack alias chains",
       "description": "Spacing collections (20 variables across 2 collections) use flat values with no alias chain. Shape (5 variables) and breakpoints (7 variables) also lack alias chains. Only colour (99 palette aliases) and typography (26 fontSize aliases) have alias architecture.",
       "recommendation": "Introduce semantic layers for spacing (e.g. spacing/inset, spacing/stack) and shape (e.g. shape/container, shape/input) aliasing to their respective primitives."
     },
@@ -530,6 +535,7 @@
       "dimension": "token_architecture_depth",
       "severity": "blocker",
       "severity_rank": 3,
+      "summary": "Three-layer token architecture exists only for colour; other categories are flat",
       "description": "Three-layer architecture exists only for colour. Spacing (20 vars), typography (40 vars), shape (5 vars), and elevation (24 effect styles) lack semantic and component layers. An agent working with spacing must use raw numeric values (1=8, 2=16) with no semantic context.",
       "recommendation": "Add semantic spacing tokens (spacing/inset, spacing/stack, spacing/inline) aliasing to primitives. Add component-level spacing tokens per component. Extend the pattern to typography, shape, and elevation."
     },
@@ -538,6 +544,7 @@
       "dimension": "token_documentation",
       "severity": "blocker",
       "severity_rank": 3,
+      "summary": "81.6% of Figma Variables have no description",
       "description": "81.6% of Figma Variables have no description (434 of 532). All 262 material/colors primitives, all 20 spacing variables, all 40 typography variables, all 5 shape variables, and all 7 breakpoint variables lack descriptions. Only palette collections have descriptions (98 of 195).",
       "recommendation": "Add descriptions to all token collections. Priority: spacing (no semantic names, descriptions are the only context), typography (multiple overlapping size values), primitives (no usage guidance)."
     },
@@ -546,6 +553,7 @@
       "dimension": "component_to_token_binding",
       "severity": "warning",
       "severity_rank": 2,
+      "summary": "Component spacing values are hardcoded, not bound to tokens",
       "description": "Spacing values hardcoded as px across components. Alert spot-check via get_variable_defs shows colour and typography bindings but no spacing token binding. No comprehensive component-level token layer for spacing.",
       "recommendation": "Bind component spacing properties to spacing variables rather than hardcoded px values."
     },
@@ -554,6 +562,7 @@
       "dimension": "component_description_coverage",
       "severity": "blocker",
       "severity_rank": 3,
+      "summary": "96.2% of component descriptions are code snippets with zero functional intent",
       "description": "35.8% of components have any description (370 of 1034). Of those, 96.2% are code import snippets (356). Only 14 components (1.4%) have real descriptions, all on Avatar Group variants. Functional intent coverage is approximately 0%.",
       "recommendation": "Replace code snippets with functional descriptions: when to use, when not to use, expected behaviour, constraints. Prioritise the 6 primary component pages (Alert, Card, Avatar, Button, Checkbox, Text Field)."
     },
@@ -562,6 +571,7 @@
       "dimension": "intent_quality",
       "severity": "blocker",
       "severity_rank": 3,
+      "summary": "Zero components have structured intent documentation against the six-level hierarchy",
       "description": "Zero components have structured intent documentation against the six-level hierarchy. The 14 real descriptions cover only structure (level 2). No documented interaction patterns (loading, empty state, error recovery, validation, navigation, dismissal).",
       "recommendation": "Write intent documentation following the six-level hierarchy for each primary component: purpose (level 1), structure (level 2), intended behaviour (level 3), main use cases (level 4). Add pattern documentation for loading, empty state, and error recovery."
     },
@@ -570,6 +580,7 @@
       "dimension": "documentation_frame_metadata",
       "severity": "pass",
       "severity_rank": 0,
+      "summary": "All 6 component pages have real page-level descriptions",
       "description": "All 6 component pages have real page-level descriptions from the *Library / Component Heading.",
       "recommendation": "Maintain page-level descriptions as the file evolves. Consider adding intent-level content to complement the structural metadata."
     },
@@ -578,6 +589,7 @@
       "dimension": "documentation_frame_metadata",
       "severity": "blocker",
       "severity_rank": 3,
+      "summary": "82% of sub-component documentation frames contain placeholder text",
       "description": "14 of 17 sub-component sections have placeholder lorem ipsum descriptions in *Library / Component Information. 18% real description coverage at the sub-component level.",
       "recommendation": "Replace placeholder text with functional sub-component descriptions covering purpose and structure (levels 1-2 of the documentation hierarchy)."
     },
@@ -586,6 +598,7 @@
       "dimension": "deprecation_patterns",
       "severity": "warning",
       "severity_rank": 2,
+      "summary": "No deprecation markers on any component or variable",
       "description": "No deprecation markers found on any component or variable in the Figma file.",
       "recommendation": "Implement deprecation markers using variable descriptions or a naming convention (e.g. [DEPRECATED] prefix) for components and tokens that are being phased out."
     },
@@ -594,6 +607,7 @@
       "dimension": "token_value_parity",
       "severity": "note",
       "severity_rank": 1,
+      "summary": "warning/main colour value drifted between Figma and code",
       "description": "warning/main colour mismatch between Figma and code: Figma resolves to a different shade than the code default theme.",
       "recommendation": "Align warning/main colour value between Figma palette variable and code createTheme() default. Determine which is the source of truth and update the other."
     },
@@ -602,6 +616,7 @@
       "dimension": "token_value_parity",
       "severity": "note",
       "severity_rank": 1,
+      "summary": "3 material/colors tokens show subtle value drift",
       "description": "3 material/colors tokens show subtle value drift between Figma variables and code defaults.",
       "recommendation": "Review the 3 drifted material/colors values and determine whether the drift is intentional (design decision) or accidental (sync issue). Document the decision."
     },
@@ -610,6 +625,7 @@
       "dimension": "token_value_parity",
       "severity": "note",
       "severity_rank": 1,
+      "summary": "h4 fontSize, fontFamily scope, and breakpoints/xs semantics diverge",
       "description": "h4 fontSize, fontFamily fallback scope, and breakpoints/xs semantics differ between Figma and code.",
       "recommendation": "Document these as known intentional gaps in a parity register. fontFamily fallback scope is expected (Figma has no fallback stack concept). breakpoints/xs semantics may need alignment."
     },
@@ -618,6 +634,7 @@
       "dimension": "documentation_of_parity_gaps",
       "severity": "blocker",
       "severity_rank": 3,
+      "summary": "7 token mismatches and structural parity gaps are undocumented",
       "description": "7 token value mismatches and multiple structural gaps (spacing not in Variables, typography sub-properties absent, shadows/zIndex/transitions code-only) are undocumented.",
       "recommendation": "Create a parity gap register documenting known differences between Figma and code. Track which gaps are intentional and which are drift. Review and update the register with each release."
     }

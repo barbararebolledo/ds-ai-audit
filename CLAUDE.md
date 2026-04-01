@@ -378,6 +378,8 @@ ds-ai-poc/
 │   ├── 001-audit-methodology-v1.0.md
 │   ├── 002-governance-dimension.md
 │   └── 003-material-ui-test-vehicle.md
+├── data/                            # Static data for front-end and agent consumption
+│   └── dimension-reference.json     # All dimensions with score levels, keyed by ID
 ├── docs/                            # Reserved for GitHub Pages output (v1.3+)
 │   └── exploration-plan.md          # Full release plan
 ├── CLAUDE.md                        # This file
@@ -386,6 +388,56 @@ ds-ai-poc/
 ├── manifest.json                    # System manifest -- read this first
 └── README.md
 ```
+
+---
+
+## Data directory
+
+The `data/` directory contains static reference data for front-end and agent
+consumption. These files are derived from CLAUDE.md, the audit dimensions
+document, and the scoring weights config. They are not hand-authored.
+
+- `data/dimension-reference.json` -- All 56 dimensions keyed by dimension ID.
+  Each entry has: name, cluster, description, evidence_sources, and score_levels
+  (keys "0" through "4" for standard dimensions, "0" through "2" for Tier 2).
+  The front-end reads this file to render dimension names, descriptions, and
+  scoring rubrics without parsing CLAUDE.md.
+
+## Front-end information architecture
+
+The front-end consumes the audit JSON (v2.2 schema) and the dimension reference
+directly. No markdown rendering. JSON is the source of truth.
+
+**Primary views:**
+
+1. **Dashboard** -- Overall score, phase readiness, cluster scores as a summary.
+   Uses `summary.overall_score`, `summary.phase_readiness`, `summary.cluster_scores`.
+2. **Cluster overview** -- One card per cluster with cluster_summary and score.
+   Uses `clusters[key].cluster_name`, `cluster_summary`, `cluster_score`.
+3. **Dimension drill-down** -- Score, severity, narrative, finding list per dimension.
+   Uses `clusters[key].dimensions[key]` joined with `dimension-reference.json` for
+   score level descriptions.
+4. **Finding list** -- All findings sortable by severity_rank, filterable by
+   dimension and cluster. Uses `findings[]` with `summary` for list view and
+   `description` for detail view.
+5. **Remediation roadmap** -- Three-column layout (quick wins, foundational blockers,
+   post-migration). Uses `remediation`.
+6. **Comparison** -- Score delta between two audit runs. Uses `version_delta`.
+
+**Benchmark manifest approach:** When multiple audit outputs exist (different
+systems or different versions of the same system), a manifest file lists
+available audits with their metadata (system_name, audit_date, run_id, path).
+The front-end reads the manifest to populate a selector. The manifest is a
+simple JSON array, not embedded in the schema.
+
+**New meta fields for front-end:**
+
+- `system_name` -- Display title for the audited system.
+- `audit_date` -- ISO 8601 date for grouping and display.
+- `run_id` -- UUID for deduplication and cross-referencing.
+
+**Finding summary field:** Each finding has a `summary` (one-line overview for
+list views) distinct from `description` (full detail for drill-down views).
 
 ---
 
@@ -426,15 +478,17 @@ Update this section at the end of each release session.
 
 | Field | Value |
 |---|---|
-| Current release | 2.1 (complete) |
+| Current release | 2.2-schema (in progress) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
 | Last prompt version | v2.1 (prompts/audit-prompt.md) |
-| Schema version | v2.1 (audit/schema/audit-schema.json) |
+| Schema version | v2.2 (audit/schema/audit-schema.json) |
 | Scoring weights | v2.1 (config/scoring-weights.json) -- cluster-based, 7 clusters sum to 1.00 |
 | Last audit run | Material UI v2.1 -- 55.3/100 not ready, 10 blockers (zero drift from v2.0) |
-| Dimensions | 7 clusters / 44 dimensions (38 scored, 9 code-only null) |
+| Dimensions | 7 clusters / 56 dimensions (38 scored, 9 code-only null in MUI audit) |
+| Dimension reference | data/dimension-reference.json -- all 56 dimensions with score levels |
 | Client status | Access pending -- adaptation sprint is Release 3.0 |
 | Release 2.1 | Complete -- decision record 006, validation run confirmed zero drift |
+| Release 2.2 | Schema pre-handoff for front-end build. New meta fields, finding summaries, dimension reference extracted. |
 
 ---
 
@@ -450,9 +504,15 @@ Full plan in `docs/exploration-plan.md`.
   Dimension restructure to 7 clusters / 44 dimensions.
 - **2.1** -- Schema iteration (cluster-based, remediation section, severity_rank).
   Two-phase audit. Token reduction. Documentation hierarchy for Dimension 3.3.
-  Validation run pending.
-- **2.2** -- Studio library application. First real-world stress test.
-- **2.3** -- Repeatability and baseline diff mode.
+  Validation run confirmed zero drift.
+- **2.2-schema** -- Front-end pre-handoff. Schema v2.2: system_name, audit_date,
+  run_id in meta. Finding summary field. Dimension reference extracted to
+  data/dimension-reference.json. MUI v2.1 audit backfilled.
+- **2.2** -- Front-end build (Konsta) + knowledge layer. React app consuming
+  audit JSON. Cluster overview, dimension drill-down, finding list, comparison.
+- **2.3** -- Studio or client library stress test.
+- **2.4** -- Methodology refinement.
+- **2.5** -- Repeatability and baseline diff mode.
 - **3.0+** -- Client application sprint. Agent wrapper decision point.
 
 ---

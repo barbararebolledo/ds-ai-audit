@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "audit-schema.json",
-  "title": "AI-Readiness Audit v2.1",
-  "$comment": "v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
+  "title": "AI-Readiness Audit v2.2",
+  "$comment": "v2.2: added system_name, audit_date, run_id to meta; added summary to findings. v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
 
   "type": "object",
   "required": ["meta", "summary", "clusters", "findings", "data_gaps", "config_ref"],
@@ -60,14 +60,30 @@
 
     "Meta": {
       "type": "object",
-      "required": ["schema_version", "audit_id", "timestamp", "auditor", "target_system", "figma_files"],
+      "required": ["schema_version", "system_name", "audit_date", "run_id", "audit_id", "timestamp", "auditor", "target_system", "figma_files"],
       "additionalProperties": false,
       "properties": {
 
         "schema_version": {
           "type": "string",
-          "const": "2.1",
+          "const": "2.2",
           "$comment": "Must match the title version. Allows consumers to assert schema compatibility before parsing."
+        },
+
+        "system_name": {
+          "type": "string",
+          "$comment": "New in v2.2. Human-readable name of the design system being audited. Used as the display title in front-end dashboards."
+        },
+
+        "audit_date": {
+          "type": "string",
+          "format": "date",
+          "$comment": "New in v2.2. ISO 8601 date (YYYY-MM-DD) of the audit run. Separate from timestamp for date-level grouping and display."
+        },
+
+        "run_id": {
+          "type": "string",
+          "$comment": "New in v2.2. Machine-generated unique identifier for this audit run. Used for deduplication and cross-referencing. Recommended format: UUID v4."
         },
 
         "audit_id": {
@@ -349,7 +365,7 @@
     "Finding": {
       "$comment": "The atomic unit of the audit. Every finding must have a recommendation (mandatory in v2.1) and a severity_rank for sorting.",
       "type": "object",
-      "required": ["id", "dimension", "severity", "severity_rank", "description", "recommendation"],
+      "required": ["id", "dimension", "severity", "severity_rank", "summary", "description", "recommendation"],
       "additionalProperties": false,
       "properties": {
 
@@ -385,6 +401,11 @@
         "node_name": {
           "type": ["string", "null"],
           "$comment": "Optional. Human-readable Figma node name. Null when node_id is null."
+        },
+
+        "summary": {
+          "type": "string",
+          "$comment": "New in v2.2. One-line overview of the finding for list views and dashboards. Distinct from description which is full detail."
         },
 
         "description": {
