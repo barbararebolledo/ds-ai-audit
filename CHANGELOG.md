@@ -180,7 +180,7 @@ Commit message suggestion:
 ```
 docs: reorientation session -- CLAUDE.md, CONTEXT.md, CHANGELOG.md, schema v1.3
 
-## [v1.2] -- in progress
+## [v1.2] -- 2026-03-26
 
 ### Repo restructure
 
