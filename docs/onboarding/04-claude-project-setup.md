@@ -3,7 +3,7 @@
 This file contains three things to set up in Claude AI:
 1. Project description (the short text when creating the project)
 2. Project instructions (paste into the project instructions field)
-3. What to upload as project knowledge
+3. What to add as project knowledge
 
 ---
 
@@ -123,48 +123,47 @@ patterns across multiple findings.
 
 ---
 
-## 3. What to upload as project knowledge
+## 3. What to add as project knowledge
 
-Upload these files from the repo. They give Claude the context
-it needs to help with rewrites.
+Add these to the project knowledge. The repo links stay up to
+date automatically when Barbara pushes changes. The audit JSON
+should be uploaded directly so Claude has it fully in context.
 
-### Required
+### Repo links (add as knowledge sources)
 
-1. `docs/onboarding/01-what-we-are-building.md`
-   So Claude understands the project, the clusters, and the
-   scoring methodology.
+1. `https://github.com/barbararebolledo/ds-ai-audit`
+   The audit repo. Contains the schema, dimension reference,
+   CLAUDE.md, onboarding docs, and all audit outputs. Claude
+   can reference any file in the repo.
 
-2. `audit/material-ui/v2.1/mui-audit-v2.1.json`
-   The actual audit data she is rewriting. Claude needs this
-   to see the current findings and suggest rewrites in context.
+2. `https://github.com/barbararebolledo/ds-audit-dashboard`
+   The dashboard repo. Useful if you want to ask Claude
+   questions about how findings display in the front end.
 
-3. `audit/schema/audit-schema.json`
-   So Claude understands the data contract and which fields are
-   editable versus structural.
+### File upload (upload directly)
 
-4. `data/dimension-reference.json`
-   So Claude understands what each dimension measures and what
-   each score level means. Essential for writing findings that
-   accurately reflect the scoring criteria.
+3. `audit/material-ui/v2.1/mui-audit-v2.1.json`
+   The actual audit data you are rewriting. Upload this
+   directly so Claude has the full findings in context at
+   all times. Download it from the repo or copy it from
+   your local clone.
 
-### Optional but useful
-
-5. `CLAUDE.md`
-   The full project context. Useful if she needs to understand
-   the methodology deeply but not required for rewriting work.
-
-6. `docs/onboarding/02-workflow.md`
-   Her workflow reference. Not needed by Claude but useful if
-   she wants to ask Claude questions about the process.
+   Re-upload this file when you have made significant
+   changes and want Claude to work from the latest version.
 
 ---
 
 ## Notes for Barbara
 
 Her project is separate from yours. She cannot see your project
-instructions, memory, or conversation history. If you make
-changes to the audit schema or dimensions, she will need to
-re-upload the updated files to her project knowledge.
+instructions, memory, or conversation history. The repo links
+in her project knowledge mean she will automatically see changes
+you push (schema updates, dimension changes, knowledge layer
+work) without needing to re-upload files.
+
+The one file she needs to re-upload manually is the audit JSON,
+since she is actively editing it and wants Claude to have her
+latest version in context.
 
 When she produces writing rules, ask her to save them in the repo
 at `docs/content-design/finding-copy-rules.md` on her branch.
