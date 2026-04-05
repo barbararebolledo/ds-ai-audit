@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "editorial-schema.json",
+  "title": "Audit Editorial Content v1.0",
+  "$comment": "Companion to audit-schema.json v2.2. Carries all client-facing prose: edited copy, value framing, cluster narratives, and report-level content. The front-end merges this with the data JSON at render time, preferring editorial content when present. All sections are optional; the front-end falls back to data JSON content when editorial content is absent.",
+
+  "type": "object",
+  "required": ["meta"],
+  "additionalProperties": false,
+
+  "properties": {
+
+    "meta": {
+      "type": "object",
+      "required": ["schema_version", "audit_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0",
+          "$comment": "Editorial schema version. Independent from audit schema version."
+        },
+        "audit_ref": {
+          "type": "string",
+          "$comment": "Must match the audit_id in the companion data JSON. Links the two files."
+        },
+        "last_edited_by": {
+          "type": "string",
+          "$comment": "Optional. Name of the last person who edited this file."
+        },
+        "last_edited_at": {
+          "type": "string",
+          "format": "date-time",
+          "$comment": "Optional. ISO 8601 timestamp of the last edit."
+        }
+      }
+    },
+
+    "report": {
+      "$comment": "Optional. Report-level prose for client-facing output. Has no counterpart in the data JSON.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string",
+          "$comment": "Client-facing report title, e.g. 'AI-Readiness Audit: Material UI'."
+        },
+        "executive_summary": {
+          "type": "string",
+          "$comment": "Overall narrative for stakeholders. Two to four sentences summarising the audit state and the single most important action."
+        },
+        "methodology_note": {
+          "type": "string",
+          "$comment": "Brief explanation of the audit approach for readers unfamiliar with the methodology."
+        }
+      }
+    },
+
+    "clusters": {
+      "$comment": "Optional. Keyed by cluster key (e.g. '1_token_and_variable_system'). Overrides or supplements cluster-level prose in the data JSON.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "narrative": {
+            "type": "string",
+            "$comment": "Editorial override of the cluster_summary field in the data JSON. Used in dashboards and executive summaries."
+          },
+          "value_framing": {
+            "type": "string",
+            "$comment": "What this cluster's current state means operationally. Used on the Impact screen. Example: 'Token architecture gaps mean every theme change requires manual updates across all components using flat values.'"
+          }
+        }
+      }
+    },
+
+    "dimensions": {
+      "$comment": "Optional. Keyed by dimension ID (e.g. '3.1_component_description_coverage'). Overrides dimension-level prose in the data JSON.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "narrative": {
+            "type": "string",
+            "$comment": "Editorial override of the dimension narrative field in the data JSON. Used in dimension detail views."
+          }
+        }
+      }
+    },
+
+    "findings": {
+      "$comment": "Optional. Keyed by finding ID (e.g. 'CDC-001'). Overrides finding-level prose in the data JSON. The front-end prefers these values when present.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "summary": {
+            "type": "string",
+            "$comment": "Edited one-line overview. Overrides the summary field in the data JSON."
+          },
+          "description": {
+            "type": "string",
+            "$comment": "Edited full description. Overrides the description field in the data JSON."
+          },
+          "recommendation": {
+            "type": "string",
+            "$comment": "Edited recommendation text. Overrides the recommendation field in the data JSON."
+          }
+        }
+      }
+    },
+
+    "remediation": {
+      "$comment": "Optional. Keyed by remediation item ID (e.g. 'REM-001'). Overrides remediation-level prose in the data JSON.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "type": "string",
+            "$comment": "Edited action text. Overrides the action field in the data JSON."
+          },
+          "value_framing": {
+            "type": "string",
+            "$comment": "Edited operational consequence text. Overrides the value_framing field in the data JSON."
+          }
+        }
+      }
+    }
+  }
+}

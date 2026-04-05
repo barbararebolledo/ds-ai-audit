@@ -141,6 +141,14 @@ Note: community Figma files must be published to a team library before
   tokens. Semantic tokens alias primitives. Never alias primitives directly from
   component tokens.
 
+- **Two-JSON architecture.** The audit produces a data JSON (source of truth for
+  scores, findings, structural facts). A companion editorial JSON carries all
+  client-facing prose: edited copy, value framing, cluster narratives, and
+  report-level content. The editorial JSON keys into the data JSON by cluster key,
+  dimension ID, finding ID, and remediation item ID. The front-end merges them at
+  render time, preferring editorial content when present. The editorial JSON schema
+  is at `audit/schema/editorial-schema.json`.
+
 ---
 
 ## Definition of intent
@@ -361,7 +369,8 @@ ds-ai-poc/
 │       └── button.md
 ├── audit/                           # Audit outputs
 │   ├── schema/                      # Audit output schema definitions
-│   │   └── audit-schema.json        # Additive changes only after v1.3
+│   │   ├── audit-schema.json        # Additive changes only after v1.3
+│   │   └── editorial-schema.json    # Editorial JSON schema (v1.0)
 │   ├── toimi/                       # Toimi library audits (initial POC)
 │   │   ├── v1.0/
 │   │   └── v1.2/
@@ -439,6 +448,15 @@ simple JSON array, not embedded in the schema.
 **Finding summary field:** Each finding has a `summary` (one-line overview for
 list views) distinct from `description` (full detail for drill-down views).
 
+**Editorial JSON merge.** The front-end loads both the data JSON and the editorial
+JSON (when present). For any field that exists in both, the editorial version takes
+precedence. This applies to: cluster narratives (`clusters[key].cluster_summary`),
+dimension narratives (`dimensions[key].narrative`), finding prose (`summary`,
+`description`, `recommendation`), and remediation prose (`action`, `value_framing`).
+When the editorial JSON is absent or a specific override is missing, the data JSON
+content is used as-is. The editorial JSON is stored alongside the data JSON in audit
+output directories (e.g. `audit/material-ui/v2.2/editorial.json`), not in `/data`.
+
 ---
 
 ## Naming conventions
@@ -481,7 +499,8 @@ Update this section at the end of each release session.
 | Current release | 2.2-schema (in progress) |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
 | Last prompt version | v2.1 (prompts/audit-prompt.md) |
-| Schema version | v2.2 (audit/schema/audit-schema.json) |
+| Schema version | v2.2 (audit/schema/audit-schema.json) + editorial v1.0 (audit/schema/editorial-schema.json) |
+| Editorial JSON | v1.0 schema defined, no editorial file populated yet |
 | Scoring weights | v2.1 (config/scoring-weights.json) -- cluster-based, 7 clusters sum to 1.00 |
 | Last audit run | Material UI v2.1 -- 55.3/100 not ready, 10 blockers (zero drift from v2.0) |
 | Dimensions | 7 clusters / 56 dimensions (38 scored, 9 code-only null in MUI audit) |

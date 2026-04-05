@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "audit-schema.json",
   "title": "AI-Readiness Audit v2.2",
-  "$comment": "v2.2: added system_name, audit_date, run_id to meta; added summary to findings. v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
+  "$comment": "v2.2: added system_name, audit_date, run_id to meta; added summary to findings; added id, value_framing, impact_categories to RemediationItem; added component_count to Summary; editorial JSON schema added as companion file. v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
 
   "type": "object",
   "required": ["meta", "summary", "clusters", "findings", "data_gaps", "config_ref"],
@@ -231,6 +231,12 @@
         "dimensions_null": {
           "type": "integer",
           "$comment": "Count of dimensions scored null (not assessed, typically code-only). New in v2.0."
+        },
+
+        "component_count": {
+          "type": "integer",
+          "minimum": 0,
+          "$comment": "New in v2.2. Optional. Total published components in the audited system. Used by the impact model for per-component calculations."
         }
 
       }
@@ -477,11 +483,17 @@
     },
 
     "RemediationItem": {
-      "$comment": "New in v2.1. A single remediation action with effort estimate and projected impact.",
+      "$comment": "New in v2.1. A single remediation action with effort estimate and projected impact. v2.2: added id (required), value_framing, impact_categories.",
       "type": "object",
-      "required": ["action", "affected_cluster", "affected_dimensions", "effort_estimate", "ownership"],
+      "required": ["id", "action", "affected_cluster", "affected_dimensions", "effort_estimate", "ownership"],
       "additionalProperties": false,
       "properties": {
+
+        "id": {
+          "type": "string",
+          "pattern": "^REM-[0-9]{3}$",
+          "$comment": "New in v2.2. Stable unique identifier for this remediation item. Format: REM-NNN. Required for editorial JSON cross-referencing."
+        },
 
         "action": {
           "type": "string",
@@ -509,6 +521,20 @@
           "type": "string",
           "enum": ["design", "engineering", "both"],
           "$comment": "Who is responsible for this action."
+        },
+
+        "value_framing": {
+          "type": "string",
+          "$comment": "New in v2.2. One to two sentences explaining the operational consequence of not fixing this item. Editorial content. Can be overridden by the editorial JSON."
+        },
+
+        "impact_categories": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["correction_cycles", "theme_rework", "parity_defects", "token_efficiency"]
+          },
+          "$comment": "New in v2.2. Which impact model categories this remediation action affects. Used by the front-end impact calculator to connect remediation items to projected cost."
         },
 
         "projected_score_improvement": {

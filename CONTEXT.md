@@ -138,3 +138,37 @@ count is 56: 1 (Cluster 0) + 6 (Cluster 1) + 4 (Cluster 2) + 5 (Cluster 3) +
 v2.1 audit output already scored all 56. The discrepancy was a documentation lag
 from the v2.0 restructure where Tier 2 dimensions (4.16-4.27) were added but the
 summary count was not updated. Current state section in CLAUDE.md corrected to 56.
+
+## Session update — April 2026 (Schema v2.2 update)
+
+### Two-JSON architecture formalised
+
+The editorial JSON schema (v1.0) has been defined as the companion to the audit
+data JSON. It carries all client-facing prose: edited finding copy, value framing,
+cluster narratives, and report-level content. The front-end merges both at render
+time, preferring editorial content when present.
+
+The editorial JSON keys into the data JSON by cluster key, dimension ID, finding ID,
+and remediation item ID. All sections are optional. An empty editorial JSON (just
+the meta block) is valid; the front-end falls back to the data JSON for everything.
+
+### RemediationItem additions
+
+Three fields added to RemediationItem in the audit schema (v2.2):
+- `id` (string, required): stable identifier (REM-001 pattern) for editorial JSON
+  cross-referencing.
+- `value_framing` (string, optional): operational consequence of not fixing this item.
+  Audit-generated; can be overridden by the editorial JSON.
+- `impact_categories` (array of enum, optional): which impact model categories
+  (correction_cycles, theme_rework, parity_defects, token_efficiency) this action
+  affects. Connects remediation items to the impact calculator.
+
+`component_count` (optional integer) added to Summary for the impact model.
+
+### Content workflow for Eeva
+
+The editorial JSON is the file Eeva edits (via a markdown extraction and compile-back
+workflow). A compile script extracts it to markdown with sections keyed by ID. Eeva
+edits the markdown. The script compiles it back to JSON. The front-end consumes the
+merged result. The glossary and workflow documentation for Eeva are prerequisites
+before she starts editing.
