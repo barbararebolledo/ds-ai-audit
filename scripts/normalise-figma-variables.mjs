@@ -7,13 +7,16 @@
  * preserves mode-specific values.
  *
  * Usage:
- *   node scripts/normalise-figma-variables.mjs
+ *   node scripts/normalise-figma-variables.mjs [system]
+ *
+ * Arguments:
+ *   system  — slug for the design system (default: 'mui')
  *
  * Input:
- *   scripts/output/mui-figma-variables-raw.json
+ *   scripts/output/{system}-figma-variables-raw.json
  *
  * Output:
- *   scripts/output/mui-figma-variables-normalised.json
+ *   scripts/output/{system}-figma-variables-normalised.json
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -21,8 +24,9 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const inputPath = join(__dirname, 'output', 'mui-figma-variables-raw.json');
-const outputPath = join(__dirname, 'output', 'mui-figma-variables-normalised.json');
+const system = process.argv[2] || 'mui';
+const inputPath = join(__dirname, 'output', `${system}-figma-variables-raw.json`);
+const outputPath = join(__dirname, 'output', `${system}-figma-variables-normalised.json`);
 
 const raw = JSON.parse(readFileSync(inputPath, 'utf-8'));
 const { variableCollections, variables } = raw.meta;
@@ -132,7 +136,7 @@ const aliasCount = Object.values(collections).reduce((sum, c) => {
 const output = {
   _meta: {
     source: 'Figma REST API /v1/files/{key}/variables/local',
-    fileKey: '0C5ShRQnETNce2CoupX1IJ',
+    system,
     extractedAt: new Date().toISOString(),
     totalCollections: Object.keys(collections).length,
     totalVariables: totalVars,

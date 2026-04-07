@@ -496,13 +496,14 @@ Update this section at the end of each release session.
 
 | Field | Value |
 |---|---|
-| Current release | 2.2-schema (in progress) |
+| Current release | 2.2 |
 | Active test vehicle | Material UI -- Figma community file (published to team) + GitHub repo |
-| Last prompt version | v2.1 (prompts/audit-prompt.md) |
+| Last prompt version | v2.2 (prompts/audit-prompt.md) |
 | Schema version | v2.2 (audit/schema/audit-schema.json) + editorial v1.0 (audit/schema/editorial-schema.json) |
 | Editorial JSON | v1.0 schema defined, no editorial file populated yet |
 | Scoring weights | v2.1 (config/scoring-weights.json) -- cluster-based, 7 clusters sum to 1.00 |
-| Last audit run | Material UI v2.1 -- 55.3/100 not ready, 10 blockers (zero drift from v2.0) |
+| Last audit run | Material UI v2.2 -- 55.3/100 not ready, 10 blockers (zero drift from v2.1) |
+| Benchmark audits | MUI v2.2 (55.3/100), Carbon v2.2 (62.5/100) |
 | Dimensions | 7 clusters / 56 dimensions (38 scored, 9 code-only null in MUI audit) |
 | Dimension reference | data/dimension-reference.json -- all 56 dimensions with score levels |
 | Client status | Access pending -- adaptation sprint is Release 3.0 |

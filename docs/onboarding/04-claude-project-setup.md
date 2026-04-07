@@ -68,7 +68,7 @@ understand that this problem stops AI-assisted workflows from
 working.
 
 Warnings should feel serious but not urgent. The reader should
-understand the risk of not fixing it.
+understand the value or impact once fixes are done.
 
 Notes are observations. Informational, proportionate, no alarm.
 
@@ -94,8 +94,11 @@ not acting.
 - Direct and clear. No filler, no hedging.
 - Plain language. If a technical term is necessary, make sure the
   sentence works without knowing the term.
+- Keep the tone light.
 - Concise. Say it once. Remove words that do not add meaning.
 - No em dashes. Use commas, full stops, or semicolons.
+- Keeo the sentences short and always easy to read.
+- If beneficial, use bullet point lists rather than long paragraphs.
 - Findings should be self-contained. Each one should make sense
   without reading the others.
 

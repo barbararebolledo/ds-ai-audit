@@ -1,7 +1,7 @@
-# AI-Readiness Audit Prompt v2.1
+# AI-Readiness Audit Prompt v2.2
 
-Version: 2.1
-Date: 2026-03-31
+Version: 2.2
+Date: 2026-04-06
 Schema: `audit/schema/audit-schema.json`
 Weights: `config/scoring-weights.json`
 
@@ -662,11 +662,14 @@ root entries explaining when to use each component" is a condition.
 Produce a single JSON file conforming to `audit/schema/audit-schema.json`.
 
 Required fields in `meta`:
-- `schema_version`: "2.1"
-- `audit_id`: format `{target}-v2.1-{YYYY-MM-DD}`
+- `schema_version`: "2.2"
+- `system_name`: human-readable name of the design system (e.g. "Material UI")
+- `audit_date`: ISO 8601 date (YYYY-MM-DD) of the audit run
+- `run_id`: UUID v4 for deduplication and cross-referencing
+- `audit_id`: format `{target}-v2.2-{YYYY-MM-DD}`
 - `timestamp`: ISO 8601 UTC, when the audit completed
 - `auditor`: "Claude Code via Figma REST API + MCP"
-- `prompt_version`: "2.1"
+- `prompt_version`: "2.2"
 - `git_tag`: the release tag that produced this output
 - `target_system`: name of the design system being audited
 - `figma_files`: keyed by library role, with file_key and file_name
@@ -684,6 +687,7 @@ Required fields in `summary`:
 - `dimensions_scored`: integer count of scored dimensions
 - `dimensions_total`: integer total dimensions
 - `dimensions_null`: integer count of null dimensions
+- `component_count`: integer, total published components found in Phase 1 discovery
 
 Required fields in each ClusterEntry:
 - `cluster_name`: human-readable name
@@ -715,9 +719,15 @@ Required `remediation` section (new in v2.1):
 - `foundational_blockers`: array of RemediationItem
 - `post_migration`: array of RemediationItem
 
-Each RemediationItem must have: `action`, `affected_cluster`,
-`affected_dimensions`, `effort_estimate` (hours/days/weeks), `ownership`
-(design/engineering/both). Optional: `projected_score_improvement`, `finding_ids`.
+Each RemediationItem must have: `id` (string, required, pattern `REM-001`,
+assigned sequentially), `action`, `affected_cluster`, `affected_dimensions`,
+`effort_estimate` (hours/days/weeks), `ownership` (design/engineering/both).
+Optional: `value_framing` (string, one to two sentences explaining the
+operational consequence of not fixing this item — write from the perspective of
+what happens to the team if this is not addressed), `impact_categories` (array
+of enum: `correction_cycles`, `theme_rework`, `parity_defects`,
+`token_efficiency` — which categories this action affects),
+`projected_score_improvement`, `finding_ids`.
 
 ### Markdown report
 
@@ -800,6 +810,16 @@ retain that prefix for continuity; new findings in Dimension 8 use `PRG-`.
 ---
 
 ## Changelog
+
+### v2.2 (2026-04-06)
+
+- **RemediationItem fields.** `id` (required, REM-001 pattern), `value_framing`
+  (optional, operational consequence), `impact_categories` (optional, enum array).
+- **component_count** added to Summary block.
+- **Two-JSON architecture.** Editorial JSON schema (v1.0) defined as companion
+  file. Audit output is the data JSON; editorial JSON carries client-facing prose
+  overrides. See CLAUDE.md for details.
+- **Schema version** bumped to 2.2.
 
 ### v2.1 (2026-03-31)
 

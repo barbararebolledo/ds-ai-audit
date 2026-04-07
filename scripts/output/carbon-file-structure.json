@@ -1,0 +1,278 @@
+{
+  "name": "(v11) Carbon Design System for Figma",
+  "lastModified": "2026-04-06T10:14:32Z",
+  "document": {
+    "children": [
+      {
+        "id": "58:2763",
+        "name": "About",
+        "type": "CANVAS"
+      },
+      {
+        "id": "6438:296996",
+        "name": "Read me",
+        "type": "CANVAS"
+      },
+      {
+        "id": "66489:2080",
+        "name": "---",
+        "type": "CANVAS"
+      },
+      {
+        "id": "169:0",
+        "name": "Color",
+        "type": "CANVAS"
+      },
+      {
+        "id": "1879:3705",
+        "name": "Effects",
+        "type": "CANVAS"
+      },
+      {
+        "id": "360:0",
+        "name": "Spacing block",
+        "type": "CANVAS"
+      },
+      {
+        "id": "1756:1439",
+        "name": "Screens",
+        "type": "CANVAS"
+      },
+      {
+        "id": "1768:1441",
+        "name": "Utilities",
+        "type": "CANVAS"
+      },
+      {
+        "id": "171:0",
+        "name": "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014",
+        "type": "CANVAS"
+      },
+      {
+        "id": "31:2385",
+        "name": "Accordion",
+        "type": "CANVAS"
+      },
+      {
+        "id": "51447:1896",
+        "name": "AI label",
+        "type": "CANVAS"
+      },
+      {
+        "id": "51447:122450",
+        "name": "AI layer",
+        "type": "CANVAS"
+      },
+      {
+        "id": "57561:170",
+        "name": "AI explainability popover",
+        "type": "CANVAS"
+      },
+      {
+        "id": "136:10048",
+        "name": "Breadcrumb",
+        "type": "CANVAS"
+      },
+      {
+        "id": "0:1",
+        "name": "Button",
+        "type": "CANVAS"
+      },
+      {
+        "id": "17:0",
+        "name": "Checkbox",
+        "type": "CANVAS"
+      },
+      {
+        "id": "35:2542",
+        "name": "Code snippet",
+        "type": "CANVAS"
+      },
+      {
+        "id": "16193:269966",
+        "name": "Contained list",
+        "type": "CANVAS"
+      },
+      {
+        "id": "68:3091",
+        "name": "Content switcher",
+        "type": "CANVAS"
+      },
+      {
+        "id": "60:0",
+        "name": "Date picker",
+        "type": "CANVAS"
+      },
+      {
+        "id": "24:0",
+        "name": "Data table ",
+        "type": "CANVAS"
+      },
+      {
+        "id": "14032:290630",
+        "name": "Dropdown",
+        "type": "CANVAS"
+      },
+      {
+        "id": "346:0",
+        "name": "File uploader",
+        "type": "CANVAS"
+      },
+      {
+        "id": "474:15004",
+        "name": "Form",
+        "type": "CANVAS"
+      },
+      {
+        "id": "366:0",
+        "name": "Link",
+        "type": "CANVAS"
+      },
+      {
+        "id": "369:0",
+        "name": "List",
+        "type": "CANVAS"
+      },
+      {
+        "id": "370:0",
+        "name": "Loading",
+        "type": "CANVAS"
+      },
+      {
+        "id": "31107:3280",
+        "name": "Menu",
+        "type": "CANVAS"
+      },
+      {
+        "id": "31107:3281",
+        "name": "Menu buttons",
+        "type": "CANVAS"
+      },
+      {
+        "id": "410:13792",
+        "name": "Modal",
+        "type": "CANVAS"
+      },
+      {
+        "id": "505:0",
+        "name": "Notification",
+        "type": "CANVAS"
+      },
+      {
+        "id": "351:58",
+        "name": "Number input",
+        "type": "CANVAS"
+      },
+      {
+        "id": "490:11",
+        "name": "Pagination",
+        "type": "CANVAS"
+      },
+      {
+        "id": "3556:37675",
+        "name": "Password input",
+        "type": "CANVAS"
+      },
+      {
+        "id": "8705:400369",
+        "name": "Popover",
+        "type": "CANVAS"
+      },
+      {
+        "id": "8930:400384",
+        "name": "Progress bar",
+        "type": "CANVAS"
+      },
+      {
+        "id": "521:16785",
+        "name": "Progress indicator",
+        "type": "CANVAS"
+      },
+      {
+        "id": "435:1",
+        "name": "Radio button",
+        "type": "CANVAS"
+      },
+      {
+        "id": "453:14562",
+        "name": "Search",
+        "type": "CANVAS"
+      },
+      {
+        "id": "443:23",
+        "name": "Select",
+        "type": "CANVAS"
+      },
+      {
+        "id": "456:14680",
+        "name": "Slider",
+        "type": "CANVAS"
+      },
+      {
+        "id": "494:0",
+        "name": "Structured list",
+        "type": "CANVAS"
+      },
+      {
+        "id": "464:14848",
+        "name": "Tabs",
+        "type": "CANVAS"
+      },
+      {
+        "id": "481:0",
+        "name": "Tag",
+        "type": "CANVAS"
+      },
+      {
+        "id": "5564:279849",
+        "name": "Text area",
+        "type": "CANVAS"
+      },
+      {
+        "id": "395:4",
+        "name": "Text input",
+        "type": "CANVAS"
+      },
+      {
+        "id": "404:0",
+        "name": "Tile",
+        "type": "CANVAS"
+      },
+      {
+        "id": "467:0",
+        "name": "Toggle",
+        "type": "CANVAS"
+      },
+      {
+        "id": "8996:400548",
+        "name": "Toggletip",
+        "type": "CANVAS"
+      },
+      {
+        "id": "500:0",
+        "name": "Tooltip",
+        "type": "CANVAS"
+      },
+      {
+        "id": "11800:284738",
+        "name": "Tree view",
+        "type": "CANVAS"
+      },
+      {
+        "id": "539:0",
+        "name": "UI shell - Header",
+        "type": "CANVAS"
+      },
+      {
+        "id": "2258:13866",
+        "name": "UI shell - Left panel",
+        "type": "CANVAS"
+      },
+      {
+        "id": "2258:13915",
+        "name": "UI shell - Right panel",
+        "type": "CANVAS"
+      }
+    ]
+  }
+}

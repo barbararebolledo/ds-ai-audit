@@ -1,0 +1,18 @@
+{
+  "benchmarks": [
+    {
+      "file": "../../audit/material-ui/v2.2/mui-audit-v2.2.json",
+      "system_name": "Material UI",
+      "audit_date": "2026-04-06",
+      "run_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "overall_score": 63.6,
+      "dimensions_scored": 56,
+      "blocker_count": 4
+    },
+    {
+      "file": "../../audit/carbon/v2.2/carbon-audit-v2.2.json",
+      "system_name": "Carbon Design System",
+      "audit_date": "2026-04-06"
+    }
+  ]
+}

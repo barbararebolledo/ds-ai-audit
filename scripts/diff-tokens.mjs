@@ -1,9 +1,8 @@
 /**
  * diff-tokens.mjs
  *
- * Compares the MUI default theme (code-side tokens) against the MUI
- * Figma Variables (design-side tokens). Produces a structured diff
- * report flagging:
+ * Compares code-side tokens against Figma Variables (design-side tokens).
+ * Produces a structured diff report flagging:
  *   - Value mismatches (same token, different values)
  *   - Naming mismatches (same concept, different names)
  *   - Code-only tokens (present in code, absent in Figma)
@@ -12,47 +11,47 @@
  * Feeds Cluster 6 dimensions 6.1 (token value parity) and
  * 6.2 (token naming parity).
  *
- * Matching logic handles:
- *   - Cross-collection mapping (palette/grey/* -> material/colors/grey/*)
- *   - Typography structural differences (code sub-properties vs Figma
- *     single-variable fontSize aliases)
- *   - Material colour palette (code @mui/material/colors exports vs
- *     Figma material/colors collection)
- *
  * Usage:
- *   node scripts/diff-tokens.mjs
+ *   node scripts/diff-tokens.mjs [system]
+ *
+ * Arguments:
+ *   system — slug for the design system (default: 'mui')
  *
  * Output:
- *   scripts/output/mui-token-diff.json
- *   audit/material-ui/v2.0/token-parity-findings.json
+ *   scripts/output/{system}-token-diff.json
+ *   audit/{system}/v2.2/token-parity-findings.json
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
+const system = process.argv[2] || 'mui';
 
-const rawThemeData = JSON.parse(
-  readFileSync(join(__dirname, 'output', 'mui-default-theme.json'), 'utf-8')
-);
-const figmaData = JSON.parse(
-  readFileSync(join(__dirname, 'output', 'mui-figma-variables-normalised.json'), 'utf-8')
-);
+// ---------------------------------------------------------------------------
+// Load data — system-agnostic file names
+// ---------------------------------------------------------------------------
 
-// The extraction script now outputs { theme, materialColors }.
-const theme = rawThemeData.theme;
-const materialColors = rawThemeData.materialColors;
+const figmaPath = join(__dirname, 'output', `${system}-figma-variables-normalised.json`);
+const codePath = join(__dirname, 'output', `${system}-code-tokens.json`);
+
+// For MUI backward compatibility, also check the old file names
+let rawCodeData;
+if (system === 'mui' && !existsSync(codePath) && existsSync(join(__dirname, 'output', 'mui-default-theme.json'))) {
+  // Legacy MUI path: read from mui-default-theme.json and build token map inline
+  rawCodeData = null; // Will use legacy path
+} else {
+  rawCodeData = JSON.parse(readFileSync(codePath, 'utf-8'));
+}
+
+const figmaData = JSON.parse(readFileSync(figmaPath, 'utf-8'));
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-/**
- * Resolve a Figma variable value to its final value by following alias
- * chains. Returns the resolved value and the chain of aliases traversed.
- */
 function resolveFigmaValue(variable, modeName, collections, seen = new Set()) {
   const val = variable.values[modeName];
   if (!val) return { resolved: null, chain: [] };
@@ -80,10 +79,6 @@ function resolveFigmaValue(variable, modeName, collections, seen = new Set()) {
   return { resolved: val, chain: [] };
 }
 
-/**
- * Parse any CSS colour string to { r, g, b, a } with 0-255 integers and
- * 0-1 alpha. Handles: #rgb, #rrggbb, #rrggbbaa, rgba(r,g,b,a), rgb(r,g,b).
- */
 function parseColour(val) {
   if (typeof val !== 'string') return null;
   const s = val.trim().toLowerCase();
@@ -115,10 +110,6 @@ function parseColour(val) {
   return null;
 }
 
-/**
- * Normalise a colour value for comparison. Converts all formats to a
- * canonical #rrggbb or #rrggbbaa string.
- */
 function normaliseColour(val) {
   const parsed = parseColour(String(val));
   if (!parsed) return String(val).toLowerCase().trim();
@@ -127,14 +118,8 @@ function normaliseColour(val) {
   return `#${toHex(parsed.r)}${toHex(parsed.g)}${toHex(parsed.b)}${alphaHex === 'ff' ? '' : alphaHex}`;
 }
 
-/**
- * Convert a CSS rem value to pixels assuming a 16px base.
- * Returns the numeric pixel value, or null if not a rem string.
- * Handles comma as decimal separator (Figma locale).
- */
 function remToPx(val) {
   if (typeof val !== 'string') return null;
-  // Normalise comma decimal separators to dots.
   const normalised = val.replace(',', '.');
   const match = normalised.match(/^([\d.]+)rem$/);
   if (match) return parseFloat(match[1]) * 16;
@@ -142,7 +127,7 @@ function remToPx(val) {
 }
 
 // ---------------------------------------------------------------------------
-// Build Figma token map: path -> { value, resolvedType, collection, aliases }
+// Build Figma token map
 // ---------------------------------------------------------------------------
 
 const figmaTokens = new Map();
@@ -171,139 +156,143 @@ for (const [colKey, col] of Object.entries(figmaCollections)) {
 }
 
 // ---------------------------------------------------------------------------
-// Build code token map: path -> { value, category }
+// Build code token map
 // ---------------------------------------------------------------------------
 
 const codeTokens = new Map();
 
-// --- Palette colours (semantic layer) ---
-const paletteGroups = [
-  'common', 'primary', 'secondary', 'error', 'warning', 'info', 'success',
-  'text', 'divider', 'background', 'action',
-];
-for (const group of paletteGroups) {
-  const entry = theme.palette[group];
-  if (!entry) continue;
-  if (typeof entry === 'string') {
-    codeTokens.set(`palette/${group}`, { value: entry, category: 'palette' });
-  } else if (typeof entry === 'object') {
-    for (const [key, val] of Object.entries(entry)) {
-      if (typeof val === 'string' && !val.startsWith('[Function')) {
-        codeTokens.set(`palette/${group}/${key}`, { value: val, category: 'palette' });
-      } else if (typeof val === 'number') {
-        codeTokens.set(`palette/${group}/${key}`, { value: val, category: 'palette' });
+if (rawCodeData && rawCodeData.tokens) {
+  // New normalised format from extract-code-tokens.mjs
+  for (const [path, data] of Object.entries(rawCodeData.tokens)) {
+    codeTokens.set(path, { value: data.value, category: data.category });
+  }
+} else if (system === 'mui') {
+  // Legacy MUI path: read from mui-default-theme.json
+  const legacyData = JSON.parse(
+    readFileSync(join(__dirname, 'output', 'mui-default-theme.json'), 'utf-8')
+  );
+  const theme = legacyData.theme;
+  const materialColors = legacyData.materialColors;
+
+  const paletteGroups = [
+    'common', 'primary', 'secondary', 'error', 'warning', 'info', 'success',
+    'text', 'divider', 'background', 'action',
+  ];
+  for (const group of paletteGroups) {
+    const entry = theme.palette[group];
+    if (!entry) continue;
+    if (typeof entry === 'string') {
+      codeTokens.set(`palette/${group}`, { value: entry, category: 'palette' });
+    } else if (typeof entry === 'object') {
+      for (const [key, val] of Object.entries(entry)) {
+        if (typeof val === 'string' && !val.startsWith('[Function')) {
+          codeTokens.set(`palette/${group}/${key}`, { value: val, category: 'palette' });
+        } else if (typeof val === 'number') {
+          codeTokens.set(`palette/${group}/${key}`, { value: val, category: 'palette' });
+        }
+      }
+    }
+  }
+
+  if (theme.palette.grey) {
+    for (const [key, val] of Object.entries(theme.palette.grey)) {
+      codeTokens.set(`palette/grey/${key}`, { value: val, category: 'palette' });
+    }
+  }
+
+  for (const [hueName, hueObj] of Object.entries(materialColors)) {
+    if (typeof hueObj !== 'object') continue;
+    for (const [shade, val] of Object.entries(hueObj)) {
+      codeTokens.set(`material/colors/${hueName}/${shade}`, { value: val, category: 'material/colors' });
+    }
+  }
+
+  const typographyVariants = [
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'subtitle1', 'subtitle2', 'body1', 'body2',
+    'button', 'caption', 'overline',
+  ];
+  for (const variant of typographyVariants) {
+    const entry = theme.typography[variant];
+    if (!entry) continue;
+    for (const [prop, val] of Object.entries(entry)) {
+      if (typeof val === 'string' || typeof val === 'number') {
+        codeTokens.set(`typography/${variant}/${prop}`, { value: val, category: 'typography' });
+      }
+    }
+  }
+  for (const prop of ['fontFamily', 'fontSize', 'htmlFontSize', 'fontWeightLight', 'fontWeightRegular', 'fontWeightMedium', 'fontWeightBold']) {
+    if (theme.typography[prop] !== undefined) {
+      codeTokens.set(`typography/${prop}`, { value: theme.typography[prop], category: 'typography' });
+    }
+  }
+
+  for (const [key, val] of Object.entries(theme.breakpoints.values)) {
+    codeTokens.set(`breakpoints/${key}`, { value: val, category: 'breakpoints' });
+  }
+
+  codeTokens.set('spacing/base', { value: 8, category: 'spacing' });
+  for (let i = 1; i <= 12; i++) {
+    codeTokens.set(`spacing/${i}`, { value: i * 8, category: 'spacing' });
+  }
+
+  codeTokens.set('shape/borderRadius', { value: theme.shape.borderRadius, category: 'shape' });
+
+  if (theme.shadows) {
+    theme.shadows.forEach((val, i) => {
+      codeTokens.set(`shadows/${i}`, { value: val, category: 'shadows' });
+    });
+  }
+
+  if (theme.zIndex) {
+    for (const [key, val] of Object.entries(theme.zIndex)) {
+      codeTokens.set(`zIndex/${key}`, { value: val, category: 'zIndex' });
+    }
+  }
+
+  if (theme.transitions && theme.transitions.duration) {
+    for (const [key, val] of Object.entries(theme.transitions.duration)) {
+      if (typeof val === 'number') {
+        codeTokens.set(`transitions/duration/${key}`, { value: val, category: 'transitions' });
+      }
+    }
+  }
+  if (theme.transitions && theme.transitions.easing) {
+    for (const [key, val] of Object.entries(theme.transitions.easing)) {
+      if (typeof val === 'string') {
+        codeTokens.set(`transitions/easing/${key}`, { value: val, category: 'transitions' });
       }
     }
   }
 }
 
-// --- Grey palette (lives under palette in code, under material/colors in Figma) ---
-if (theme.palette.grey) {
-  for (const [key, val] of Object.entries(theme.palette.grey)) {
-    codeTokens.set(`palette/grey/${key}`, { value: val, category: 'palette' });
-  }
-}
-
-// --- Material colours (primitive palette, Fix 1) ---
-// These map to the Figma material/colors collection.
-for (const [hueName, hueObj] of Object.entries(materialColors)) {
-  if (typeof hueObj !== 'object') continue;
-  for (const [shade, val] of Object.entries(hueObj)) {
-    codeTokens.set(`material/colors/${hueName}/${shade}`, { value: val, category: 'material/colors' });
-  }
-}
-
-// --- Typography ---
-const typographyVariants = [
-  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-  'subtitle1', 'subtitle2', 'body1', 'body2',
-  'button', 'caption', 'overline',
-];
-for (const variant of typographyVariants) {
-  const entry = theme.typography[variant];
-  if (!entry) continue;
-  for (const [prop, val] of Object.entries(entry)) {
-    if (typeof val === 'string' || typeof val === 'number') {
-      codeTokens.set(`typography/${variant}/${prop}`, { value: val, category: 'typography' });
-    }
-  }
-}
-// Top-level typography props.
-for (const prop of ['fontFamily', 'fontSize', 'htmlFontSize', 'fontWeightLight', 'fontWeightRegular', 'fontWeightMedium', 'fontWeightBold']) {
-  if (theme.typography[prop] !== undefined) {
-    codeTokens.set(`typography/${prop}`, { value: theme.typography[prop], category: 'typography' });
-  }
-}
-
-// --- Breakpoints ---
-for (const [key, val] of Object.entries(theme.breakpoints.values)) {
-  codeTokens.set(`breakpoints/${key}`, { value: val, category: 'breakpoints' });
-}
-
-// --- Spacing ---
-codeTokens.set('spacing/base', { value: 8, category: 'spacing' });
-for (let i = 1; i <= 12; i++) {
-  codeTokens.set(`spacing/${i}`, { value: i * 8, category: 'spacing' });
-}
-
-// --- Shape ---
-codeTokens.set('shape/borderRadius', { value: theme.shape.borderRadius, category: 'shape' });
-
-// --- Shadows ---
-if (theme.shadows) {
-  theme.shadows.forEach((val, i) => {
-    codeTokens.set(`shadows/${i}`, { value: val, category: 'shadows' });
-  });
-}
-
-// --- zIndex ---
-if (theme.zIndex) {
-  for (const [key, val] of Object.entries(theme.zIndex)) {
-    codeTokens.set(`zIndex/${key}`, { value: val, category: 'zIndex' });
-  }
-}
-
-// --- Transitions ---
-if (theme.transitions && theme.transitions.duration) {
-  for (const [key, val] of Object.entries(theme.transitions.duration)) {
-    if (typeof val === 'number') {
-      codeTokens.set(`transitions/duration/${key}`, { value: val, category: 'transitions' });
-    }
-  }
-}
-if (theme.transitions && theme.transitions.easing) {
-  for (const [key, val] of Object.entries(theme.transitions.easing)) {
-    if (typeof val === 'string') {
-      codeTokens.set(`transitions/easing/${key}`, { value: val, category: 'transitions' });
-    }
-  }
-}
-
 // ---------------------------------------------------------------------------
-// Matching logic (Fixes 2 and 3)
+// System-specific matching strategies
 // ---------------------------------------------------------------------------
 
 /**
- * Cross-collection mapping rules. Maps a code token path prefix to
- * the Figma collection where the equivalent variable lives.
+ * MUI cross-collection mapping rules.
  */
-const CROSS_COLLECTION_MAPS = [
-  // palette/grey/* in code lives in material/colors/grey/* in Figma.
+const MUI_CROSS_COLLECTION_MAPS = [
   { codePrefix: 'palette/grey/', figmaCollection: 'material/colors', figmaPrefix: 'grey/' },
-  // palette/common/* in code lives in material/colors/common/* in Figma (if it exists).
   { codePrefix: 'palette/common/', figmaCollection: 'material/colors', figmaPrefix: 'common/' },
 ];
 
 /**
- * Attempt to find the Figma counterpart for a code token path.
- * Returns { figmaPath, figmaToken, matchType } or null.
- *
- * Match strategies (tried in order):
- * 1. Direct path match (collection/name).
- * 2. Cross-collection mapping (palette/grey/* -> material/colors/grey/*).
- * 3. Typography structural match (typography/h1/fontSize -> typography/typography/h1
- *    with rem-to-px conversion).
+ * Carbon matching strategies.
+ * Carbon code uses colors/{hue}/{shade}, Figma may use different collection names.
  */
+const CARBON_CROSS_COLLECTION_MAPS = [
+  // Carbon primitive colors in code map to Figma color collections
+  // These will be populated based on actual Figma collection names discovered
+];
+
+const crossCollectionMaps = system === 'mui' ? MUI_CROSS_COLLECTION_MAPS : CARBON_CROSS_COLLECTION_MAPS;
+
+// ---------------------------------------------------------------------------
+// Matching logic
+// ---------------------------------------------------------------------------
+
 function findFigmaMatch(codePath) {
   // Strategy 1: Direct match.
   if (figmaTokens.has(codePath)) {
@@ -321,7 +310,7 @@ function findFigmaMatch(codePath) {
   }
 
   // Strategy 2: Cross-collection mapping.
-  for (const map of CROSS_COLLECTION_MAPS) {
+  for (const map of crossCollectionMaps) {
     if (codePath.startsWith(map.codePrefix)) {
       const suffix = codePath.slice(map.codePrefix.length);
       const figmaVarName = map.figmaPrefix + suffix;
@@ -333,15 +322,42 @@ function findFigmaMatch(codePath) {
     }
   }
 
-  // Strategy 3: Typography structural match.
-  // Code: typography/{variant}/fontSize = "Xrem"
-  // Figma: typography/typography/{variant} = alias -> _fontSize/Xrem (resolves to px)
-  if (codePath.startsWith('typography/') && codePath.endsWith('/fontSize')) {
+  // Strategy 3: Typography structural match (MUI-specific).
+  if (system === 'mui' && codePath.startsWith('typography/') && codePath.endsWith('/fontSize')) {
     const variant = codePath.split('/')[1];
     const figmaVarName = `typography/${variant}`;
     for (const [figmaPath, token] of figmaTokens) {
       if (token.collection === 'typography' && token.name === figmaVarName) {
         return { figmaPath, figmaToken: token, matchType: 'typography_fontSize' };
+      }
+    }
+  }
+
+  // Strategy 4: Carbon color matching — try normalised colour comparison
+  if (system === 'carbon' && codePath.startsWith('colors/')) {
+    // Try to find a Figma variable with the same resolved hex value
+    const codeToken = codeTokens.get(codePath);
+    if (codeToken && typeof codeToken.value === 'string' && codeToken.value.startsWith('#')) {
+      const normalised = normaliseColour(codeToken.value);
+      for (const [figmaPath, token] of figmaTokens) {
+        if (token.resolvedType === 'COLOR') {
+          const figmaNorm = normaliseColour(String(token.resolvedValue));
+          if (normalised === figmaNorm) {
+            return { figmaPath, figmaToken: token, matchType: 'color_value_match' };
+          }
+        }
+      }
+    }
+  }
+
+  // Strategy 5: Carbon theme token matching — try name similarity
+  if (system === 'carbon' && codePath.startsWith('theme/')) {
+    const tokenName = codePath.replace('theme/', '');
+    // Carbon Figma may use different collection structures
+    for (const [figmaPath, token] of figmaTokens) {
+      // Try case-insensitive name match
+      if (token.name.replace(/[\s/\-_]/g, '').toLowerCase() === tokenName.toLowerCase()) {
+        return { figmaPath, figmaToken: token, matchType: 'name_normalised' };
       }
     }
   }
@@ -377,7 +393,6 @@ for (const [codePath, codeToken] of codeTokens) {
   matchedFigmaPaths.add(match.figmaPath);
   const { figmaPath, figmaToken, matchType } = match;
 
-  // Compare values.
   let codeVal = codeToken.value;
   let figmaVal = figmaToken.resolvedValue;
 
@@ -405,9 +420,8 @@ for (const [codePath, codeToken] of codeTokens) {
   }
 
   const valuesMatch = String(codeVal) === String(figmaVal);
-  // For cross-collection and structural matches, names intentionally differ.
   const namesMatch = codePath === figmaPath;
-  const isStructuralMatch = matchType === 'cross_collection' || matchType === 'typography_fontSize';
+  const isStructuralMatch = matchType === 'cross_collection' || matchType === 'typography_fontSize' || matchType === 'color_value_match' || matchType === 'name_normalised';
 
   if (valuesMatch && (namesMatch || isStructuralMatch)) {
     results.matches.push({
@@ -437,7 +451,7 @@ for (const [codePath, codeToken] of codeTokens) {
   }
 }
 
-// Figma-only: tokens in Figma not matched to any code token.
+// Figma-only
 for (const [figmaPath, token] of figmaTokens) {
   if (!matchedFigmaPaths.has(figmaPath)) {
     results.figmaOnly.push({
@@ -462,14 +476,15 @@ const summary = {
   namingMismatches: results.namingMismatches.length,
   codeOnly: results.codeOnly.length,
   figmaOnly: results.figmaOnly.length,
-  matchBreakdown: {
-    direct: results.matches.filter(m => m.matchType === 'direct').length,
-    cross_collection: results.matches.filter(m => m.matchType === 'cross_collection').length,
-    typography_fontSize: results.matches.filter(m => m.matchType === 'typography_fontSize').length,
-  },
+  matchBreakdown: {},
   parityScore_6_1: null,
   parityScore_6_2: null,
 };
+
+// Count match types
+for (const m of results.matches) {
+  summary.matchBreakdown[m.matchType] = (summary.matchBreakdown[m.matchType] || 0) + 1;
+}
 
 // Dimension 6.1: Token value parity.
 const totalMatched = results.matches.length + results.valueMismatches.length;
@@ -489,25 +504,21 @@ summary.parityScore_6_2 = totalComparable > 0
 
 const diffOutput = {
   _meta: {
+    system,
     generatedAt: new Date().toISOString(),
-    codeSource: 'scripts/output/mui-default-theme.json',
-    figmaSource: 'scripts/output/mui-figma-variables-normalised.json',
-    description: 'Token parity diff between MUI code theme and Figma Variables. Feeds Cluster 6 dimensions 6.1 and 6.2.',
-    matchStrategies: [
-      'direct: same collection and variable path',
-      'cross_collection: palette/grey/* matched to material/colors/grey/*, palette/common/* to material/colors/common/*',
-      'typography_fontSize: code typography/{variant}/fontSize (rem) matched to Figma typography/typography/{variant} (px via alias)',
-    ],
+    codeSource: `scripts/output/${system}-code-tokens.json`,
+    figmaSource: `scripts/output/${system}-figma-variables-normalised.json`,
+    description: `Token parity diff between ${system} code tokens and Figma Variables. Feeds Cluster 6 dimensions 6.1 and 6.2.`,
   },
   summary,
   results,
 };
 
-const diffPath = join(__dirname, 'output', 'mui-token-diff.json');
+const diffPath = join(__dirname, 'output', `${system}-token-diff.json`);
 writeFileSync(diffPath, JSON.stringify(diffOutput, null, 2), 'utf-8');
 
 // ---------------------------------------------------------------------------
-// Output: audit findings (compatible with v1.4 schema Finding format)
+// Output: audit findings
 // ---------------------------------------------------------------------------
 
 const findings = [];
@@ -517,25 +528,31 @@ function fid(n) {
   return `TVP-${String(n).padStart(3, '0')}`;
 }
 
-// Value mismatches: specific recommendations per mismatch type.
+// Value mismatches
 for (const m of results.valueMismatches) {
   let recommendation;
-  if (m.codePath.includes('fontFamily')) {
-    recommendation = 'Figma stores only the primary font family; code includes the full fallback stack. This is a structural scope difference, not a bug. Document the fallback stack in the Figma variable description for parity.';
-  } else if (m.codePath === 'breakpoints/xs') {
-    recommendation = 'Code defines xs as the minimum bound (0px); Figma defines it as a design breakpoint (444px). These are different semantic uses of the same name. Align on the meaning or rename the Figma variable to avoid confusion.';
-  } else if (m.category === 'palette') {
-    recommendation = `Colour value drift between code and Figma. Code has ${m.codeValue}, Figma resolves to ${m.figmaValue}${m.aliasChain.length > 0 ? ' via alias chain ' + m.aliasChain.join(' -> ') : ''}. Determine the authoritative source and correct the other.`;
+  if (system === 'mui') {
+    if (m.codePath.includes('fontFamily')) {
+      recommendation = 'Figma stores only the primary font family; code includes the full fallback stack. This is a structural scope difference, not a bug. Document the fallback stack in the Figma variable description for parity.';
+    } else if (m.codePath === 'breakpoints/xs') {
+      recommendation = 'Code defines xs as the minimum bound (0px); Figma defines it as a design breakpoint (444px). These are different semantic uses of the same name. Align on the meaning or rename the Figma variable to avoid confusion.';
+    } else if (m.category === 'palette') {
+      recommendation = `Colour value drift between code and Figma. Code has ${m.codeValue}, Figma resolves to ${m.figmaValue}${m.aliasChain.length > 0 ? ' via alias chain ' + m.aliasChain.join(' -> ') : ''}. Determine the authoritative source and correct the other.`;
+    } else {
+      recommendation = 'Align the token value between code and Figma. Determine which source is authoritative and update the other.';
+    }
   } else {
-    recommendation = 'Align the token value between code and Figma. Determine which source is authoritative and update the other.';
+    recommendation = `Token value mismatch: code has "${m.codeValue}", Figma has "${m.figmaValue}". Determine the authoritative source and align.`;
   }
 
   findings.push({
     id: fid(findingCounter++),
     dimension: 'token_value_parity',
     severity: 'warning',
+    severity_rank: 2,
     node_id: null,
     node_name: null,
+    summary: `Value mismatch: ${m.codePath}`,
     description: `Token value mismatch: "${m.codePath}" has value "${m.codeValue}" in code but resolves to "${m.figmaValue}" in Figma.`,
     evidence: [
       `Code: ${m.codePath} = ${JSON.stringify(m.codeValue)}`,
@@ -563,35 +580,20 @@ for (const t of results.codeOnly) {
   codeOnlyByCategory[t.category].push(t.codePath);
 }
 
-// Severity assignment per category.
-const categorySeverity = {
-  shadows: 'note',
-  zIndex: 'note',
-  transitions: 'note',
-  'material/colors': 'note', // Accent shades (A100-A700) missing from Figma are expected.
-};
-
 for (const [category, paths] of Object.entries(codeOnlyByCategory)) {
-  const severity = categorySeverity[category] || 'warning';
-
-  let recommendation;
-  if (category === 'typography') {
-    recommendation = 'Figma stores typography variants as single fontSize variables. Code defines five sub-properties per variant (fontFamily, fontWeight, fontSize, lineHeight, letterSpacing). The fontSize sub-property is matched via structural mapping. The remaining sub-properties (fontWeight per variant, lineHeight, letterSpacing) have no Figma Variable equivalent because Figma binds these as text style properties rather than variables. Document this structural gap.';
-  } else if (category === 'material/colors') {
-    recommendation = 'These colour values exist in the code @mui/material/colors module but have no matching Figma Variable. May include accent shades (A100-A700) or hues not in the Figma file (brown, common). Document which are intentional omissions vs gaps.';
-  } else {
-    recommendation = `Create Figma Variables for ${category} tokens, or document the gap as intentional in the parity gap register (Dimension 6.6).`;
-  }
+  const severity = (category === 'shadows' || category === 'zIndex' || category === 'transitions' || category === 'material/colors') ? 'note' : 'warning';
 
   findings.push({
     id: fid(findingCounter++),
     dimension: 'token_value_parity',
     severity,
+    severity_rank: severity === 'warning' ? 2 : 1,
     node_id: null,
     node_name: null,
+    summary: `${paths.length} ${category} tokens exist in code only`,
     description: `${paths.length} ${category} tokens exist in code but have no Figma Variable counterpart.`,
     evidence: paths.length <= 10 ? paths : [...paths.slice(0, 10), `... and ${paths.length - 10} more`],
-    recommendation,
+    recommendation: `Create Figma Variables for ${category} tokens, or document the gap as intentional in the parity gap register (Dimension 6.6).`,
     contract_ref: {
       type: 'token_definition',
       level: 'primitive',
@@ -609,26 +611,17 @@ for (const t of results.figmaOnly) {
   figmaOnlyByCollection[t.collection].push(t.name);
 }
 for (const [collection, names] of Object.entries(figmaOnlyByCollection)) {
-  let recommendation;
-  if (collection === 'palette') {
-    recommendation = 'These Figma palette variables include _states/* variants (hover, selected, focus, focusVisible, outlinedBorder) that are computed at runtime in code via alpha()/lighten()/darken() rather than declared as static tokens. They are not absent from code but are derived values. Document this as a structural difference in how state colours are produced.';
-  } else if (collection === 'typography') {
-    recommendation = 'These are internal Figma variables (_fontSize/* lookup values) used as alias targets for typography variants. They have no direct code counterpart because code stores fontSize as a CSS rem string per variant. This is Figma-internal plumbing, not a parity gap.';
-  } else if (collection === 'metadata') {
-    recommendation = 'Version metadata variables (material-ui, mui-x) are Figma-only. They have no token equivalent in code. Not a parity gap.';
-  } else {
-    recommendation = 'Determine whether these variables map to a different code path or are Figma-only design tokens. Document the mapping or the gap.';
-  }
-
   findings.push({
     id: fid(findingCounter++),
     dimension: 'token_naming_parity',
     severity: 'note',
+    severity_rank: 1,
     node_id: null,
     node_name: null,
-    description: `${names.length} variables in Figma collection "${collection}" have no direct code theme counterpart.`,
+    summary: `${names.length} Figma-only variables in "${collection}"`,
+    description: `${names.length} variables in Figma collection "${collection}" have no direct code token counterpart.`,
     evidence: names.length <= 10 ? names : [...names.slice(0, 10), `... and ${names.length - 10} more`],
-    recommendation,
+    recommendation: 'Determine whether these variables map to a different code path or are Figma-only design tokens. Document the mapping or the gap.',
     contract_ref: {
       type: 'token_definition',
       level: 'primitive',
@@ -639,12 +632,13 @@ for (const [collection, names] of Object.entries(figmaOnlyByCollection)) {
   });
 }
 
+const auditDir = system === 'mui' ? 'material-ui' : system;
 const findingsOutput = {
   _meta: {
     generatedAt: new Date().toISOString(),
-    schema_version: '1.4',
-    description: 'Token parity findings for MUI. Cluster 6 dimensions 6.1 and 6.2. Generated by diff-tokens.mjs.',
-    note: 'Finding IDs use TVP prefix (Token Value/naming Parity). Cross-collection and structural matching applied.',
+    schema_version: '2.2',
+    system,
+    description: `Token parity findings for ${system}. Cluster 6 dimensions 6.1 and 6.2. Generated by diff-tokens.mjs.`,
   },
   summary: {
     total_findings: findings.length,
@@ -661,7 +655,7 @@ const findingsOutput = {
   findings,
 };
 
-const findingsDir = join(repoRoot, 'audit', 'material-ui', 'v2.0');
+const findingsDir = join(repoRoot, 'audit', auditDir, 'v2.2');
 mkdirSync(findingsDir, { recursive: true });
 const findingsPath = join(findingsDir, 'token-parity-findings.json');
 writeFileSync(findingsPath, JSON.stringify(findingsOutput, null, 2), 'utf-8');
@@ -670,13 +664,13 @@ writeFileSync(findingsPath, JSON.stringify(findingsOutput, null, 2), 'utf-8');
 // Console output
 // ---------------------------------------------------------------------------
 
-console.log('=== MUI Token Parity Diff ===');
+console.log(`=== ${system.toUpperCase()} Token Parity Diff ===`);
 console.log(`Code tokens:       ${summary.codeTokenCount}`);
 console.log(`Figma tokens:      ${summary.figmaTokenCount}`);
 console.log(`Matched (same):    ${summary.matches}`);
-console.log(`  Direct:          ${summary.matchBreakdown.direct}`);
-console.log(`  Cross-collection:${summary.matchBreakdown.cross_collection}`);
-console.log(`  Typography font: ${summary.matchBreakdown.typography_fontSize}`);
+for (const [type, count] of Object.entries(summary.matchBreakdown)) {
+  console.log(`  ${type}: ${count}`);
+}
 console.log(`Value mismatches:  ${summary.valueMismatches}`);
 console.log(`Naming mismatches: ${summary.namingMismatches}`);
 console.log(`Code-only:         ${summary.codeOnly}`);

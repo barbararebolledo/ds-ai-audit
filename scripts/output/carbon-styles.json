@@ -1,0 +1,2399 @@
+{
+  "styles": [
+    {
+      "key": "cd04b8c37594449453d9503a2b295973ac0d44e9",
+      "name": "X-Large (1312px)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "1761:1441"
+    },
+    {
+      "key": "d26b7643d52c9c826177d88bf6d320b4f41bc0c0",
+      "name": "Large (1056px)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "1761:1442"
+    },
+    {
+      "key": "462440c0cc1d8ffa1c7535ab3446931f7c160ef9",
+      "name": "Max plus (1784px)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "5747:284238"
+    },
+    {
+      "key": "59f960ff4579d87307ed61b683a766f179d03d0d",
+      "name": "Nested grid",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "7476:400375"
+    },
+    {
+      "key": "2c295431d98a3f0c55facc855c010b51570d4c9a",
+      "name": "Max (1584px)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "1761:1440"
+    },
+    {
+      "key": "93978a65a205b542fc59d4c922f2b0da914c3516",
+      "name": "Carbon grid (Variable)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "42946:326267"
+    },
+    {
+      "key": "57efd068c434fe2641c266c7d402c2bcd39161ac",
+      "name": "Small (320px)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "1761:1444"
+    },
+    {
+      "key": "f90b193a401b8549571704f9727d9073b8d58d95",
+      "name": "Shadows/Menu",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3412"
+    },
+    {
+      "key": "ed8efd0181573395226ccfc2082e885da7914bc9",
+      "name": "$border-interactive - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3987"
+    },
+    {
+      "key": "573486ba40095f7fa2fe3cf6aeabd1fe44c82b82",
+      "name": "Shadow/Default/AI-drop-shadow-light",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:159"
+    },
+    {
+      "key": "0e1adf0ee7cc1a137da3984a31f5320f1b4d5c8c",
+      "name": "Blur/AI-blur-85",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:4620"
+    },
+    {
+      "key": "3f7b48bd3af27a1d957b8142ad92ef2e82412677",
+      "name": "$border-strong-03 - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401087"
+    },
+    {
+      "key": "c9bbf058c8bd921dbc127f7237d3dfa322fac337",
+      "name": "$border-interactive - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3988"
+    },
+    {
+      "key": "c191df249fd140722d21725c0d891dcd2394632f",
+      "name": "$border-subtle-03 - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401077"
+    },
+    {
+      "key": "43cd84aa4ae133421900c4a0ceb889f1eeef22bd",
+      "name": "$border-interactive - Outer/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3989"
+    },
+    {
+      "key": "2b8a1d799b057072eb7bddc5e44e68a46f59bfaf",
+      "name": "Selected inverse - Outer/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327124"
+    },
+    {
+      "key": "1548bfc2bc8dcaa5993bc00d490386864f52cea0",
+      "name": "$border-subtle-03 - Inner/Top + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400555"
+    },
+    {
+      "key": "6a26f0768bfe3c487b13083e83f0c8cfb21503a9",
+      "name": "$support-error - Outer/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "3687:41217"
+    },
+    {
+      "key": "35647dcf189c83d4ffe376b2a51b142ab6c306e1",
+      "name": "$border-strong-02 - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401060"
+    },
+    {
+      "key": "8e59bafe2be3775a1c2c1372700b5ccd14d110a9",
+      "name": "$border-subtle-01 - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1878:5026"
+    },
+    {
+      "key": "43d5adeac6f908b4ad3a2c974abacd28b2464172",
+      "name": "$border-strong-01 - Inner/Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8528:400369"
+    },
+    {
+      "key": "64a880ca3a04a388f32a8f4365baa7bc183efab2",
+      "name": "$border-strong-01 - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1880:3517"
+    },
+    {
+      "key": "d9f6bd9fb66de91975799d4ea7a86fa9b1ecc04e",
+      "name": "Shadow/Default/AI-drop-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:160"
+    },
+    {
+      "key": "183b401aaa7a5b6fa22dbfa6a54488a8ca19f327",
+      "name": "$border-strong-02 - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401062"
+    },
+    {
+      "key": "8a96f6a801f238fecff7f07937730411ed58fa5b",
+      "name": "$border-subtle-02 - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8706:401049"
+    },
+    {
+      "key": "7aaabba8168d8244fff28109fe33e2a8549c6ec4",
+      "name": "$border-disabled - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5734:283611"
+    },
+    {
+      "key": "1e8b30e322c415a7d455c319754b43e1a47a0a3d",
+      "name": "Selected inverse - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327127"
+    },
+    {
+      "key": "4c134fbc191cf0f9aee1c8f094b7dd258485830c",
+      "name": "Selected inverse - Outer/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327125"
+    },
+    {
+      "key": "1ebdfd9d49e5f019fdd2c86175f580c1a56c6bea",
+      "name": "Selected inverse - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327128"
+    },
+    {
+      "key": "87b5ca12bc8285b60ba3b94d4ad77a8a64538481",
+      "name": "Selected inverse - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327129"
+    },
+    {
+      "key": "6fc083909fdcc6f6d96a3b8ba9d83fa0630d03d1",
+      "name": "Selected inverse - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327131"
+    },
+    {
+      "key": "9dce47bcd0d7c54f58f72f04dfa27bf7f6f99ac6",
+      "name": "$border-interactive - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3985"
+    },
+    {
+      "key": "71db2406ad79b88d04d3a6a5a98b7034380214cd",
+      "name": "Selected inverse - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327130"
+    },
+    {
+      "key": "f91710b72c1ce7dfe0aff467b8f7f2d0a02b40c7",
+      "name": "$border-subtle-01 - Inner/Bottom + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8517:400460"
+    },
+    {
+      "key": "5e769257de8bc46c94ecc1327df3e41b8d363e11",
+      "name": "$border-subtle-01 - Inner/Top + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8517:400462"
+    },
+    {
+      "key": "e6c997748074b7ba00bf12af202a6140884cd607",
+      "name": "$border-subtle-01 - Inner/Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8517:400463"
+    },
+    {
+      "key": "4c359abb21c66b896a1c357ceddd94b770b0fe9c",
+      "name": "$border-subtle-02 - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401755"
+    },
+    {
+      "key": "361c087f9f5bf4dab1e2e4d9f6480bf85194817e",
+      "name": "$border-strong-01 - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8528:400374"
+    },
+    {
+      "key": "bbe887c12cf5f1f02bb5c7014e49a8a57677c1ba",
+      "name": "$support-error -  Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "3687:41216"
+    },
+    {
+      "key": "4838348a53b18b98c99e901b2f3501ccd2a74695",
+      "name": "$border-disabled - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5734:283612"
+    },
+    {
+      "key": "524b97524c791dfa009a808a2f8195868d5ed779",
+      "name": "$border-subtle-02 - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8706:401050"
+    },
+    {
+      "key": "8efe767292f0e6c93fc1ab0b7de5bc1e8c78b473",
+      "name": "$border-strong-03 - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401088"
+    },
+    {
+      "key": "80d6107bf79f9d6319abdde0e1e9537be8aff9ca",
+      "name": "$border-strong-02 - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401063"
+    },
+    {
+      "key": "5c8750473200941cac3238062f2399ae8f4ff86d",
+      "name": "$border-strong-02 - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401064"
+    },
+    {
+      "key": "edb5af941d103dc4e3a617d45691213beba3a728",
+      "name": "$border-strong-03 - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401089"
+    },
+    {
+      "key": "8494e39679291cb58495f5b55fcf26a542045554",
+      "name": "$border-subtle-02 - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401752"
+    },
+    {
+      "key": "3a81de487afe9d6edf91782c7cc458701ce527a5",
+      "name": "$border-strong-01 - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8528:400371"
+    },
+    {
+      "key": "6d346a2af0d9a795405ecfd09259bcfbb331da45",
+      "name": "Shadow/Default/AI-inner-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "The inner shadow used as part of the AI layer in the dark theme",
+      "node_id": "82676:162"
+    },
+    {
+      "key": "26c732889caab05660536798bc3574a552cfbeb1",
+      "name": "Blur/AI-blur-170",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:4618"
+    },
+    {
+      "key": "5780bf421741ab478074a99f2ebfce8f76ffe9d4",
+      "name": "AI-callout-shadow",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "70459:2303"
+    },
+    {
+      "key": "33730cdacb9ebdf07ba42f591667bcd4dd180384",
+      "name": "$border-subtle-03 - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400553"
+    },
+    {
+      "key": "4e11c44ae7f013e73773338013a5e213f18085f0",
+      "name": "$border-strong-03 - Inner/Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400563"
+    },
+    {
+      "key": "3e48b4d358e730a17b09a1bd6cb5cd74e8ec8cf8",
+      "name": "$border-strong-03 - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400564"
+    },
+    {
+      "key": "bfa9d3c019424c42a5a3718bbd8b4e132cdda86d",
+      "name": "$border-strong-03 - Inner/Top + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400565"
+    },
+    {
+      "key": "7bf94f72406369f2032d9a476579753c2017a9bf",
+      "name": "$border-strong-01 - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1880:3513"
+    },
+    {
+      "key": "7ba7aa7668aaec5717b999249cc4fe739fc14d79",
+      "name": "Shadow/Default/AI-callout-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "Combined dropdown shadows for callouts in light theme",
+      "node_id": "82676:164"
+    },
+    {
+      "key": "a057e4f917ebcf7860f770daccb40bd04e510c91",
+      "name": "$border-strong-01 - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1880:3516"
+    },
+    {
+      "key": "0a5cb626fb51308bfe6031d36604be34b61589c0",
+      "name": "Shadow/Transparent/AI-inner-shadow-light",
+      "style_type": "EFFECT",
+      "description": "The inner shadow used as part of the AI layer in the light theme",
+      "node_id": "82676:167"
+    },
+    {
+      "key": "151d623f6ea89dce6ffe8bf5dc7442819254d587",
+      "name": "Shadow/Transparent/AI-inner-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "The inner shadow used as part of the AI layer in the dark theme",
+      "node_id": "82676:168"
+    },
+    {
+      "key": "754517a5e8f0057b3268b828ec92310036a42c59",
+      "name": "Shadow/Transparent/AI-callout-shadow-light",
+      "style_type": "EFFECT",
+      "description": "Combined dropdown shadows for callouts in light theme",
+      "node_id": "82676:169"
+    },
+    {
+      "key": "c842b73a597150ea5af8ff4b436d4dc43bc9c293",
+      "name": "Shadow/Transparent/AI-callout-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "Combined dropdown shadows for callouts in light theme",
+      "node_id": "82676:170"
+    },
+    {
+      "key": "1b62c0e1e37660c165d6168e76100b33dd138c7a",
+      "name": "Shadow/Deprecated/[Deprecated] AI-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:171"
+    },
+    {
+      "key": "8b4d8b5f712a1f22ab4b8225261503becdb9a325",
+      "name": "Blur/AI-blur-150",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:4619"
+    },
+    {
+      "key": "dd53669d81d6d9ad68456cdd9ba4b1df26964492",
+      "name": "$border-subtle-03 - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400552"
+    },
+    {
+      "key": "5f214d13a3603fdd466da99604f4904580460c4c",
+      "name": "$border-interactive - Outer/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3992"
+    },
+    {
+      "key": "e8373d91599cda1c03faea5dbccf6bed1645f60c",
+      "name": "$border-interactive - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3984"
+    },
+    {
+      "key": "90ec84dbceb01049e13aa89e47e0ef9c78701da0",
+      "name": "Field/$field-01",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "169:146"
+    },
+    {
+      "key": "86faba1ac405b0415ed1e669662b07c75a35c285",
+      "name": "Layer/$layer-hover-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401206"
+    },
+    {
+      "key": "c483cbb6f01c4c14cbb87c889375cd12f0c35eb6",
+      "name": "Border/$border-interactive",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401719"
+    },
+    {
+      "key": "ff69ea0647097c15e3df1061b4329968be25e1f4",
+      "name": "Text/$text-secondary",
+      "style_type": "FILL",
+      "description": "v10: $text-02",
+      "node_id": "169:91"
+    },
+    {
+      "key": "674d9eddb6b80c5e1ec5a4087726101239d09628",
+      "name": "Support/$support-error",
+      "style_type": "FILL",
+      "description": "v10: $support-01",
+      "node_id": "169:180"
+    },
+    {
+      "key": "dbab132abdd235b4b441b7cb9eee0bf7bf485e83",
+      "name": "$border-subtle-03 - Inner/Border bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401078"
+    },
+    {
+      "key": "06b64dfbf13baa24a1cf00171826b43025274dca",
+      "name": "Button/$button-danger-secondary",
+      "style_type": "FILL",
+      "description": "v10: $danger-02",
+      "node_id": "1871:1746"
+    },
+    {
+      "key": "5737682d2a637972de503f45b3ca3c8920178152",
+      "name": "Support inverse/$support-info-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-support-04",
+      "node_id": "169:223"
+    },
+    {
+      "key": "5dbb27bd39478e8aad84f2ad3d906fe81a415fe2",
+      "name": "Button/$button-secondary",
+      "style_type": "FILL",
+      "description": "v10: $interactive-02",
+      "node_id": "169:28"
+    },
+    {
+      "key": "02b98dd8d3d3a834c2b5fe468f575a2da77f4cd2",
+      "name": "Tag/Cyan text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43829"
+    },
+    {
+      "key": "469327fd2d794fcb0d683aaa945e22200c753e1f",
+      "name": "$border-disabled - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5734:283610"
+    },
+    {
+      "key": "afd7e4ad5cb2f491eb675289927ccd639773cbdf",
+      "name": "Button/$button-tertiary",
+      "style_type": "FILL",
+      "description": "v10: $interactive-03",
+      "node_id": "169:35"
+    },
+    {
+      "key": "8b23114aa6259662222c6a72b85d2bc62b3a5185",
+      "name": "Support inverse/$support-error-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-support-01",
+      "node_id": "169:220"
+    },
+    {
+      "key": "a922ea21c11ac2f5017651db89219434ff86457b",
+      "name": "Base/Text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "2092:8405"
+    },
+    {
+      "key": "0504b806108f23d3ad865f5dbf9db968986a10ed",
+      "name": "Link/$link-primary",
+      "style_type": "FILL",
+      "description": "v10: $link-01",
+      "node_id": "169:112"
+    },
+    {
+      "key": "86c4cd8e8ede896594b68e44a18ad93920a10b1e",
+      "name": "Miscellaneous/$overlay",
+      "style_type": "FILL",
+      "description": "v10: $$overlay-01 (Black)",
+      "node_id": "169:230"
+    },
+    {
+      "key": "672e2b0256fbf2d45f16a217aef4dd74d0cc898a",
+      "name": "Icon/$icon-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-01",
+      "node_id": "169:160"
+    },
+    {
+      "key": "04f7172efaeb690e914446cade7a66a964372ccb",
+      "name": "Text/$text-helper",
+      "style_type": "FILL",
+      "description": "v10: $text-05",
+      "node_id": "371:274"
+    },
+    {
+      "key": "c828780ee0ba4cfe34626acdd8b12ed06781ec2b",
+      "name": "Aura/AI-aura-dark",
+      "style_type": "FILL",
+      "description": "Aura used across AI components in the background.",
+      "node_id": "82676:10977"
+    },
+    {
+      "key": "69ee72a17dba84701c40d9dfcc181d358548e98d",
+      "name": "Tag/Red-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41753"
+    },
+    {
+      "key": "611027b126f43234a945b0ce99180757dd7c293c",
+      "name": "Tag/Teal text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47645"
+    },
+    {
+      "key": "247a33411143255b7cfd9c9839bb27dbf84af667",
+      "name": "Border/$border-subtle-01",
+      "style_type": "FILL",
+      "description": "v10: $ui-03",
+      "node_id": "169:69"
+    },
+    {
+      "key": "dd4005f11ab6dd7061fc6aa01505ac6e3f9183ac",
+      "name": "Button/$button-secondary-hover",
+      "style_type": "FILL",
+      "description": "v10: $hover-secondary",
+      "node_id": "169:427"
+    },
+    {
+      "key": "57ea63f2b81b4801b2c3623a103195e0a88edbe4",
+      "name": "Base/Icon",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "2092:8406"
+    },
+    {
+      "key": "57ab54bf24b9202ff2e2edbcc9ad6253618bb757",
+      "name": "Button/$button-danger-active",
+      "style_type": "FILL",
+      "description": "v10: $active-danger",
+      "node_id": "169:437"
+    },
+    {
+      "key": "20268fa776ee3cc9c33c47bff26afcae5eeb0700",
+      "name": "Layer accent/$layer-accent-hover-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401452"
+    },
+    {
+      "key": "b6f1966c8c5f11fbbb628efbf2488606520f75f8",
+      "name": "Miscellaneous/$highlight",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "169:439"
+    },
+    {
+      "key": "4e4caffaf981731328bd5fb708b783371e6b0b0e",
+      "name": "$border-subtle-01 - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1878:5025"
+    },
+    {
+      "key": "72fa0a886f5a3ba7be3ec356b61c21ce850f42ba",
+      "name": "Text/$text-error",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "1871:1749"
+    },
+    {
+      "key": "8f018c14e480ed238a909314f99d056925dcb007",
+      "name": "Layer/$layer-selected-hover-01",
+      "style_type": "FILL",
+      "description": "v10: $hover-selected-ui",
+      "node_id": "169:430"
+    },
+    {
+      "key": "8aa453cb536e6c1815695fa70b486e6833345cd4",
+      "name": "Button/$button-disabled",
+      "style_type": "FILL",
+      "description": "v10: $disabled-02",
+      "node_id": "169:444"
+    },
+    {
+      "key": "965dcf89f51171f7f289cb2044a02291d34b5499",
+      "name": "Layer/$layer-01",
+      "style_type": "FILL",
+      "description": "v10: $ui-01",
+      "node_id": "169:55"
+    },
+    {
+      "key": "a4415f82b0c3b5f54db69ff4884f452eb11ce6dc",
+      "name": "Aura/AI-aura-hover-light",
+      "style_type": "FILL",
+      "description": "Hover state for the linear aura on inputs.",
+      "node_id": "82676:10982"
+    },
+    {
+      "key": "6626f0b65719fb2b9617fa262475ce4dfa720de2",
+      "name": "$border-subtle-03 - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401076"
+    },
+    {
+      "key": "d1a8fd7645875dec0e53651f3400bc8afcac4350",
+      "name": "Border/$border-subtle-02",
+      "style_type": "FILL",
+      "description": "v10: $decorative-01",
+      "node_id": "1871:1748"
+    },
+    {
+      "key": "527c578a1a73a4300572e512f729ca58644a17ef",
+      "name": "Layer/$layer-hover-02",
+      "style_type": "FILL",
+      "description": "v10: $hover-light-ui",
+      "node_id": "1871:2263"
+    },
+    {
+      "key": "cb76818a37fb031526550016be5952a753c0dc58",
+      "name": "Gradient/Gradient",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "5487:272842"
+    },
+    {
+      "key": "7da0d16bb942cbc712bdf87d104c04c7778e4f92",
+      "name": "Notifications/$notification-action-tertiary-inverse-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "11186:321956"
+    },
+    {
+      "key": "a095bf6c4182ba58f2135798a143858130059ec8",
+      "name": "Layer/$layer-selected-02",
+      "style_type": "FILL",
+      "description": "v10: $selected-light-ui",
+      "node_id": "1871:2516"
+    },
+    {
+      "key": "d0b2cc519ce81251e07171fda83c48805f272493",
+      "name": "Tag/Cool gray-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41747"
+    },
+    {
+      "key": "7420f881a469da6fb7dcc13aeed1645642b6a373",
+      "name": "Tag/Purple-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41752"
+    },
+    {
+      "key": "f90b2587c55f6e90eaf1f44db88c69222b98ab78",
+      "name": "$border-subtle-01 - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1878:5023"
+    },
+    {
+      "key": "4e3b91a67e2aa06c4145d7532bf67655c1482ec0",
+      "name": "Link/$link-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-link",
+      "node_id": "1871:1751"
+    },
+    {
+      "key": "d2cd870d9e5be53a5782cb80f4fbf2260b60da48",
+      "name": "Tag/Green-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41750"
+    },
+    {
+      "key": "7e01132e0c120ecb12e9827874486e73c9df374f",
+      "name": "Background/$background",
+      "style_type": "FILL",
+      "description": "v10: $ui-background",
+      "node_id": "169:13"
+    },
+    {
+      "key": "4f41f232fe69e3593f9b9623a6c3677e9bd284c2",
+      "name": "Tag/Green background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41756"
+    },
+    {
+      "key": "7d99df6de27ddc171e4d3078e5731f5776dd8655",
+      "name": "Layer/$layer-active-01",
+      "style_type": "FILL",
+      "description": "v10: $active-ui",
+      "node_id": "169:436"
+    },
+    {
+      "key": "dd313865e6d7cc7befa1a8d5f0dd6598ebac014c",
+      "name": "Layer/$layer-active-02",
+      "style_type": "FILL",
+      "description": "v10: $active-light-ui",
+      "node_id": "1871:2515"
+    },
+    {
+      "key": "0a4b2ae4c666f010b556c02d6e69fd47cf4c723e",
+      "name": "Text/$text-inverse",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401742"
+    },
+    {
+      "key": "0c483bfcec9b2e4320595038cb304b48b7788484",
+      "name": "Button/$button-primary",
+      "style_type": "FILL",
+      "description": "v10: $interactive-01",
+      "node_id": "169:21"
+    },
+    {
+      "key": "e47f43d34cc7ef339b8d4a26d19a897b27881f88",
+      "name": "Base/BG",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "2092:8407"
+    },
+    {
+      "key": "cb4f21941e5615464d41d66ce9a329e28b2f3f33",
+      "name": "Notifications/$notification-action-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "11060:328469"
+    },
+    {
+      "key": "bb0a97322a44ddd9105d6682c4b173a86d5c9963",
+      "name": "Tag/Gray text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43929"
+    },
+    {
+      "key": "ba85b962575aaca90755abd380d08d4b9954ed5b",
+      "name": "Skeleton/$skeleton-element",
+      "style_type": "FILL",
+      "description": "v10: $skeleton-02",
+      "node_id": "169:441"
+    },
+    {
+      "key": "5b0f5690a3630fb4436c6d166f6b4af207f8605f",
+      "name": "Link/$link-visted",
+      "style_type": "FILL",
+      "description": "v10: $visited-link",
+      "node_id": "169:442"
+    },
+    {
+      "key": "38796f8521208b02de5bae1f8aea79421c3bbf82",
+      "name": "Layer accent/$layer-accent-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401419"
+    },
+    {
+      "key": "f4ac752554fab8e831da35ca4d796f3aeb2404b1",
+      "name": "Border/$border-subtle-selected-01",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8773:400395"
+    },
+    {
+      "key": "d41df90df3aca87f0ccc705ec51698870a943232",
+      "name": "Tag/Purple background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47567"
+    },
+    {
+      "key": "bbce5350be1b3b782c1cc947b85fdb4de1ec0ccd",
+      "name": "Button/$button-primary-hover",
+      "style_type": "FILL",
+      "description": "v10: $hover-primary",
+      "node_id": "169:425"
+    },
+    {
+      "key": "ce77291cfff678dda061f68a0022be779667e85c",
+      "name": "Tag/Blue-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41746"
+    },
+    {
+      "key": "f3a0b36b9127da17379c16bd55db3c686e975d45",
+      "name": "Background/$background-inverse-hover",
+      "style_type": "FILL",
+      "description": "v10: $inverse-hover-ui",
+      "node_id": "1871:2514"
+    },
+    {
+      "key": "e94a545577243e3ba7a33bff91f9ca573f7e836d",
+      "name": "Button/$button-tertiary-hover",
+      "style_type": "FILL",
+      "description": "v10: $hover-tertiary",
+      "node_id": "169:428"
+    },
+    {
+      "key": "9e96f091af2c72eca907b6fe3ea9514339ea9e02",
+      "name": "Miscellaneous/$toggle-off",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:402190"
+    },
+    {
+      "key": "0c157a76f171252a40758c2aa1ab5038aebe32f6",
+      "name": "Link/$link-inverse-visited",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "73408:175"
+    },
+    {
+      "key": "66bcd28ea1dbe7673332bc798b8168b79db6a699",
+      "name": "Tag/Warm gray background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:50578"
+    },
+    {
+      "key": "8655000b205215ab5224e1b8ae7568d040cd313e",
+      "name": "Border/$border-subtle-selected-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8773:400396"
+    },
+    {
+      "key": "3ff82a160fa2c0e4c9cc2f6719a86a9e7f7c231a",
+      "name": "Notifications/$notification-error-background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108675"
+    },
+    {
+      "key": "3621c39a31260ac3b9e7b9c591097c430ea390b8",
+      "name": "Notifications/$support-error border",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108679"
+    },
+    {
+      "key": "3f5d6d4e40236d1e9804daefb3dbc9e64521e8c7",
+      "name": "Shadow/Deprecated/[Deprecated] AI-shadow-light",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:172"
+    },
+    {
+      "key": "b2461af78103e4a6a4663e616a42647ef879e3e9",
+      "name": "Layer/$layer-hover-01",
+      "style_type": "FILL",
+      "description": "v10: $hover-ui",
+      "node_id": "169:429"
+    },
+    {
+      "key": "c03557de1b218400a7fb530b1d38eede81d92d6d",
+      "name": "Background/$background-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8678:400967"
+    },
+    {
+      "key": "6f53d4737e83ce28a7d3890513e8682bfe14947a",
+      "name": "Background/$background-brand",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8678:401000"
+    },
+    {
+      "key": "fdc1d3d84eeabb809f9af4e8f43c8848ef3f90ca",
+      "name": "Layer/$layer-selected-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401258"
+    },
+    {
+      "key": "98762531ea7d2032bf0b64361aa47193a92c3f0f",
+      "name": "Border/$border-inverse",
+      "style_type": "FILL",
+      "description": "v10: $ui-05",
+      "node_id": "8704:401708"
+    },
+    {
+      "key": "7fb504890d2c8f1e68684a84bfa3598c669bb181",
+      "name": "Layer/$layer-selected-hover-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401279"
+    },
+    {
+      "key": "081e30d7991eba1fae6fc27e60e1e38439dfd568",
+      "name": "Border/$border-tile-03",
+      "style_type": "FILL",
+      "description": "Border color on $field-03 tile ($layer-02 background) ",
+      "node_id": "20047:288109"
+    },
+    {
+      "key": "7e5d104bc79ceb84797a522035a65a2aebccf9f1",
+      "name": "Layer accent/$layer-accent-active-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401474"
+    },
+    {
+      "key": "f985c1417afa4585d3f51b7b67a588ea5569d507",
+      "name": "Layer accent/$layer-accent-active-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401475"
+    },
+    {
+      "key": "1de55949225b84749aadb16c6e284132167af74e",
+      "name": "Support/$support-info",
+      "style_type": "FILL",
+      "description": "v10: $support-04",
+      "node_id": "169:195"
+    },
+    {
+      "key": "9f8e3c31be14e67f622efc2bf1a498d69afee868",
+      "name": "Border/$border-subtle-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401655"
+    },
+    {
+      "key": "4a0e46abee06f3b65be2e04670265b762ca21b78",
+      "name": "Border/$border-subtle-selected-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8773:400397"
+    },
+    {
+      "key": "4ed7bb0639254efbc2fe16eb76f04b44b866113f",
+      "name": "Tag/Magenta-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41751"
+    },
+    {
+      "key": "fa26b75b820c42230db747eb3c21c043d30ecab4",
+      "name": "Accessibility/White",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3097:27419"
+    },
+    {
+      "key": "ccd881a2ad7f2c2aba66ca6e7928535d56d82755",
+      "name": "Border/$border-strong-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401686"
+    },
+    {
+      "key": "962f77496d3afa1fc536a5a5bfc4cf8a8ace2d58",
+      "name": "AI Layer/Layer 02/layer-02-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11017"
+    },
+    {
+      "key": "e0fd7bf0f21fec54e490d9799eaec98972207718",
+      "name": "Support/$support-warning",
+      "style_type": "FILL",
+      "description": "v10: $support-03",
+      "node_id": "169:194"
+    },
+    {
+      "key": "d9eb1b4586c3c7bc66fd4d41d7720ac9ba964771",
+      "name": "Layer accent/$layer-accent-hover-01",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401440"
+    },
+    {
+      "key": "15232aa9db86027c8761982555767de7c6fa1a19",
+      "name": "$border-strong-01 - Inner/Bottom + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8528:400372"
+    },
+    {
+      "key": "6df4c34b6c8f4e14f92fe9a62a0df2d3644d5c5b",
+      "name": "Tag/Warm gray text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:50579"
+    },
+    {
+      "key": "71c3695027a1234eb3204e14f90932f2ed7f53b2",
+      "name": "Icon/$icon-interactive",
+      "style_type": "FILL",
+      "description": "Icon color",
+      "node_id": "20047:288110"
+    },
+    {
+      "key": "3ca5756dc2e095c45528b24ec6fe367e187551fa",
+      "name": "Transparent/Transparent",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "1797:1446"
+    },
+    {
+      "key": "26fd576c9545784d13fb67f72640c1831b940e23",
+      "name": "Selected inverse - Outer/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327123"
+    },
+    {
+      "key": "241a4c007c11d8a02a816d338d216e9fce82e8c0",
+      "name": "$border-strong-03 - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401086"
+    },
+    {
+      "key": "42f3ae9e1082a56169b829fc01c7c9dde51e9e58",
+      "name": "Border/$border-disabled",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401730"
+    },
+    {
+      "key": "8e4c1c57c70a40c122ff2ee859f9e1ca1380e8fb",
+      "name": "$border-strong-01 - Inner/Top + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8528:400370"
+    },
+    {
+      "key": "88e265b402decd5fe77521c877551b8affaa6b8b",
+      "name": "Border/$border-strong-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401687"
+    },
+    {
+      "key": "a1902c48467164c1ec915933cb75e510b23d3b4b",
+      "name": "$border-strong-01 - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8528:400373"
+    },
+    {
+      "key": "92a6344c6a906a0b427c1e7da6d61a2bcc3c6d5a",
+      "name": "Notifications/$notification-success-background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108676"
+    },
+    {
+      "key": "ac13459b1ae91b2a916a4205f6225dd3489756f3",
+      "name": "Icon/$icon-primary",
+      "style_type": "FILL",
+      "description": "v10: $icon-01",
+      "node_id": "169:131"
+    },
+    {
+      "key": "3079cdf1958b3326e7d2c411eff8f229536fd3fc",
+      "name": "Link/$link-primary-hover",
+      "style_type": "FILL",
+      "description": "v10: $hover-primary-text",
+      "node_id": "169:426"
+    },
+    {
+      "key": "869473f0a58626eb8dfcd88e5e3315ab474d4a77",
+      "name": "Text/$text-on-color",
+      "style_type": "FILL",
+      "description": "v10: $text-04",
+      "node_id": "169:105"
+    },
+    {
+      "key": "c01192bcc27b6b98cb0888de7a6b23ef9d155097",
+      "name": "Notifications/$support-info border",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108682"
+    },
+    {
+      "key": "746c8862360f0a65e6bc0a8dac58d372794d631e",
+      "name": "Text/$text-disabled",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401753"
+    },
+    {
+      "key": "551e66fb5e6d2c6466168762b1631e1f027c9396",
+      "name": "Background/$background-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-02",
+      "node_id": "169:167"
+    },
+    {
+      "key": "f9fe69e60a363fe362b29d3a3f9b25e709334fe3",
+      "name": "Icon/$icon-on-color",
+      "style_type": "FILL",
+      "description": "v10: $icon-03",
+      "node_id": "169:133"
+    },
+    {
+      "key": "c2625c6086fb98bef9c00f4cb785369d88a8c859",
+      "name": "Text/$text-primary",
+      "style_type": "FILL",
+      "description": "v10: $text-01",
+      "node_id": "169:84"
+    },
+    {
+      "key": "2c8b830a5ad7c97d6c47bb2cb3ff3f2608197c4c",
+      "name": "AI Layer/Layer 01/layer-active-01-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11010"
+    },
+    {
+      "key": "5809d2f1ae3776c1b2ae409c4f367bc83b529e1e",
+      "name": "Tag/Gray background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43910"
+    },
+    {
+      "key": "99ba9916167da3a2a7d0fc530c24e9d0958aa5a5",
+      "name": "Button/$button-secondary-active",
+      "style_type": "FILL",
+      "description": "v10: $active-secondary",
+      "node_id": "169:434"
+    },
+    {
+      "key": "f4a7a841b5eb91aab39d51090170015765066d4c",
+      "name": "$focus - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "3687:41155"
+    },
+    {
+      "key": "fd8e8a551c6846feca5cb0553408f59b25ef18bf",
+      "name": "Field/$field-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401568"
+    },
+    {
+      "key": "72aeb3a519598815efd58e1a17b43f18d50e3cd3",
+      "name": "$border-strong-03 - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400562"
+    },
+    {
+      "key": "3b1467bb73118d340b1798e1f2cc745d90e10924",
+      "name": "Notifications/$notification-action-tertiary-inverse",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "11186:321954"
+    },
+    {
+      "key": "1c8ea54a39af5bba1bd9666ab22422dadff23e64",
+      "name": "slug-callout-shadow-outer",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "53900:438292"
+    },
+    {
+      "key": "eda464c8204ea91e9a3ecb230fea6a47406633e7",
+      "name": "Border/AI-border-light",
+      "style_type": "FILL",
+      "description": "AI border with a gradient for larger components.",
+      "node_id": "82676:10989"
+    },
+    {
+      "key": "474ef3cd7d9a5bb1104827f9880a913b5087357a",
+      "name": "Tag/Cool gray text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:50029"
+    },
+    {
+      "key": "e00962aacfc42206af221f000ff21bbef625a2b8",
+      "name": "$focus-inverse - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5853:283933"
+    },
+    {
+      "key": "f6da4258c10f45391532187c6b4977aa9a711e86",
+      "name": "Aura/AI-aura-hover-dark",
+      "style_type": "FILL",
+      "description": "Hover state for the linear aura on inputs.",
+      "node_id": "82676:10981"
+    },
+    {
+      "key": "41a55799f88ce649e263d7c8c7a5088d640f75e5",
+      "name": "Aura/AI-aura-table-light",
+      "style_type": "FILL",
+      "description": "Aura used for highlighting partial AI in data table columns or rows. Gradient direction is horizontal.",
+      "node_id": "82676:10984"
+    },
+    {
+      "key": "82cdbbb6bfbad688707b93ed0456550b3f5c437e",
+      "name": "Support/$support-caution-major",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:402042"
+    },
+    {
+      "key": "7f1f6f9c59855de1929b844cc83ccb162f304612",
+      "name": "Text/$text-placeholder",
+      "style_type": "FILL",
+      "description": "v10: $text-03",
+      "node_id": "169:104"
+    },
+    {
+      "key": "eb83c666180887015a9afe98e26cce0683d6d9a5",
+      "name": "Layer/$layer-selected-01",
+      "style_type": "FILL",
+      "description": "v10: $selected-ui",
+      "node_id": "169:438"
+    },
+    {
+      "key": "cb0dc6c9638db5f4d9d3d17562052a40299824fb",
+      "name": "Support inverse/$support-success-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-support-02",
+      "node_id": "169:221"
+    },
+    {
+      "key": "f0bc534639dc0696a90c56a75c452675844c9771",
+      "name": "Border/$border-strong-01",
+      "style_type": "FILL",
+      "description": "v10: $ui-04",
+      "node_id": "169:70"
+    },
+    {
+      "key": "0e4d98895d06b693f12d442356ad8330cf084695",
+      "name": "Layer/$layer-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401195"
+    },
+    {
+      "key": "10ec316eccb9fe3245132963ccc5ba3f604612cf",
+      "name": "$border-subtle-03 - Inner/Bottom + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400554"
+    },
+    {
+      "key": "e7d331c06b522b5b33d880d7a76a6078876c9ae2",
+      "name": "AI Layer/Background/AI-background-hover-light",
+      "style_type": "FILL",
+      "description": "Blue-10 background used by AI layer.",
+      "node_id": "82676:11005"
+    },
+    {
+      "key": "05802c555ebbfa61c47cfd9a1cf94306822eb254",
+      "name": "Tag/Green text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47184"
+    },
+    {
+      "key": "947213b960e973145421daa05f4962f12dcf2be1",
+      "name": "Figma Variant/Border",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "2092:8624"
+    },
+    {
+      "key": "4726538b5fdbd9a5248aed8dd79a7d694529e5c1",
+      "name": "$border-subtle-02 - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401754"
+    },
+    {
+      "key": "ccf330fb772f712b0f3411b0ce23a9efd9ead9e4",
+      "name": "Layer accent/$layer-accent-active-01",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401473"
+    },
+    {
+      "key": "20f8e6f11d6ad464197abf55b86ba936b9d97eb1",
+      "name": "Skeleton/$skeleton-background",
+      "style_type": "FILL",
+      "description": "v10: $skeleton-01",
+      "node_id": "169:440"
+    },
+    {
+      "key": "762d526da2499b6984776e062fab076be7d88d5e",
+      "name": "Support/$support-caution-minor",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:402043"
+    },
+    {
+      "key": "79833ab30b79455592ca88def7785f318320f4e1",
+      "name": "$border-subtle-03 - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401075"
+    },
+    {
+      "key": "c315b0282319b84f00a1cfce40a6125b09316a95",
+      "name": "Tag/Magenta background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47221"
+    },
+    {
+      "key": "6315e123107be18e131fe8ed6f2be41c4ade71b1",
+      "name": "Medium (672px)",
+      "style_type": "GRID",
+      "description": "",
+      "node_id": "1761:1443"
+    },
+    {
+      "key": "89eb8cc4b69040da480af1b268811b211ce96a6a",
+      "name": "Field/$field-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "169:153"
+    },
+    {
+      "key": "1da37dfdefe254949e0d05cb911d10bab75cf78d",
+      "name": "Button/$button-danger-hover",
+      "style_type": "FILL",
+      "description": "v10: $hover-danger",
+      "node_id": "169:431"
+    },
+    {
+      "key": "e2c3af02e9e28f985686a32b8bd1fc21e8b87c7d",
+      "name": "$border-strong-01 - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1880:3514"
+    },
+    {
+      "key": "2ee865bed719472ade5a6ff1791370ca5d9a09a7",
+      "name": "Shadow/Transparent/AI-drop-shadow-light",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:165"
+    },
+    {
+      "key": "4dac643df657efc7d3714d455c2c289cbff84965",
+      "name": "Layer/$layer-active-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401237"
+    },
+    {
+      "key": "b2ab8c6247a933c6a818f4e0de5732c826fdc4aa",
+      "name": "Notifications/$notification-info-background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108678"
+    },
+    {
+      "key": "76053e768af565828d55f43f55be6bee21c452a0",
+      "name": "Shadow/Deprecated/[Deprecated] AI-shadow-secondary",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:173"
+    },
+    {
+      "key": "bd1f669735b3cf24fb78d24068aa93cb1c2e7a6e",
+      "name": "Focus/$focus",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "169:424"
+    },
+    {
+      "key": "b1ad8128c06894e3ccaef88f0818842fc20ff04e",
+      "name": "Focus/$focus-inset",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:402107"
+    },
+    {
+      "key": "8474304af985adeb6890e31b873cac87311ab670",
+      "name": "$border-strong-03 - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400567"
+    },
+    {
+      "key": "155bb954433c5ee8b4e5c87218834274c5c62034",
+      "name": "$border-subtle-03 - Inner/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401079"
+    },
+    {
+      "key": "82ddb391a24db87a09ec9209cfae976654171565",
+      "name": "Button/$button-danger-primary",
+      "style_type": "FILL",
+      "description": "v10: $danger-01",
+      "node_id": "1871:1745"
+    },
+    {
+      "key": "91b89038c090e5a81d71a299ccdd37cd5f1648d0",
+      "name": "Accessibility/Black",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3097:27420"
+    },
+    {
+      "key": "2efd4aeaab68ed957ec31a806c609db21e0b178b",
+      "name": "AI Layer/Layer 01/AI-layer-01-hover-light",
+      "style_type": "FILL",
+      "description": "Blue-10 background used by AI layer.",
+      "node_id": "82676:11016"
+    },
+    {
+      "key": "e4640d52c6473282e517e40550eae53bb2ae4f3d",
+      "name": "Selected inverse - Outer/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327122"
+    },
+    {
+      "key": "601e270df630dac6540c85edc6e196fd2f3c0cf3",
+      "name": "Miscellaneous/$interactive",
+      "style_type": "FILL",
+      "description": "v10: $interactive-04",
+      "node_id": "169:54"
+    },
+    {
+      "key": "0799a06f3c3322e2d0f4a82a9d5f6aef1631048a",
+      "name": "Background/$background-selected",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8678:400978"
+    },
+    {
+      "key": "f87a4087e3dc80fee63c4d198f0cda88f912eb12",
+      "name": "Layer accent/$layer-accent-01",
+      "style_type": "FILL",
+      "description": "v10: $ui-03",
+      "node_id": "8704:401407"
+    },
+    {
+      "key": "d6387177c63d511d7b1ccf9f4079af3e6cbf6609",
+      "name": "$border-strong-03 - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401085"
+    },
+    {
+      "key": "d7990d3bb09eb45979852246dddfa342bc1588df",
+      "name": "Background/$background-selected-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8678:400989"
+    },
+    {
+      "key": "f744fb009c1bbf462f428fa9dc3dc9f70f5fb5b2",
+      "name": "Tag/Blue text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43058"
+    },
+    {
+      "key": "cc9689d888cc35c45283206cb9929e36a3416390",
+      "name": "Notifications/$support-warning border",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108681"
+    },
+    {
+      "key": "ee579d22a26992e8a5e04c95646496d25d44d796",
+      "name": "Aura/AI-aura-sm-dark",
+      "style_type": "FILL",
+      "description": "Aura used for highlighting partial AI in inputs. Gradient direction is bottom to top.",
+      "node_id": "82676:10979"
+    },
+    {
+      "key": "9ff012b75f52896970ab0b44730757cec8a8fe82",
+      "name": "$border-strong-02 - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401771"
+    },
+    {
+      "key": "c47682b00f64cf682f6d84d4754036c65173d148",
+      "name": "AI Layer/Layer 02/layer-selected-hover-02-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11020"
+    },
+    {
+      "key": "28e0acb8e7fe5012c4bb8e1bffba09cfe66f2aa6",
+      "name": "$border-strong-02 - Inner/Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401770"
+    },
+    {
+      "key": "ff639eaa26f5c7c13686004689fae504aff38a09",
+      "name": "Border/[Deprecated] AI-border-table-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10993"
+    },
+    {
+      "key": "420f0c47ef59da5063e661e6c40a307aef4f5e7f",
+      "name": "Tag/Blue background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43233"
+    },
+    {
+      "key": "b2cdaf1a6329972d2f627010bb917221b9850ed5",
+      "name": "$border-interactive - Outer/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3990"
+    },
+    {
+      "key": "02b0acf95dcb481b3287544f283643926b34306c",
+      "name": "Border/$border-tile-01",
+      "style_type": "FILL",
+      "description": "Border color on $layer-01 tile ($background background)",
+      "node_id": "20047:288107"
+    },
+    {
+      "key": "3bed804f68bb336c27cc2bb6e28f3e89164eef4a",
+      "name": "$border-strong-02 - Inner/Bottom + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401773"
+    },
+    {
+      "key": "5077bf71ae41e01602a2ad7a2d8859a3a31b0a44",
+      "name": "AI Layer/Layer 02/layer-active-02-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11026"
+    },
+    {
+      "key": "8cde877e2eaf34857a16e5eca568d958ff1c3775",
+      "name": "Layer/$layer-02",
+      "style_type": "FILL",
+      "description": "v10: $ui-02",
+      "node_id": "169:56"
+    },
+    {
+      "key": "cb354d627660828438b8f030f3b7a9312c254cac",
+      "name": "Support/$support-success",
+      "style_type": "FILL",
+      "description": "v10: $support-02",
+      "node_id": "169:181"
+    },
+    {
+      "key": "946bf785d0d651d485d83bf44ee41cf901ca47bd",
+      "name": "Selected inverse - Outer/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5984:327126"
+    },
+    {
+      "key": "80f4135fcf35e088848abe8f6f070590149ef5a6",
+      "name": "Field/$field-hover-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401580"
+    },
+    {
+      "key": "9045e34aaae9faa3b09049c264856cdc18f9d231",
+      "name": "Background/$background-active",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8676:400956"
+    },
+    {
+      "key": "64f02b50d841dd0d7fc8cf7f9c50ffe61547e577",
+      "name": "Tag/Magenta text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47222"
+    },
+    {
+      "key": "3c5081700649265cb7982e9f753f64d2750a4a9c",
+      "name": "AI Layer/Background/background-selected-hover-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11004"
+    },
+    {
+      "key": "22fb257c176d997aa5a54575a67f4c7f5947f609",
+      "name": "Layer accent/$layer-accent-hover-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401451"
+    },
+    {
+      "key": "ee9dd6e675cae1f239e52ca4bc08ec4c4133a454",
+      "name": "$border-subtle-03 - Inner/Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400551"
+    },
+    {
+      "key": "0e8bd5da233d044c71be143594de794f86fad676",
+      "name": "$border-subtle-02 - Inner/Bottom + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401756"
+    },
+    {
+      "key": "cb4bfff3fab55f7b65075efcb70408b5fba7d04e",
+      "name": "Tag/Warm gray-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41755"
+    },
+    {
+      "key": "2699424c465fc7fdc55b282759d7d54dca10c04c",
+      "name": "Notifications/$notification-action-tertiary-inverse-text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "11186:321955"
+    },
+    {
+      "key": "f982805cdda075195f6a2bfaadb05c9dc1f59af4",
+      "name": "AI Layer/Layer 01/layer-01-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11006"
+    },
+    {
+      "key": "e5be699e704c1f86ad14b943fb9103f09cc90208",
+      "name": "Icon/$icon-disabled",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401919"
+    },
+    {
+      "key": "eb7c05df5d6fd82c37e4cb8b23245229c093c15d",
+      "name": "AI Layer/Layer 02/layer-hover-02-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11018"
+    },
+    {
+      "key": "1131d62d93568ac8a01e56717554a2f019fbddf9",
+      "name": "$border-strong-02 - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401769"
+    },
+    {
+      "key": "2ecf64d2d838938622ea934f975dca130149363d",
+      "name": "$border-subtle-02 - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8706:401046"
+    },
+    {
+      "key": "90fe0ef86eea523d0bf5a507afc29cd00d13a9f3",
+      "name": "AI Layer/Background/background-active-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10998"
+    },
+    {
+      "key": "5faa6143ad4e5f2cb7462d69a2430788b3d730d2",
+      "name": "$border-interactive - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3986"
+    },
+    {
+      "key": "f46c91ecc348e0046cccdfa0620ff87f5934336a",
+      "name": "$border-subtle-02 - Inner/Top + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401757"
+    },
+    {
+      "key": "8007a535225e42cf6362b98e455c99af55d5134f",
+      "name": "Aura/AI-aura-light",
+      "style_type": "FILL",
+      "description": "Aura used across AI components in the background.",
+      "node_id": "82676:10978"
+    },
+    {
+      "key": "8e69958bab4649b6c87130b4d39db9dcb8bf710f",
+      "name": "Tag/Purple text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47517"
+    },
+    {
+      "key": "4696f526f682adff4a40fdd75c7cff06ece1f669",
+      "name": "$border-subtle-01 - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8517:400461"
+    },
+    {
+      "key": "37197d97c43e6c3f02298447959ad7a31bfe0fb6",
+      "name": "Tag/Gray-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41749"
+    },
+    {
+      "key": "a97f8e5729836830cb49970dc61b3cb7289f14f6",
+      "name": "$border-subtle-01 - Inner/Top + Left + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8517:400459"
+    },
+    {
+      "key": "86bef6370d7e60eb8d99405ba8fad8ff9a0fc527",
+      "name": "Icon/$icon-on-color-disabled",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401918"
+    },
+    {
+      "key": "3aeedcb5f6c021d155ecb6bd33215dcf8a413f66",
+      "name": "Shadow/Default/AI-inner-shadow-light",
+      "style_type": "EFFECT",
+      "description": "The inner shadow used as part of the AI layer in the light theme",
+      "node_id": "82676:161"
+    },
+    {
+      "key": "2cff6f41f533f0ca07f29a02c017fbef534f665c",
+      "name": "$border-strong-02 - Inner/Top + Right + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401774"
+    },
+    {
+      "key": "b22b6ad2238152a04f805b2a99e9573af9eafc52",
+      "name": "AI Layer/Layer 02/layer-active-02-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11021"
+    },
+    {
+      "key": "2aef31978b2d268e1ab50c8960d4fda61c01cc43",
+      "name": "Layer/$layer-selected-hover-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401280"
+    },
+    {
+      "key": "6d33fb5cadc8e0a087eb39f95e2e4cc55686fd15",
+      "name": "Border/AI-border-strong-dark",
+      "style_type": "FILL",
+      "description": "AI border for smaller components and data table columns.",
+      "node_id": "82676:10990"
+    },
+    {
+      "key": "532ab7a39d4d27ce11750df75f13679dee4dd2a4",
+      "name": "AI Layer/Layer 01/layer-hover-01-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11012"
+    },
+    {
+      "key": "5290162312e5d005d911288c3f1e9b53d06ebbfc",
+      "name": "Layer/$layer-selected-disabled",
+      "style_type": "FILL",
+      "description": "v10: $disabled-03",
+      "node_id": "8704:401302"
+    },
+    {
+      "key": "7ed9c8f2e6df95fcc7ec0ce1ed6d34e657d64ea0",
+      "name": "Aura/AI-aura-sm-light",
+      "style_type": "FILL",
+      "description": "Aura used for highlighting partial AI in inputs. Gradient direction is bottom to top.",
+      "node_id": "82676:10980"
+    },
+    {
+      "key": "a5a5ddccceb2199dbce616b2a9cd691d09704886",
+      "name": "Tag/Red background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47568"
+    },
+    {
+      "key": "8a77ace2ce83a9445043b4c1fa2be9d202f80ff4",
+      "name": "Layer accent/$layer-accent-02",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401408"
+    },
+    {
+      "key": "f54298095c4dd1e4101b08199bbb70f5d699785e",
+      "name": "AI Layer/Layer 01/layer-active-01-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11015"
+    },
+    {
+      "key": "76054772a312c07fab0af20a367101619bdba3e1",
+      "name": "Aura/AI-aura-table-dark",
+      "style_type": "FILL",
+      "description": "Aura used for highlighting partial AI in data table columns or rows. Gradient direction is horizontal.",
+      "node_id": "82676:10983"
+    },
+    {
+      "key": "e24e392ae890f21206ce5ac0c5d48807c2a93fbf",
+      "name": "AI Layer/Background/background-hover-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11003"
+    },
+    {
+      "key": "1cb9dc90992dfcfa2c5d2b75bdca0b79188a5f10",
+      "name": "Tag/Cyan-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41748"
+    },
+    {
+      "key": "5aae677374e4001ee9096fba13a32b9bb76c858e",
+      "name": "Border/$border-subtle-00",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401654"
+    },
+    {
+      "key": "f397d91ccd59503c77f2cf69cf1ba69926e3815f",
+      "name": "Field/$field-hover-03",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401581"
+    },
+    {
+      "key": "03a0f096ba21e5a9ae3bfe0369982115bcac383c",
+      "name": "$border-strong-01 - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1880:3515"
+    },
+    {
+      "key": "05a8b32ec06a154d8708680f5a0638800f6ae534",
+      "name": "Shadow/Transparent/AI-drop-shadow-dark",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "82676:166"
+    },
+    {
+      "key": "f9fc88a646e5cc5e0319e30884db88066e6bbc5d",
+      "name": "Border/[Deprecated] AI-border-table-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10992"
+    },
+    {
+      "key": "a3d256dcd8ab1d703f7a2c4ae76492ee5f541bd9",
+      "name": "$border-strong-02 - Inner/Top + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401772"
+    },
+    {
+      "key": "84d8c33e681f988868fde9d7aaad1eb7f77fa9ed",
+      "name": "AI Layer/Layer 02/layer-hover-02-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11023"
+    },
+    {
+      "key": "e27a34d4cc0ad9494d5dff073f4bfeb635179213",
+      "name": "Button/$button-tertiary-active",
+      "style_type": "FILL",
+      "description": "v10: $active-tertiary",
+      "node_id": "169:435"
+    },
+    {
+      "key": "aea709826a6f653947a88d69d4aa16b74e3b8ea2",
+      "name": "Border/AI-border-strong-light",
+      "style_type": "FILL",
+      "description": "AI border for smaller components and data table columns.",
+      "node_id": "82676:10991"
+    },
+    {
+      "key": "cd199376d8074a27d6bb56822442c17094f0d330",
+      "name": "Link/$link-secondary",
+      "style_type": "FILL",
+      "description": "v10: $link-02",
+      "node_id": "6375:296997"
+    },
+    {
+      "key": "78d7b37d4b709069b116293c876c49c456757bf8",
+      "name": "Text/$text-on-color-disabled",
+      "style_type": "FILL",
+      "description": "v10: $disabled-03",
+      "node_id": "169:445"
+    },
+    {
+      "key": "8c74d9249f9788541992a7e7bcc34117f8fec62d",
+      "name": "Support/$support-undefined",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:402054"
+    },
+    {
+      "key": "04fa0aa2a2db6bbd3ac4599c4ebb59ef365379cd",
+      "name": "$border-subtle-02 - Inner/Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9017:401753"
+    },
+    {
+      "key": "1c510ff0925307a8011a8500b67ea6acb47f3920",
+      "name": "AI/AI-aura-sm-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "55928:273"
+    },
+    {
+      "key": "70739fd23d13e17e0150861955a4343cf8fc0aa4",
+      "name": "AI Layer/Layer 02/layer-selected-02-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11024"
+    },
+    {
+      "key": "8db37f89ef4ce5ada303e82c657da1431911e523",
+      "name": "AI Layer/Layer 01/layer-selected-01-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11008"
+    },
+    {
+      "key": "b5bb92158cd8434867c06e45425343b387aab352",
+      "name": "Icon/$icon-secondary",
+      "style_type": "FILL",
+      "description": "v10: $icon-02",
+      "node_id": "169:132"
+    },
+    {
+      "key": "b0570bf636cee28f272d4ed954b91b8432f6a8aa",
+      "name": "Notifications/$notification-warning-background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108677"
+    },
+    {
+      "key": "9761ea4345f9f3c9261f8831dbadd004509f1bc1",
+      "name": "AI Layer/Layer 01/layer-hover-01-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11007"
+    },
+    {
+      "key": "ac8fd7ce3eb41e530f980c4ee9170bcc9114a8a4",
+      "name": "AI Layer/Background/background-active-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11001"
+    },
+    {
+      "key": "904e5d271ba38ea9a5f8347b32069e49e21c4cee",
+      "name": "Button/$button-primary-active",
+      "style_type": "FILL",
+      "description": "v10: $active-primary",
+      "node_id": "169:433"
+    },
+    {
+      "key": "3e83aa7135d34f0e1cf89d064ecd93bef269e8c3",
+      "name": "AI Layer/Background/background-selected-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11000"
+    },
+    {
+      "key": "3acf25c85238516aec49ebf246e8768c3c14602b",
+      "name": "Field/$field-hover-01",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "8704:401579"
+    },
+    {
+      "key": "e290a93fa3c194c1f2eee46c03d69050f5bf51a8",
+      "name": "AI Layer/Layer 02/layer-selected-02-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11019"
+    },
+    {
+      "key": "da2dfff6624277e610467399d374ec8e41b2f8c3",
+      "name": "Support inverse/$support-warning-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-support-03",
+      "node_id": "169:222"
+    },
+    {
+      "key": "3d39ab5473ad02b15b91d027a58e265a39e6b296",
+      "name": "$border-interactive - Outer/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3991"
+    },
+    {
+      "key": "4b8158dc78aeaf6dbc24cc7e0b232539ff5681bf",
+      "name": "Border/$border-tile-02",
+      "style_type": "FILL",
+      "description": "Border color on $field-02 tile ($layer-01 background) ",
+      "node_id": "20047:288108"
+    },
+    {
+      "key": "d69d1400fad71d76cb4658d50f12e41525bf9b97",
+      "name": "$border-subtle-01 - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8517:400464"
+    },
+    {
+      "key": "358671448395e8172beda79b7ecbc16f1aad3033",
+      "name": "AI Layer/Background/background-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10995"
+    },
+    {
+      "key": "e146c84cf129c6599e02e5118b2479ac6e6582a6",
+      "name": "$border-strong-03 - Inner/Bottom + Left + Right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400566"
+    },
+    {
+      "key": "57513d2ac5d9da8de025db0b3e4df16154bd880c",
+      "name": "AI Layer/Layer 02/layer-selected-hover-02-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11025"
+    },
+    {
+      "key": "5b63dd3fe70bbc33bee5c5861d656e30f820110d",
+      "name": "AI Layer/Layer 01/layer-selected-01-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11013"
+    },
+    {
+      "key": "fe10fdc8b400e557121c745a1627ea239aa685a1",
+      "name": "AI Layer/Layer 01/layer-01-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11011"
+    },
+    {
+      "key": "17d0a34c427a3eee0fdf72c80a9fc762024f717a",
+      "name": "$focus-inverse - Outer/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "5853:283932"
+    },
+    {
+      "key": "4d9eaf0956a2615b984f9ece44169ff182e57f60",
+      "name": "Aura/AI-aura-table-hover-light",
+      "style_type": "FILL",
+      "description": "Hover for AI data table column.",
+      "node_id": "82676:10986"
+    },
+    {
+      "key": "032cb5d933a651b6f5b953fa0e2e4649e6cf4bb5",
+      "name": "Tag/Teal-hover",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:41754"
+    },
+    {
+      "key": "7396352579fecfed13badc3cfa756c9bd07ecdd0",
+      "name": "Link/$link-inverse-hover",
+      "style_type": "FILL",
+      "description": "v10: ?",
+      "node_id": "73401:90"
+    },
+    {
+      "key": "c0030435d8b6d2180a6e56fe1cada9b77f2f82bf",
+      "name": "Notifications/$support-success border",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "4179:108680"
+    },
+    {
+      "key": "50bf58af76d81125d983f77f13482f4a4797d83d",
+      "name": "Aura/AI-aura-table-hover-dark",
+      "style_type": "FILL",
+      "description": "Hover for AI data table column.",
+      "node_id": "82676:10985"
+    },
+    {
+      "key": "0ec0d743ed8fb34f4f44e130c6eaaf13c8b32174",
+      "name": "$border-subtle-03 - Inner/Top + Bottom",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "9023:400550"
+    },
+    {
+      "key": "ac5bbb98563f1c2502230fdaaa3e23907b045f9e",
+      "name": "Tag/Red text",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47608"
+    },
+    {
+      "key": "923b2091427bc8f57461f3ad276ddf5db6bddd36",
+      "name": "$border-strong-02 - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8710:401061"
+    },
+    {
+      "key": "f12ce27b95f29f57607d3f6e6e8f33d85209d057",
+      "name": "Shadow/Default/AI-callout-shadow-light",
+      "style_type": "EFFECT",
+      "description": "Combined dropdown shadows for callouts in light theme",
+      "node_id": "82676:163"
+    },
+    {
+      "key": "2e1de1c9586e51f59f07656fe1ecc0d1406492b7",
+      "name": "Blur/AI-blur-background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10994"
+    },
+    {
+      "key": "39aab0c39a00fa36c2525ad25d0f6871c2cba2d1",
+      "name": "Focus/$focus-inverse",
+      "style_type": "FILL",
+      "description": "v10: $inverse-focus-ui",
+      "node_id": "1871:2250"
+    },
+    {
+      "key": "24c7d6aeec7e561973d3068a6fd34785775a6274",
+      "name": "Tag/Cyan background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43565"
+    },
+    {
+      "key": "36070e3f14e69caf757da16d74a69a4243ab5dde",
+      "name": "Aura/[Deprecated] AI-aura-tint-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10987"
+    },
+    {
+      "key": "8f26a1ce5689f13a3e6e287f6fbd85f4bd798569",
+      "name": "Link/$link-inverse-active",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "73894:899028"
+    },
+    {
+      "key": "bf2bd3c5c5e1aaa82324633784d666a82591c49c",
+      "name": "AI Layer/Background/background-selected-hover-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10997"
+    },
+    {
+      "key": "8e40f27412c008af18972641f2bb8320f080447e",
+      "name": "$border-subtle-01 - Inner/Border all",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1878:4915"
+    },
+    {
+      "key": "1d2ed23bc58cc8ea7757f32fa98446d521a0c93c",
+      "name": "AI Layer/Background/background-selected-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11002"
+    },
+    {
+      "key": "845943a07f65f6faa973f98423b791943dce0ebc",
+      "name": "Border/AI-border-dark",
+      "style_type": "FILL",
+      "description": "AI border with a gradient for larger components.",
+      "node_id": "82676:10988"
+    },
+    {
+      "key": "66a0f6bb796a5491566a7a1dc2d77a3f1f623b7c",
+      "name": "AI/AI-aura-sm-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "55926:169"
+    },
+    {
+      "key": "59c244d41b3856b41108aa10f82c23d588ce2eac",
+      "name": "Tag/Teal background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:47644"
+    },
+    {
+      "key": "ea2c8342eada2ffacf8f02a91ce88a2353a25bb5",
+      "name": "AI Layer/Layer 02/layer-02-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11022"
+    },
+    {
+      "key": "c98880a6f915d9956b273409d525784abea80ad5",
+      "name": "$border-subtle-02 - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8706:401048"
+    },
+    {
+      "key": "acd92797012c64c43e41c3dd98b4e6f7e1c1bd5d",
+      "name": "AI Layer/Background/background-hover-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10996"
+    },
+    {
+      "key": "ad80e5367c1cd8b7687a2cc049581c8babcfcd1b",
+      "name": "$border-subtle-01 - Inner/Border right",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1878:5024"
+    },
+    {
+      "key": "df843653b516252a602e1d11dc66ed2827cb57d8",
+      "name": "Button/$button-separator",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "1871:1750"
+    },
+    {
+      "key": "ffc21408b5ebe1b7a51de351f92bb07bfea611dc",
+      "name": "Shadows/Menu (Transparent)",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "12006:329072"
+    },
+    {
+      "key": "c17c8edbfe7ea12c6f37b53189f4f7c97d0ccf6b",
+      "name": "Layer/$layer-selected-inverse",
+      "style_type": "FILL",
+      "description": "v10: $ui-05",
+      "node_id": "169:77"
+    },
+    {
+      "key": "c9df7bddc4c84ce39354585f7ce220de57e80a8d",
+      "name": "Tag/Cool gray background",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "3699:43301"
+    },
+    {
+      "key": "34cede96c9b70dc076e260e7d42cc81eb13ab70b",
+      "name": "$border-subtle-02 - Inner/Border top",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "8706:401047"
+    },
+    {
+      "key": "33071287fadb21e7028522d47171f6582f1ab581",
+      "name": "AI Layer/Background/background-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:10999"
+    },
+    {
+      "key": "96adcee131abe1b32fd4543b0e71e492785d1cd2",
+      "name": "$border-interactive - Outer/Border left",
+      "style_type": "EFFECT",
+      "description": "",
+      "node_id": "1879:3993"
+    },
+    {
+      "key": "d6e6e766bf6714545473dc311c39f3bf505c801a",
+      "name": "AI Layer/Layer 02/AI-layer-02-hover-light",
+      "style_type": "FILL",
+      "description": "Blue-10 background used by AI layer.",
+      "node_id": "82676:11027"
+    },
+    {
+      "key": "4363f17aa5a7b0873166314488c7afc219eba98d",
+      "name": "AI Layer/Layer 01/layer-selected-hover-01-light",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11014"
+    },
+    {
+      "key": "1febdd7f18937bac10b8f7fbdd8d913d4659c9cb",
+      "name": "AI Layer/Layer 01/layer-selected-hover-01-dark",
+      "style_type": "FILL",
+      "description": "",
+      "node_id": "82676:11009"
+    }
+  ],
+  "count": 342
+}

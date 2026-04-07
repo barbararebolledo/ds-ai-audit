@@ -1,303 +1,393 @@
-[
-  {
-    "key": "52fbf115c0c5079ae77b26feca813508423fb85d",
-    "name": "elevation/20",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:467"
-  },
-  {
-    "key": "f27513284477c94a766b5fe0082ef10f18181a78",
-    "name": "typography/h5",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:482"
-  },
-  {
-    "key": "deacc6ea630799ae32557b508018f1b8ad6af8c1",
-    "name": "breakpoints/lg",
-    "style_type": "GRID",
-    "description": "Max width 1200px",
-    "node_id": "6465:475"
-  },
-  {
-    "key": "88350410939d84f41c9c501c5222a05133e472a9",
-    "name": "breakpoints/xl",
-    "style_type": "GRID",
-    "description": "",
-    "node_id": "6465:476"
-  },
-  {
-    "key": "f1f865611cf64e0bf3a7b696163ea3e7d8001295",
-    "name": "breakpoints/fullWidth",
-    "style_type": "GRID",
-    "description": "",
-    "node_id": "6465:477"
-  },
-  {
-    "key": "3f818895a4ce2fb8fabe9101cbd7441bcab2f171",
-    "name": "elevation/3",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:450"
-  },
-  {
-    "key": "8b0fb20414679043885d62ccfd6031cfa874d254",
-    "name": "elevation/22",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:469"
-  },
-  {
-    "key": "1111964357d823db22c87ad846f7a03bfcee80df",
-    "name": "elevation/4",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:451"
-  },
-  {
-    "key": "e9209084e56cfddb6ada641c4eec296e2027947e",
-    "name": "elevation/1",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:448"
-  },
-  {
-    "key": "e976c822f4193a49cb03643448e6f6e7d4c79a97",
-    "name": "elevation/11",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:458"
-  },
-  {
-    "key": "7157715faded5eda3b537f7a5061f695615bd210",
-    "name": "elevation/2",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:449"
-  },
-  {
-    "key": "e18e593dc26ba97dc2fdb89fc0ed2c2b825b2642",
-    "name": "elevation/9",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:456"
-  },
-  {
-    "key": "f1f7cee3e66c0df1c4feafdc5def0f188f798480",
-    "name": "elevation/13",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:460"
-  },
-  {
-    "key": "2daed88986cc4b96e6a1a8dd38b6cba70c449d1d",
-    "name": "elevation/14",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:461"
-  },
-  {
-    "key": "7f8b274c73bcd1fc33621226e2da59ebd214f6db",
-    "name": "elevation/15",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:462"
-  },
-  {
-    "key": "b6b26f8f4424a62f3bfb87587794230dcd3c64b6",
-    "name": "elevation/19",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:466"
-  },
-  {
-    "key": "24b4c40ff87f5c5385625f2f9868e997e7e858c7",
-    "name": "elevation/24",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:471"
-  },
-  {
-    "key": "b8a95497427847f3c2023278ba88a483a49da15e",
-    "name": "elevation/6",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:453"
-  },
-  {
-    "key": "72010242c4df83e90ac0de9a019064cfd06ac6bf",
-    "name": "elevation/21",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:468"
-  },
-  {
-    "key": "cdaba4cb640bc9d3efb4416dcb1c6d008b6a125e",
-    "name": "elevation/23",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:470"
-  },
-  {
-    "key": "4d482f967eba6e331baf177a8a5c18b271f49379",
-    "name": "elevation/8",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:455"
-  },
-  {
-    "key": "a83bab7d9bea08164c6fb315eaa3512e28666809",
-    "name": "elevation/18",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:465"
-  },
-  {
-    "key": "3d3b70e241201b9e785c50c4c64d70e817f59d44",
-    "name": "typography/subtitle2",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:487"
-  },
-  {
-    "key": "d119a228df26006da027c3c488df951de6ee73fc",
-    "name": "elevation/17",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:464"
-  },
-  {
-    "key": "5274e0cb68b27431f15f0189275e263b93d40b3e",
-    "name": "typography/h4",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:481"
-  },
-  {
-    "key": "5e49ad1e53eb2c0d9a9663be38dcd88858a9ab31",
-    "name": "typography/h3",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:480"
-  },
-  {
-    "key": "016dfcb9bdad5b14e226c92c0d9ca158487221ab",
-    "name": "typography/h6",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:483"
-  },
-  {
-    "key": "f8e1a4233a158c652f437795746ab33e19797135",
-    "name": "breakpoints/sm",
-    "style_type": "GRID",
-    "description": "Max width 600px",
-    "node_id": "6465:473"
-  },
-  {
-    "key": "3bea0d1904e0410e4f49c78695303dda1b4400d0",
-    "name": "typography/body2",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:485"
-  },
-  {
-    "key": "5770baae9618a0e0c91876c5b13474ba027b6b69",
-    "name": "typography/caption",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:489"
-  },
-  {
-    "key": "1450d368441ffb56c247771c36e7deee93740b93",
-    "name": "breakpoints/md",
-    "style_type": "GRID",
-    "description": "Max width 900px",
-    "node_id": "6465:474"
-  },
-  {
-    "key": "cfc46e3d476e251e69e1001f2fb8e689b283a6d9",
-    "name": "breakpoints/xs",
-    "style_type": "GRID",
-    "description": "Max width 444px",
-    "node_id": "6465:472"
-  },
-  {
-    "key": "d4c0a3999103e7e75e22cb7dbaf96121e4fc8814",
-    "name": "typography/h2",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:479"
-  },
-  {
-    "key": "48fd5ef25496917dbe0f75403d2b868b1547be9d",
-    "name": "*library/heading",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:511"
-  },
-  {
-    "key": "ed8d92115ad243b4ff14971ce62bb05a54503aeb",
-    "name": "elevation/10",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:457"
-  },
-  {
-    "key": "c0359657dfb339ddebda46485ab41a3cab032629",
-    "name": "elevation/16",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:463"
-  },
-  {
-    "key": "9d9f2bde6510c250159aef992eb693d6a9181ae7",
-    "name": "typography/body1",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:484"
-  },
-  {
-    "key": "b64e33025cc9ca8ec2f494bc77d011868d9847c1",
-    "name": "elevation/5",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:452"
-  },
-  {
-    "key": "221bbfabac78d6ad04fa4214d7a755f4b4d29d78",
-    "name": "typography/subtitle1",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:486"
-  },
-  {
-    "key": "3fba5794f487546f494e503846fba95db2a73481",
-    "name": "elevation/7",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:454"
-  },
-  {
-    "key": "c54dbb59c91e4b9adc8c23897ee22cc338b719e1",
-    "name": "typography/h1",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:478"
-  },
-  {
-    "key": "c988393b802ad46148163b802033edb9b1ead84a",
-    "name": "typography/overline",
-    "style_type": "TEXT",
-    "description": "",
-    "node_id": "6465:488"
-  },
-  {
-    "key": "c84b928c6119708781b36936dfeba4f54364976d",
-    "name": "elevation/12",
-    "style_type": "EFFECT",
-    "description": "",
-    "node_id": "6465:459"
+{
+  "meta": {
+    "styles": [
+      {
+        "key": "52fbf115c0c5079ae77b26feca813508423fb85d",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:467",
+        "style_type": "EFFECT",
+        "name": "elevation/20",
+        "description": "",
+        "sort_position": "!vt"
+      },
+      {
+        "key": "f27513284477c94a766b5fe0082ef10f18181a78",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:482",
+        "style_type": "TEXT",
+        "name": "typography/h5",
+        "description": "",
+        "sort_position": "!p"
+      },
+      {
+        "key": "deacc6ea630799ae32557b508018f1b8ad6af8c1",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:475",
+        "style_type": "GRID",
+        "name": "breakpoints/lg",
+        "description": "Max width 1200px",
+        "sort_position": "!~"
+      },
+      {
+        "key": "88350410939d84f41c9c501c5222a05133e472a9",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:476",
+        "style_type": "GRID",
+        "name": "breakpoints/xl",
+        "description": "",
+        "sort_position": "\"7"
+      },
+      {
+        "key": "f1f865611cf64e0bf3a7b696163ea3e7d8001295",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:477",
+        "style_type": "GRID",
+        "name": "breakpoints/fullWidth",
+        "description": "",
+        "sort_position": "#O"
+      },
+      {
+        "key": "3f818895a4ce2fb8fabe9101cbd7441bcab2f171",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:450",
+        "style_type": "EFFECT",
+        "name": "elevation/3",
+        "description": "",
+        "sort_position": "!vc"
+      },
+      {
+        "key": "8b0fb20414679043885d62ccfd6031cfa874d254",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:469",
+        "style_type": "EFFECT",
+        "name": "elevation/22",
+        "description": "",
+        "sort_position": "!vv"
+      },
+      {
+        "key": "1111964357d823db22c87ad846f7a03bfcee80df",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:451",
+        "style_type": "EFFECT",
+        "name": "elevation/4",
+        "description": "",
+        "sort_position": "!vd"
+      },
+      {
+        "key": "e9209084e56cfddb6ada641c4eec296e2027947e",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:448",
+        "style_type": "EFFECT",
+        "name": "elevation/1",
+        "description": "",
+        "sort_position": "!va"
+      },
+      {
+        "key": "e976c822f4193a49cb03643448e6f6e7d4c79a97",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:458",
+        "style_type": "EFFECT",
+        "name": "elevation/11",
+        "description": "",
+        "sort_position": "!vk"
+      },
+      {
+        "key": "7157715faded5eda3b537f7a5061f695615bd210",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:449",
+        "style_type": "EFFECT",
+        "name": "elevation/2",
+        "description": "",
+        "sort_position": "!vb"
+      },
+      {
+        "key": "e18e593dc26ba97dc2fdb89fc0ed2c2b825b2642",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:456",
+        "style_type": "EFFECT",
+        "name": "elevation/9",
+        "description": "",
+        "sort_position": "!vi"
+      },
+      {
+        "key": "f1f7cee3e66c0df1c4feafdc5def0f188f798480",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:460",
+        "style_type": "EFFECT",
+        "name": "elevation/13",
+        "description": "",
+        "sort_position": "!vm"
+      },
+      {
+        "key": "2daed88986cc4b96e6a1a8dd38b6cba70c449d1d",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:461",
+        "style_type": "EFFECT",
+        "name": "elevation/14",
+        "description": "",
+        "sort_position": "!vn"
+      },
+      {
+        "key": "7f8b274c73bcd1fc33621226e2da59ebd214f6db",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:462",
+        "style_type": "EFFECT",
+        "name": "elevation/15",
+        "description": "",
+        "sort_position": "!vo"
+      },
+      {
+        "key": "b6b26f8f4424a62f3bfb87587794230dcd3c64b6",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:466",
+        "style_type": "EFFECT",
+        "name": "elevation/19",
+        "description": "",
+        "sort_position": "!vs"
+      },
+      {
+        "key": "24b4c40ff87f5c5385625f2f9868e997e7e858c7",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:471",
+        "style_type": "EFFECT",
+        "name": "elevation/24",
+        "description": "",
+        "sort_position": "!vx"
+      },
+      {
+        "key": "b8a95497427847f3c2023278ba88a483a49da15e",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:453",
+        "style_type": "EFFECT",
+        "name": "elevation/6",
+        "description": "",
+        "sort_position": "!vf"
+      },
+      {
+        "key": "72010242c4df83e90ac0de9a019064cfd06ac6bf",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:468",
+        "style_type": "EFFECT",
+        "name": "elevation/21",
+        "description": "",
+        "sort_position": "!vu"
+      },
+      {
+        "key": "cdaba4cb640bc9d3efb4416dcb1c6d008b6a125e",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:470",
+        "style_type": "EFFECT",
+        "name": "elevation/23",
+        "description": "",
+        "sort_position": "!vw"
+      },
+      {
+        "key": "4d482f967eba6e331baf177a8a5c18b271f49379",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:455",
+        "style_type": "EFFECT",
+        "name": "elevation/8",
+        "description": "",
+        "sort_position": "!vh"
+      },
+      {
+        "key": "a83bab7d9bea08164c6fb315eaa3512e28666809",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:465",
+        "style_type": "EFFECT",
+        "name": "elevation/18",
+        "description": "",
+        "sort_position": "!vr"
+      },
+      {
+        "key": "3d3b70e241201b9e785c50c4c64d70e817f59d44",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:487",
+        "style_type": "TEXT",
+        "name": "typography/subtitle2",
+        "description": "",
+        "sort_position": "!u7"
+      },
+      {
+        "key": "d119a228df26006da027c3c488df951de6ee73fc",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:464",
+        "style_type": "EFFECT",
+        "name": "elevation/17",
+        "description": "",
+        "sort_position": "!vq"
+      },
+      {
+        "key": "5274e0cb68b27431f15f0189275e263b93d40b3e",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:481",
+        "style_type": "TEXT",
+        "name": "typography/h4",
+        "description": "",
+        "sort_position": "!o"
+      },
+      {
+        "key": "5e49ad1e53eb2c0d9a9663be38dcd88858a9ab31",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:480",
+        "style_type": "TEXT",
+        "name": "typography/h3",
+        "description": "",
+        "sort_position": "!n"
+      },
+      {
+        "key": "016dfcb9bdad5b14e226c92c0d9ca158487221ab",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:483",
+        "style_type": "TEXT",
+        "name": "typography/h6",
+        "description": "",
+        "sort_position": "!q"
+      },
+      {
+        "key": "f8e1a4233a158c652f437795746ab33e19797135",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:473",
+        "style_type": "GRID",
+        "name": "breakpoints/sm",
+        "description": "Max width 600px",
+        "sort_position": "!|"
+      },
+      {
+        "key": "3bea0d1904e0410e4f49c78695303dda1b4400d0",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:485",
+        "style_type": "TEXT",
+        "name": "typography/body2",
+        "description": "",
+        "sort_position": "!s7"
+      },
+      {
+        "key": "5770baae9618a0e0c91876c5b13474ba027b6b69",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:489",
+        "style_type": "TEXT",
+        "name": "typography/caption",
+        "description": "",
+        "sort_position": "!w7"
+      },
+      {
+        "key": "1450d368441ffb56c247771c36e7deee93740b93",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:474",
+        "style_type": "GRID",
+        "name": "breakpoints/md",
+        "description": "Max width 900px",
+        "sort_position": "!}"
+      },
+      {
+        "key": "cfc46e3d476e251e69e1001f2fb8e689b283a6d9",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:472",
+        "style_type": "GRID",
+        "name": "breakpoints/xs",
+        "description": "Max width 444px",
+        "sort_position": "!{"
+      },
+      {
+        "key": "d4c0a3999103e7e75e22cb7dbaf96121e4fc8814",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:479",
+        "style_type": "TEXT",
+        "name": "typography/h2",
+        "description": "",
+        "sort_position": "!m"
+      },
+      {
+        "key": "48fd5ef25496917dbe0f75403d2b868b1547be9d",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:511",
+        "style_type": "TEXT",
+        "name": "*library/heading",
+        "description": "",
+        "sort_position": "1"
+      },
+      {
+        "key": "ed8d92115ad243b4ff14971ce62bb05a54503aeb",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:457",
+        "style_type": "EFFECT",
+        "name": "elevation/10",
+        "description": "",
+        "sort_position": "!vj"
+      },
+      {
+        "key": "c0359657dfb339ddebda46485ab41a3cab032629",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:463",
+        "style_type": "EFFECT",
+        "name": "elevation/16",
+        "description": "",
+        "sort_position": "!vp"
+      },
+      {
+        "key": "9d9f2bde6510c250159aef992eb693d6a9181ae7",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:484",
+        "style_type": "TEXT",
+        "name": "typography/body1",
+        "description": "",
+        "sort_position": "!r"
+      },
+      {
+        "key": "b64e33025cc9ca8ec2f494bc77d011868d9847c1",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:452",
+        "style_type": "EFFECT",
+        "name": "elevation/5",
+        "description": "",
+        "sort_position": "!ve"
+      },
+      {
+        "key": "221bbfabac78d6ad04fa4214d7a755f4b4d29d78",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:486",
+        "style_type": "TEXT",
+        "name": "typography/subtitle1",
+        "description": "",
+        "sort_position": "!tO"
+      },
+      {
+        "key": "3fba5794f487546f494e503846fba95db2a73481",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:454",
+        "style_type": "EFFECT",
+        "name": "elevation/7",
+        "description": "",
+        "sort_position": "!vg"
+      },
+      {
+        "key": "c54dbb59c91e4b9adc8c23897ee22cc338b719e1",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:478",
+        "style_type": "TEXT",
+        "name": "typography/h1",
+        "description": "",
+        "sort_position": "!l"
+      },
+      {
+        "key": "c988393b802ad46148163b802033edb9b1ead84a",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:488",
+        "style_type": "TEXT",
+        "name": "typography/overline",
+        "description": "",
+        "sort_position": "!v7"
+      },
+      {
+        "key": "c84b928c6119708781b36936dfeba4f54364976d",
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "node_id": "6465:459",
+        "style_type": "EFFECT",
+        "name": "elevation/12",
+        "description": "",
+        "sort_position": "!vl"
+      }
+    ]
   }
-]
+}

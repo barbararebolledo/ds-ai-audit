@@ -1,0 +1,1452 @@
+{
+  "meta": {
+    "schema_version": "2.2",
+    "system_name": "Carbon Design System",
+    "audit_date": "2026-04-06",
+    "run_id": "456dbfe9-1581-412b-add2-c2e347416d47",
+    "audit_id": "carbon-v2.2-2026-04-06",
+    "timestamp": "2026-04-06T18:00:00Z",
+    "auditor": "Claude Code via Figma REST API + MCP (get_variable_defs) + GitHub raw file inspection + cached token diff + cached doc frames",
+    "prompt_version": "2.2",
+    "git_tag": "v2.2",
+    "target_system": "Carbon Design System v11 (IBM)",
+    "figma_files": {
+      "component": {
+        "file_key": "uJiQsaTRITNZdvNEAPsSQ1",
+        "file_name": "(v11) Carbon Design System for Figma"
+      }
+    },
+    "evidence_sources": [
+      "Figma REST API (file structure, components, styles, variables/local) -- fresh fetch 2026-04-06",
+      "MCP get_variable_defs spot-check (Button Primary Icon Small Enabled, Text Input Inline Error)",
+      "Token parity diff (scripts/output/carbon-token-diff.json, generated 2026-04-06)",
+      "Documentation frame reader (scripts/output/carbon-doc-frames.json, generated 2026-04-06)",
+      "Carbon GitHub repo raw file inspection (packages/colors, packages/themes, packages/type, packages/layout, packages/motion, packages/react)"
+    ]
+  },
+  "summary": {
+    "overall_score": 62.5,
+    "phase_readiness": "not_ready",
+    "phase_readiness_detail": {
+      "blocking_dimensions": [
+        "1.6_token_documentation",
+        "3.1_component_description_coverage",
+        "3.5_documentation_frame_metadata",
+        "4.7_motion_duration_ranges",
+        "4.12_empty_state_coverage",
+        "6.6_documentation_of_parity_gaps"
+      ],
+      "warning_dimensions": [
+        "1.2_alias_chain_integrity",
+        "1.5_token_format_machine_readability",
+        "2.1_component_to_token_binding",
+        "3.3_intent_quality",
+        "4.4_type_completeness",
+        "4.8_motion_easing",
+        "4.11_loading_state_coverage",
+        "4.22_flexibility_and_efficiency",
+        "4.26_visual_hierarchy",
+        "6.1_token_value_parity"
+      ],
+      "conditions_for_advancement": [
+        "Resolve CDC-001: add functional intent descriptions to component set root entries -- currently 5.1% have any description, none convey intent",
+        "Resolve TD-001: add descriptions to Figma variable definitions -- currently 0.3% coverage across 1804 variables",
+        "Resolve DPG-001: create a parity gap register documenting known gaps between Figma variables and code tokens -- 518 code-only, 1164 Figma-only tokens with no documentation of intent",
+        "Resolve DFM-001: sub-component descriptions in Figma are absent across all 196 sub-components -- add functional descriptions",
+        "Resolve MOT-001: define motion tokens as Figma Variables or document the absence as intentional"
+      ]
+    },
+    "top_blockers": [
+      "CDC-001",
+      "TD-001",
+      "DPG-001"
+    ],
+    "blocker_count": 6,
+    "dimension_scores": {
+      "0.1_platform_architecture_clarity": 75,
+      "1.1_token_implementation": 100,
+      "1.2_alias_chain_integrity": 50,
+      "1.3_token_architecture_depth": 75,
+      "1.4_primitive_naming": 75,
+      "1.5_token_format_machine_readability": 50,
+      "1.6_token_documentation": 0,
+      "2.1_component_to_token_binding": 50,
+      "2.2_component_api_composability": 100,
+      "2.3_variant_completeness": 100,
+      "2.4_escape_hatch_usage": 75,
+      "3.1_component_description_coverage": 0,
+      "3.2_documentation_structure_machine_readability": 50,
+      "3.3_intent_quality": 50,
+      "3.4_usage_guidance_formalisation": 100,
+      "3.5_documentation_frame_metadata": 25,
+      "4.1_interaction_targets": 100,
+      "4.2_contrast_ratios": 100,
+      "4.3_type_scale_consistency": 100,
+      "4.4_type_completeness": 50,
+      "4.5_spacing_scale_regularity": 100,
+      "4.6_grid_and_layout_system": 100,
+      "4.7_motion_duration_ranges": 0,
+      "4.8_motion_easing": 50,
+      "4.9_focus_state_presence": 100,
+      "4.10_error_state_coverage": 100,
+      "4.11_loading_state_coverage": 50,
+      "4.12_empty_state_coverage": 0,
+      "4.13_colour_system_structure": 100,
+      "4.14_icon_sizing_consistency": 100,
+      "4.15_elevation_shadow_system": 75,
+      "4.16_visibility_of_system_status": 100,
+      "4.17_match_between_system_and_real_world": 100,
+      "4.18_user_control_and_freedom": 100,
+      "4.19_consistency_and_standards": 100,
+      "4.20_error_prevention": 100,
+      "4.21_recognition_rather_than_recall": 100,
+      "4.22_flexibility_and_efficiency": 50,
+      "4.23_aesthetic_and_minimalist_design": 100,
+      "4.24_error_recovery": 50,
+      "4.25_help_and_documentation": 50,
+      "4.26_visual_hierarchy": 50,
+      "4.27_visual_rhythm_and_proportion": 50,
+      "5.1_naming_convention_consistency": 75,
+      "5.2_versioning_and_changelog_discipline": 75,
+      "5.3_contribution_standards": 75,
+      "5.4_deprecation_patterns": 100,
+      "5.5_test_coverage": 100,
+      "5.6_adoption_visibility": 75,
+      "5.7_code_consistency_and_pattern_predictability": 75,
+      "6.1_token_value_parity": 50,
+      "6.2_token_naming_parity": 50,
+      "6.3_component_naming_parity": 100,
+      "6.4_variant_and_state_coverage_parity": 75,
+      "6.5_behaviour_parity": 50,
+      "6.6_documentation_of_parity_gaps": 0
+    },
+    "cluster_scores": {
+      "0_prerequisites": 75.0,
+      "1_token_and_variable_system": 58.3,
+      "2_component_quality": 81.2,
+      "3_documentation_and_intent": 45.0,
+      "4_design_quality_baseline": 76.9,
+      "5_governance_and_ecosystem": 82.1,
+      "6_design_to_code_parity": 54.2
+    },
+    "dimensions_scored": 56,
+    "dimensions_total": 56,
+    "dimensions_null": 0,
+    "component_count": 2856
+  },
+  "clusters": {
+    "0_prerequisites": {
+      "cluster_name": "Prerequisites",
+      "cluster_summary": "Carbon is an explicitly multi-platform system (web + iOS + Android) with documented platform strategy and clear information architecture.",
+      "cluster_score": 75.0,
+      "dimensions": {
+        "0.1_platform_architecture_clarity": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Carbon is documented as a multi-platform system with web as primary and native guidelines published. The Figma file is web-focused but references cross-platform considerations. Platform strategy is discoverable from the docs site and file structure. An agent can determine platform targets without guessing.",
+          "evidence_sources": [
+            "Figma REST API",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        }
+      }
+    },
+    "1_token_and_variable_system": {
+      "cluster_name": "Token and Variable System",
+      "cluster_summary": "Exceptionally rich variable system (1804 variables, 34 collections, 3097 aliases) with four theme modes. Three-layer architecture present in code. Figma variable descriptions nearly absent (0.3%).",
+      "cluster_score": 58.3,
+      "dimensions": {
+        "1.1_token_implementation": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "1804 variables across 34 collections covering colour, spacing, typography, breakpoints, grid, layer, and component-specific tokens. All implemented as Figma Variables with mode support. Four theme modes (White, Gray 10, Gray 90, Gray 100). 342 styles (218 fills, 116 effects, 8 grids). Token coverage is comprehensive across all design property categories.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "Figma REST API styles"
+          ],
+          "finding_ids": []
+        },
+        "1.2_alias_chain_integrity": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "3097 alias references across 1782 variables (173.8% ratio, meaning most variables alias through multiple hops). Theme collection (548 vars) aliases to Colors primitives (135 vars). Component-specific collections alias to Theme. However, code-side component tokens in packages/themes/src/component-tokens use hardcoded hex values rather than aliasing semantic tokens, breaking the three-layer chain at the component level.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "AC-001"
+          ]
+        },
+        "1.3_token_architecture_depth": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Three layers confirmed in both Figma and code. Primitives: Colors collection (135 vars) + Type Primitives (329 vars). Semantic: Theme collection (548 vars) with four modes. Component: dedicated collections (Button, Content Switcher, etc.) and contextual variables. Code mirrors this with @carbon/colors (primitives), @carbon/themes (semantic), and component-tokens/ (component). Minor gap: code-side component tokens hardcode hex values instead of aliasing semantic tokens.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "TA-001"
+          ]
+        },
+        "1.4_primitive_naming": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Full words throughout. Color primitives use hue+step convention (blue60, gray10). Spacing uses numbered scale (spacing-01 through spacing-13). Typography uses role-based names (body-compact-01, heading-03). Consistent within categories. The hue+step pattern for primitives is functional but not fully intent-based.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "1.5_token_format_machine_readability": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Code-side tokens are JS module exports with computed values (rem(), miniUnits(), adjustAlpha()). SCSS generated via @carbon/scss-generator. No DTCG or Style Dictionary interop. Format is machine-readable but requires Carbon-specific tooling to parse. An AI agent needs custom extraction logic rather than standard token tooling.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "TF-001"
+          ]
+        },
+        "1.6_token_documentation": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "5 of 1804 variables (0.3%) have descriptions in Figma. This is worse than MUI (18.4%). No variable descriptions on the Colors primitives (135 vars), Theme semantics (548 vars), spacing, typography, or breakpoints collections. Without descriptions, an agent cannot determine token purpose from the variable data alone.",
+          "evidence_sources": [
+            "Figma REST API variables/local"
+          ],
+          "finding_ids": [
+            "TD-001"
+          ]
+        }
+      }
+    },
+    "2_component_quality": {
+      "cluster_name": "Component Quality",
+      "cluster_summary": "Strong component architecture: 2856 published variants, comprehensive state coverage, TypeScript APIs, and meaningful token binding including spacing and typography.",
+      "cluster_score": 81.2,
+      "dimensions": {
+        "2.1_component_to_token_binding": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "MCP spot-check of Button (Primary, Icon Small, Enabled) shows color fills bound to variables (Button/button-primary, Icon/icon-on-color). Text Input (Inline, Error) shows extensive binding: colour, typography (label-01, body-compact-01 with full font specs), contextual layer variables (field, border-strong), and spacing (spacing-10). Token binding is richer than MUI but inconsistent across components. Button has minimal bindings (4 variables); Text Input has 17.",
+          "evidence_sources": [
+            "MCP get_variable_defs spot-check"
+          ],
+          "finding_ids": [
+            "CTB-001"
+          ]
+        },
+        "2.2_component_api_composability": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Full TypeScript with exported interfaces. ButtonBaseProps extends React.ButtonHTMLAttributes. Polymorphic 'as' prop via PolymorphicComponentPropWithRef. Constrained enums (ButtonKinds, ButtonSizes as const arrays with derived union types). Composable renderIcon prop accepts React.ElementType. Dual PropTypes + TypeScript typing. 126 components under @carbon/react.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "2.3_variant_completeness": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "2856 published components with exhaustive variant coverage. Button alone has 420 variants across Style (Primary, Secondary, Tertiary, Danger, Ghost, Danger ghost), Type (Text, Text + Icon, Icon only), Size (Small, Medium, Large, Extra large, 2X large, Expressive), and State (Enabled, Hover, Focus, Active, Disabled, Skeleton). Interactive states consistently defined. 4047 total variants across 196 component sets.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "scripts/output/carbon-doc-frames.json"
+          ],
+          "finding_ids": []
+        },
+        "2.4_escape_hatch_usage": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Carbon's API design constrains customisation through typed props and constrained enums. className is accepted on all components (standard React pattern). No sx prop or style prop abuse detected in examples. The design system's coding style guide in developer-handbook.md establishes BEM naming conventions that discourage direct style overrides.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        }
+      }
+    },
+    "3_documentation_and_intent": {
+      "cluster_name": "Documentation and Intent",
+      "cluster_summary": "Severe split: code-side documentation is excellent (MDX, structured API docs, usage guidelines), but Figma-side descriptions are nearly absent (5.1% components, 0% sub-component doc frames).",
+      "cluster_score": 45.0,
+      "dimensions": {
+        "3.1_component_description_coverage": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "147 of 2856 components (5.1%) have any description in Figma. All 147 are spec implementation notes on Tree View variants ('Follow specs for levels...'), not functional intent. No component has an intent-carrying description. This is worse than MUI in coverage but better in that no descriptions are code import snippets.",
+          "evidence_sources": [
+            "Figma REST API components"
+          ],
+          "finding_ids": [
+            "CDC-001"
+          ]
+        },
+        "3.2_documentation_structure_machine_readability": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Code-side documentation uses MDX (Storybook-integrated) with doctoc-generated tables of contents. No frontmatter metadata. No structured JSON schema for component docs. Content is prose-based, not agent-optimised. API documentation is structured via Storybook ArgsTable. External docs on carbondesignsystem.com are HTML, not machine-readable data.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "DS-001"
+          ]
+        },
+        "3.3_intent_quality": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Code-side MDX covers 4 of 6 documentation hierarchy levels: Purpose (overview paragraphs with intent), Structure (via API docs), Intended behaviour (variant guidance), and Main use cases (when to use danger vs tertiary). Missing: Error handling and Edge cases. Figma-side has zero intent documentation. The split between excellent code docs and absent Figma docs creates a parity problem for agents consuming both sources.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "IQ-001"
+          ]
+        },
+        "3.4_usage_guidance_formalisation": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Formalised usage guidance on carbondesignsystem.com with dedicated usage, style, code, and accessibility pages per component. Storybook provides interactive examples with Stackblitz integration. MDX files link to external usage pages. Guidance is structured, not ad-hoc.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "3.5_documentation_frame_metadata": {
+          "score": 1,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "Generic parser found 196 sub-components across 53 pages with rich structural data (4047 variants, 447 variant axes). However, 0 of 196 sub-components have descriptions in the Figma frame structure. Page-level descriptions exist (51 of 53 pages) but these are extracted from page content, not structured documentation frames. Carbon does not use a documentation frame convention like MUI's *Library / Component Heading pattern. Structural metadata is extractable but description metadata is absent.",
+          "evidence_sources": [
+            "scripts/output/carbon-doc-frames.json"
+          ],
+          "finding_ids": [
+            "DFM-001"
+          ]
+        }
+      }
+    },
+    "4_design_quality_baseline": {
+      "cluster_name": "Design Quality Baseline",
+      "cluster_summary": "Strong baseline quality across most dimensions. Comprehensive type scale, spacing system, colour structure, and accessibility patterns. Motion tokens exist in code but not in Figma Variables.",
+      "cluster_score": 76.9,
+      "dimensions": {
+        "4.1_interaction_targets": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Carbon specifies minimum touch targets per component size variant. Button sizes range from Small (32px height) to 2XL (80px). Interactive targets meet WCAG 2.5.5 (44x44px) at Medium and above. Small variants are documented as desktop-only. Explicit size variants make target sizes inspectable.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "MCP spot-check"
+          ],
+          "finding_ids": []
+        },
+        "4.2_contrast_ratios": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Carbon's four-theme system (White, Gray 10, Gray 90, Gray 100) is designed around WCAG AA contrast compliance. Semantic token aliases (text-primary, text-secondary, text-on-color) resolve differently per theme to maintain contrast. Token value chain is auditable: text-primary resolves to gray100 (#161616) on white theme, white (#ffffff) on gray100 theme.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.3_type_scale_consistency": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "23-step type scale with mathematical progression: 12, 14, 16, 18, 20, 24, 28, 32, 36, 42, 48, 54, 60, 68, 76, 84, 92, 102, 112, 122, 132, 144, 156. Steps follow a consistent ratio. 329 Type Primitives in Figma. Scale is explicitly documented in code (packages/type/src/scale.js).",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.4_type_completeness": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "tier": 1,
+          "narrative": "Code-side type styles define fontSize, fontWeight, lineHeight, and letterSpacing per role (body-compact-01, heading-03, etc.). Font family is IBM Plex Sans. In Figma, Type Primitives collection has 329 variables but the MCP spot-check shows typography bindings include weight, family, and paragraph spacing. Line height and letter spacing are present in code styles but their Figma variable binding is inconsistent.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo",
+            "MCP spot-check"
+          ],
+          "finding_ids": [
+            "TC-001"
+          ]
+        },
+        "4.5_spacing_scale_regularity": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Carbon spacing scale uses 8px base unit (miniUnits). Scale: 2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 160px. Implemented as both Figma Variables (28 spacing vars in local collection) and code tokens (spacing01-spacing13). Consistent progression with no irregular gaps.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.6_grid_and_layout_system": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Comprehensive grid system with 5 breakpoints (SM 320px, MD 672px, LG 1056px, XL 1312px, Max 1584px), column counts (4, 8, 16), and four grid modes (Wide, Narrow, Condensed, Nested). Grid mode collection has 24 variables. Breakpoint collection has 212 variables with mode-specific values. 8 grid styles published.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "Figma REST API styles",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.7_motion_duration_ranges": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "tier": 1,
+          "narrative": "Motion tokens are well-defined in code (fast01: 70ms, fast02: 110ms, moderate01: 150ms, moderate02: 240ms, slow01: 400ms, slow02: 700ms) but do not exist as Figma Variables. No motion-related variable collection was found in the Figma file. An agent reading only the Figma file would find no motion specifications.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "MOT-001"
+          ]
+        },
+        "4.8_motion_easing": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "tier": 1,
+          "narrative": "Code defines structured easing curves: standard, entrance, and exit categories, each with productive and expressive variants (6 easing curves total). All use cubic-bezier, no linear. However, these exist only in code (packages/motion/src/index.ts), not in Figma Variables or styles. Partial score because the system is well-designed but not available in the design tool.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "MOT-002"
+          ]
+        },
+        "4.9_focus_state_presence": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Focus state present on all interactive components. Button has explicit Focus variant. Text Input has Focus state. Accordion has Focus state. Carbon's accessibility-first approach includes AVT (Accessibility Verification Testing) with keyboard navigation tests tagged @avt-keyboard-nav on 82 components.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.10_error_state_coverage": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Error states present on form components. Text Input has Error variant with support-error token binding. Notification component has Status variants (Error, Warning, Success, Info). Form component includes error state patterns. support-error (#da1e28) and text-error tokens are bound to error-state components.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "MCP spot-check"
+          ],
+          "finding_ids": []
+        },
+        "4.11_loading_state_coverage": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "tier": 1,
+          "narrative": "Dedicated Loading component with 4 sub-components. Button has Skeleton state variant. However, not all async-capable components have loading patterns defined. Skeleton states exist but are not universal across the component library.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "scripts/output/carbon-doc-frames.json"
+          ],
+          "finding_ids": [
+            "LS-001"
+          ]
+        },
+        "4.12_empty_state_coverage": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "tier": 1,
+          "narrative": "No empty state patterns found in the Figma component library. Data Table, Dropdown, and other data-dependent components do not include empty state variants. No empty state utility component exists.",
+          "evidence_sources": [
+            "Figma REST API components"
+          ],
+          "finding_ids": [
+            "ES-001"
+          ]
+        },
+        "4.13_colour_system_structure": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Structured colour system with 135 primitive colours (Colors collection), 548 semantic theme tokens with four modes, and contextual layer variables. Role-based naming (text-primary, background, layer-01, support-error). 10-step scales per hue. 218 fill styles published. The four-theme architecture is one of the most mature observed.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "Figma REST API styles",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.14_icon_sizing_consistency": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "tier": 1,
+          "narrative": "Carbon defines icon sizes aligned with spacing scale. Code exports iconSize01 and iconSize02. Button Icon variants use consistent sizing across size variants. The icon-on-color token is bound to icon components.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo",
+            "MCP spot-check"
+          ],
+          "finding_ids": []
+        },
+        "4.15_elevation_shadow_system": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "tier": 1,
+          "narrative": "116 effect styles published in Figma covering shadows and overlays. Carbon's elevation approach uses Layer tokens (Background, Layer 01, Layer 02) rather than shadow-based elevation like Material Design. This is a deliberate architectural choice. Shadows exist for specific components (Popover, Tooltip, Modal) rather than as a universal scale.",
+          "evidence_sources": [
+            "Figma REST API styles",
+            "Figma REST API variables/local"
+          ],
+          "finding_ids": []
+        },
+        "4.16_visibility_of_system_status": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. Notification component with 4 status variants. Loading component. Progress bar and Progress indicator components. Inline notification and Toast notification patterns.",
+          "evidence_sources": [
+            "Figma REST API components"
+          ],
+          "finding_ids": []
+        },
+        "4.17_match_between_system_and_real_world": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. Consistent, plain language naming (Button, Accordion, Breadcrumb, Toggle). No jargon in component names. Documentation on carbondesignsystem.com uses plain language with real-world task framing.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.18_user_control_and_freedom": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. Modal has dismiss/close patterns. Notification has dismissible variants. Form components support clear/reset. Breadcrumb provides navigation context.",
+          "evidence_sources": [
+            "Figma REST API components"
+          ],
+          "finding_ids": []
+        },
+        "4.19_consistency_and_standards": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. Consistent naming conventions (PascalCase components, kebab-case tokens). Consistent size variants across components (Small, Medium, Large, Extra large). Consistent state naming (Enabled, Hover, Focus, Active, Disabled).",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.20_error_prevention": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. Form validation patterns. Constrained prop types prevent invalid configurations. Disabled states prevent interaction with unavailable actions. TypeScript catches prop errors at compile time.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.21_recognition_rather_than_recall": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. Variant names describe their purpose (Style=Primary, State=Enabled). Component names are standard industry terms. Storybook provides visual documentation of all variants.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.22_flexibility_and_efficiency": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "tier": 2,
+          "narrative": "Partially addressed. Polymorphic 'as' prop on Button. renderIcon prop for icon composition. However, Carbon's API is intentionally constrained to enforce consistency, which limits flexibility for power users. No sx-style escape hatch.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.23_aesthetic_and_minimalist_design": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "tier": 2,
+          "narrative": "Systematically addressed. IBM's design philosophy emphasises minimal, functional design. Component variants are purposeful, not decorative. The layer-based elevation system avoids shadow overuse.",
+          "evidence_sources": [
+            "Figma REST API components"
+          ],
+          "finding_ids": []
+        },
+        "4.24_error_recovery": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "tier": 2,
+          "narrative": "Partially addressed. Notification component includes error and warning variants. Form error states visible. However, no dedicated error recovery patterns (retry, undo) found as reusable components. Error recovery guidance exists on the docs site but not as Figma component patterns.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.25_help_and_documentation": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "tier": 2,
+          "narrative": "Partially addressed. Tooltip and Toggletip components provide contextual help. External documentation is comprehensive. However, no in-component help patterns (inline help text, guided tours) exist as reusable components. Help is available externally but not embedded in the system.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.26_visual_hierarchy": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "tier": 2,
+          "narrative": "Partially addressed. Type scale establishes heading hierarchy. Layer system (Background, Layer 01, Layer 02) creates depth. However, the hierarchy depends on correct token usage which is not enforced by the system. No visual hierarchy guidelines found as structured component-level documentation in Figma.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "4.27_visual_rhythm_and_proportion": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "tier": 2,
+          "narrative": "Partially addressed. 8px base grid with consistent spacing scale. Grid system with defined column and margin ratios. However, rhythm and proportion are emergent from token usage rather than explicitly documented as design principles in the Figma file.",
+          "evidence_sources": [
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        }
+      }
+    },
+    "5_governance_and_ecosystem": {
+      "cluster_name": "Governance and Ecosystem",
+      "cluster_summary": "Mature governance: documented deprecation patterns with runtime warnings, comprehensive testing (unit + AVT + VRT), monorepo with clear contribution standards, and adoption tracking via @carbon/react npm.",
+      "cluster_score": 82.1,
+      "dimensions": {
+        "5.1_naming_convention_consistency": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Consistent PascalCase for components in code (Button, Accordion, DataTable). Figma page names match component names. Token names use kebab-case (spacing-01, body-compact-01). Minor inconsistency: some Figma variable collections use spaces (Color palette 1) while code uses camelCase (spacing01). The naming is consistent within each domain but conventions differ between Figma and code.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "Figma REST API variables/local",
+            "GitHub repo"
+          ],
+          "finding_ids": [
+            "NC-001"
+          ]
+        },
+        "5.2_versioning_and_changelog_discipline": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Monorepo managed with Lerna + Yarn workspaces. Individual packages versioned (v11.50+). Migration documentation at docs/migration/v11.md. @carbon/upgrade codemod package for automated migration. Release schedule documented. Per-package changelogs may exist but no single authoritative CHANGELOG at repo root.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "5.3_contribution_standards": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Comprehensive developer handbook at docs/developer-handbook.md covering commit conventions, coding style, BEM class naming, Sass documentation, file/folder conventions, deprecation, and publishing. Additional docs for experimental code, preview code, feature flags, and testing. No root CONTRIBUTING.md (unconventional location). A new contributor may not find the handbook without guidance.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "5.4_deprecation_patterns": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Formal deprecation pattern using warning() utility. Runtime deprecation warnings in development mode. Components continue to work through current major version. Explicit notice of removal in next major. Bug fixes deprioritised but external contributions accepted. This is one of the best deprecation strategies observed in a design system.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "5.5_test_coverage": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Three-tier testing: (1) Unit tests with Jest + @testing-library/react covering rendering, props, states, keyboard interaction. (2) Accessibility Verification Testing (AVT) with Playwright, custom toHaveNoACViolations matcher, 82 of 126 components (65%) have e2e test directories with tagged test categories. (3) Visual regression via Playwright snapshots against Storybook. AVT tags flow to the docs site as component status indicators.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "5.6_adoption_visibility": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "@carbon/react is published on npm with download tracking. The monorepo structure allows per-package version tracking. carbondesignsystem.com publishes component AVT statuses. No explicit dependency consumption dashboard or adoption metrics tool found, but npm statistics provide baseline visibility.",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "5.7_code_consistency_and_pattern_predictability": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "126 components follow consistent patterns: TypeScript interfaces, PropTypes, co-located MDX docs, test directories. Coding style guide establishes BEM naming, Sass conventions, and file organisation. Feature flags and experimental/preview patterns are formally documented. Minor inconsistency: some components have complete test coverage, others lack e2e tests (35% gap).",
+          "evidence_sources": [
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        }
+      }
+    },
+    "6_design_to_code_parity": {
+      "cluster_name": "Design-to-Code Parity",
+      "cluster_summary": "Structural parity is strong (component naming, variant coverage) but token-level parity is difficult to assess due to different architectures. 518 code-only tokens, 1164 Figma-only tokens, no parity gap register.",
+      "cluster_score": 54.2,
+      "dimensions": {
+        "6.1_token_value_parity": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Token diff found 116 matched tokens (via colour value matching), 6 value mismatches, 518 code-only tokens, and 1164 Figma-only tokens. The 95% match rate among comparable tokens is high, but the total matchable set is small (122 of 1924 total tokens = 6.3%). The large gap (518 + 1164 unmatched) reflects different token architectures rather than value drift: Carbon's Figma uses mode-based contextual variables while code uses flat JS exports.",
+          "evidence_sources": [
+            "scripts/output/carbon-token-diff.json"
+          ],
+          "finding_ids": [
+            "TVP-001"
+          ]
+        },
+        "6.2_token_naming_parity": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "0 naming mismatches among matched tokens (100% naming parity in the matched set). However, the matching relied on colour value matching rather than name matching, indicating that naming conventions differ significantly between Figma and code. Figma uses slash-separated paths (Theme/text-primary), code uses camelCase (textPrimary) or kebab-case (text-primary). The naming gap is architectural, not accidental.",
+          "evidence_sources": [
+            "scripts/output/carbon-token-diff.json"
+          ],
+          "finding_ids": [
+            "TVP-002"
+          ]
+        },
+        "6.3_component_naming_parity": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Component names align well between Figma and code. Figma page names (Button, Accordion, Data table, Text input) match code component names (Button, Accordion, DataTable, TextInput) after case normalisation. 47 Figma pages with components map to the 126 code components. Some code components are sub-components not separately paged in Figma, which is expected.",
+          "evidence_sources": [
+            "Figma REST API file structure",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "6.4_variant_and_state_coverage_parity": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Figma has 2856 published component variants, code has 126 top-level components with variant props. State coverage is consistent: Enabled, Hover, Focus, Active, Disabled in both. Button size variants match between Figma (Small, Medium, Large, Extra large, 2X large, Expressive) and code (ButtonSizes). Minor gaps: code may support additional programmatic states (loading, skeleton) not visible as Figma variants on all components.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "6.5_behaviour_parity": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Figma captures static states but not transitions or interactive behaviour. Code implements keyboard navigation, focus management, aria attributes, and event handlers that have no Figma representation. The MDX documentation bridges some gaps with behavioural descriptions, but an agent reading only the Figma file cannot infer interaction patterns. This is a structural limitation of Figma, not a Carbon-specific gap.",
+          "evidence_sources": [
+            "Figma REST API components",
+            "GitHub repo"
+          ],
+          "finding_ids": []
+        },
+        "6.6_documentation_of_parity_gaps": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "No parity gap register exists. The token diff reveals 518 code-only tokens and 1164 Figma-only tokens with no documentation explaining which gaps are intentional (architectural differences) vs which are bugs. The naming convention differences (slash-paths vs camelCase) are undocumented. Motion tokens existing only in code is undocumented. Without a gap register, an agent cannot distinguish intentional omissions from drift.",
+          "evidence_sources": [
+            "scripts/output/carbon-token-diff.json"
+          ],
+          "finding_ids": [
+            "DPG-001"
+          ]
+        }
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "AC-001",
+      "dimension": "1.2_alias_chain_integrity",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Code-side component tokens hardcode hex values instead of aliasing semantic tokens",
+      "description": "Component tokens in packages/themes/src/component-tokens/ (button, notification, tag, status, content-switcher) define per-theme values with hardcoded hex fallbacks rather than aliasing the semantic theme tokens. This breaks the three-layer alias chain at the component level: an agent following aliases from component tokens will hit a dead end rather than resolving through semantic to primitive.",
+      "evidence": [
+        "packages/themes/src/component-tokens/button/ uses direct hex values per theme",
+        "Expected: component token -> semantic token -> primitive. Actual: component token -> hardcoded hex"
+      ],
+      "recommendation": "Refactor code-side component tokens to alias the semantic theme tokens (e.g., button-primary should alias interactive-01 or background-brand) rather than duplicating hex values per theme.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "composite",
+        "path": null,
+        "field": "component-tokens/button"
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "TA-001",
+      "dimension": "1.3_token_architecture_depth",
+      "severity": "note",
+      "severity_rank": 1,
+      "summary": "Component token layer partially breaks alias chain in code",
+      "description": "Three layers exist (primitives in @carbon/colors, semantic in @carbon/themes, component in component-tokens/) but the component layer in code uses hardcoded hex values rather than aliasing semantic tokens. The Figma variable system maintains proper alias chains through all three layers. This creates a code-specific architectural gap.",
+      "evidence": [
+        "Figma: Theme collection aliases Colors. Component collections alias Theme.",
+        "Code: @carbon/colors (primitives) -> @carbon/themes (semantic) -> component-tokens (hardcoded hex, not aliases)"
+      ],
+      "recommendation": "Align code-side component tokens to reference semantic token variables rather than hardcoding hex values. This would complete the three-layer chain in both Figma and code.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "composite",
+        "path": null,
+        "field": null
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "TF-001",
+      "dimension": "1.5_token_format_machine_readability",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Custom JS token format requires Carbon-specific extraction tooling",
+      "description": "Carbon tokens are JS module exports with computed values (rem(), miniUnits(), adjustAlpha()). The @carbon/scss-generator builds SCSS output. No DTCG (Design Token Community Group) or Style Dictionary format support. An AI agent or external tooling needs custom extraction logic to read Carbon tokens.",
+      "evidence": [
+        "packages/colors/src/colors.js: export const blue60 = '#0f62fe'",
+        "packages/layout/src/index.js: export const spacing01 = miniUnits(0.25)"
+      ],
+      "recommendation": "Consider publishing tokens in DTCG format alongside the JS exports. This would enable standard tooling interop without replacing the existing JS-primary workflow.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "primitive",
+        "path": null,
+        "field": null
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TD-001",
+      "dimension": "1.6_token_documentation",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "0.3% of Figma variables have descriptions \u2014 agent cannot determine token purpose",
+      "description": "Only 5 of 1804 Figma variables (0.3%) have descriptions. None of the major collections have descriptions: Colors primitives (135), Theme semantics (548), Spacing (28), Type Primitives (329), Breakpoint (212). Without descriptions, an agent reading the variable data cannot determine token purpose, scope, or constraints from the Figma API alone.",
+      "evidence": [
+        "Total variables: 1804",
+        "Variables with descriptions: 5 (0.3%)",
+        "Collections with 0 descriptions: Colors, Theme, Spacing, Type Primitives, Breakpoint, Grid mode, Layer, Modal"
+      ],
+      "recommendation": "Add descriptions to all variable collections, prioritising Theme semantics (548 vars \u2014 these are the most-consumed tokens) and Colors primitives (135 vars \u2014 agents need to understand the scale). At minimum, add collection-level descriptions and descriptions for the 20 most-used semantic tokens.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": null,
+        "path": null,
+        "field": "description"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CTB-001",
+      "dimension": "2.1_component_to_token_binding",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Token binding depth varies significantly across components",
+      "description": "MCP spot-check reveals inconsistent token binding depth. Button (Primary, Icon Small, Enabled) has 4 variable bindings (colour only). Text Input (Inline, Error) has 17 variable bindings covering colour, typography, spacing, and contextual layers. The richer binding on Text Input demonstrates the system's capability, but Button's minimal binding suggests not all components are fully bound.",
+      "evidence": [
+        "Button: 4 bindings (Button/button-primary, Icon/icon-on-color, Transparent x2)",
+        "Text Input: 17 bindings (text-primary, text-secondary, support-error, label-01, body-compact-01, field, border-strong, spacing-10, etc.)"
+      ],
+      "recommendation": "Audit all components for token binding completeness. Use Text Input's binding depth as the target standard. Priority: ensure all interactive components have colour, typography, and spacing tokens bound.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": "composite",
+        "path": null,
+        "field": "token_bindings"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CDC-001",
+      "dimension": "3.1_component_description_coverage",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "94.9% of components have no Figma description \u2014 zero functional intent",
+      "description": "147 of 2856 components (5.1%) have any description in Figma. All 147 are Tree View spec notes ('Follow specs for levels...'), not functional intent descriptions. No component carries a description that would help an agent decide whether to use it. The code-side MDX documentation is excellent but is not accessible through the Figma API.",
+      "evidence": [
+        "Total components: 2856",
+        "With any description: 147 (5.1%)",
+        "With functional intent: 0 (0%)",
+        "Description type: all 147 are Tree View implementation spec notes"
+      ],
+      "recommendation": "Add functional intent descriptions to the COMPONENT_SET root entries for the 45 primary components (one per page). Start with the 10 most-used components. Use the code-side MDX overview paragraphs as the source \u2014 they already contain good intent descriptions that need to be ported to Figma.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "component.description"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "DS-001",
+      "dimension": "3.2_documentation_structure_machine_readability",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "MDX docs lack structured metadata for agent consumption",
+      "description": "Code-side documentation uses MDX with Storybook integration. Content is well-structured as prose but lacks machine-readable metadata: no frontmatter, no structured JSON schema, no semantic markup beyond headings. An agent can read the text but cannot extract structured fields (purpose, structure, behaviour, use cases) without NLP parsing.",
+      "evidence": [
+        "Button.mdx: no frontmatter, doctoc-generated TOC, prose paragraphs",
+        "API documentation structured via Storybook ArgsTable (semi-structured)"
+      ],
+      "recommendation": "Add YAML frontmatter to MDX files with structured fields: component_name, purpose (one sentence), category, status, related_components. This would make documentation machine-readable without changing the human-readable content.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "mdx.frontmatter"
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "IQ-001",
+      "dimension": "3.3_intent_quality",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Code-side docs cover 4 of 6 hierarchy levels; Figma has zero intent",
+      "description": "Against the six-level documentation hierarchy: code-side MDX covers Purpose (overview paragraphs), Structure (via API docs), Intended behaviour (variant guidance), and Main use cases (when-to-use guidance). Missing: Error handling and Edge cases. Figma-side has zero intent documentation. The split creates a problem: an agent reading Figma cannot access any intent, an agent reading code gets 4/6 levels.",
+      "evidence": [
+        "Code MDX: Purpose=yes, Structure=yes, Behaviour=yes, Use cases=yes, Error handling=no, Edge cases=no",
+        "Figma descriptions: 0% intent coverage"
+      ],
+      "recommendation": "Priority 1: port one-line intent summaries from MDX to Figma component descriptions (fixes CDC-001 simultaneously). Priority 2: add Error handling and Edge cases sections to the 10 most-used component MDX files.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": null
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "DFM-001",
+      "dimension": "3.5_documentation_frame_metadata",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "Zero sub-component descriptions in Figma frame structure",
+      "description": "196 COMPONENT_SET nodes found across 53 pages with rich structural data (4047 variants, 447 variant axes). However, 0 of 196 have Figma descriptions on the COMPONENT_SET node. Carbon does not use a structured documentation frame convention. Page-level text exists (51 of 53 pages) but is embedded in the canvas, not in structured node metadata.",
+      "evidence": [
+        "Sub-components: 196",
+        "With description: 0 (0%)",
+        "Page descriptions (from canvas text): 51/53",
+        "Convention: generic (no structured doc frames detected)"
+      ],
+      "recommendation": "Add descriptions to COMPONENT_SET nodes. These are the primary metadata entry points for agents using the Figma API. The description field is structured (not canvas text) and returned by the REST API components endpoint.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "component_set.description"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TC-001",
+      "dimension": "4.4_type_completeness",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Typography variable binding in Figma is inconsistent across properties",
+      "description": "Code-side type styles define fontSize, fontWeight, lineHeight, and letterSpacing per role. Figma's Type Primitives collection has 329 variables and MCP spot-check shows font family, weight, and size bound. However, line height and letter spacing binding is inconsistent. Some typography variables are bound as full composite font styles, others as individual properties.",
+      "evidence": [
+        "MCP Text Input: body-compact-01 bound as composite font style (size: 14, weight: 400, lineHeight: 18, letterSpacing: 0.16)",
+        "329 Type Primitives in Figma covering individual properties"
+      ],
+      "recommendation": "Standardise typography binding approach: either bind all properties as individual variables or use composite text styles consistently. Document which approach is canonical.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "primitive",
+        "path": null,
+        "field": "typography"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "MOT-001",
+      "dimension": "4.7_motion_duration_ranges",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "Motion duration tokens exist in code but not in Figma Variables",
+      "description": "Code defines well-structured motion durations (fast01: 70ms, fast02: 110ms, moderate01: 150ms, moderate02: 240ms, slow01: 400ms, slow02: 700ms) with productive/expressive variants. These do not exist as Figma Variables or styles. An agent reading only the Figma file would find no motion specifications.",
+      "evidence": [
+        "Code: packages/motion/src/index.ts exports 6 duration tokens + 6 easing curves",
+        "Figma: 0 motion-related variable collections, 0 motion styles"
+      ],
+      "recommendation": "Create a Motion variable collection in Figma with duration and easing tokens matching the code definitions. Alternatively, document the absence as intentional (Figma cannot animate) and ensure the motion specifications are referenced in component documentation frames.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "semantic",
+        "path": null,
+        "field": "motion"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "MOT-002",
+      "dimension": "4.8_motion_easing",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Easing curves well-designed in code but absent from Figma",
+      "description": "Six easing curves defined in code (standard/entrance/exit x productive/expressive) using cubic-bezier. All curves use proper easing, no linear. However, these exist only in code. Figma does not support animation curves as Variables, but the values could be documented as text metadata or stored as named Figma styles.",
+      "evidence": [
+        "Standard productive: cubic-bezier(0.2, 0, 0.38, 0.9)",
+        "Entrance expressive: cubic-bezier(0, 0, 0.3, 1)"
+      ],
+      "recommendation": "Document motion easing values in Figma either as variable descriptions or as a dedicated documentation page. Ensure motion specifications are discoverable from the Figma file.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "semantic",
+        "path": null,
+        "field": "motion.easing"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "LS-001",
+      "dimension": "4.11_loading_state_coverage",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Loading/skeleton states not universal across the component library",
+      "description": "Dedicated Loading component exists with 4 sub-components. Button has Skeleton state variant. However, not all async-capable components (Dropdown, Data Table, Select) have loading or skeleton patterns defined as Figma variants.",
+      "evidence": [
+        "Loading component: 4 sub-components",
+        "Button: has Skeleton variant",
+        "Data Table, Dropdown, Select: no skeleton/loading variant found"
+      ],
+      "recommendation": "Add skeleton state variants to async-capable components (Data Table, Dropdown, Select) or document that the Loading component should be used as a wrapper pattern for these cases.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": "composite",
+        "path": null,
+        "field": "variants.skeleton"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "ES-001",
+      "dimension": "4.12_empty_state_coverage",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "No empty state patterns in Figma component library",
+      "description": "Data-dependent components (Data Table, Dropdown, List, Contained list) do not include empty state variants. No dedicated empty state utility component exists. Empty states are a critical UX pattern for data-driven interfaces. Their absence forces designers and agents to improvise.",
+      "evidence": [
+        "Data Table: no empty state variant",
+        "Dropdown: no empty state variant",
+        "No EmptyState utility component found"
+      ],
+      "recommendation": "Create empty state variants for data-dependent components or create a reusable EmptyState component pattern. Document when to use empty states and what content they should contain.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": "pattern",
+        "path": null,
+        "field": "variants.empty"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "NC-001",
+      "dimension": "5.1_naming_convention_consistency",
+      "severity": "note",
+      "severity_rank": 1,
+      "summary": "Naming convention differs between Figma (spaces/kebab) and code (PascalCase/camelCase)",
+      "description": "Figma uses spaces in collection names (Color palette 1, Data table size) and kebab-case in variable names (text-primary, spacing-01). Code uses PascalCase for components (DataTable, TextInput) and camelCase for token exports (textPrimary, spacing01). This is a consistent pattern within each platform but creates a naming gap for cross-platform tools.",
+      "evidence": [
+        "Figma: 'Color palette 1', 'text-primary', 'spacing-01'",
+        "Code: 'DataTable', 'textPrimary', 'spacing01'"
+      ],
+      "recommendation": "Document the naming convention mapping between Figma and code explicitly. This helps automated tools transform names correctly when syncing between platforms.",
+      "contract_ref": {
+        "type": "governance_rule",
+        "level": null,
+        "path": null,
+        "field": "naming_convention"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TVP-001",
+      "dimension": "6.1_token_value_parity",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Only 6.3% of total tokens matched across platforms \u2014 different architectures",
+      "description": "Token diff found 116 matched tokens with 95% value parity among matched set. However, total matchable set is small (122 of 1924 total = 6.3%). 518 code-only tokens and 1164 Figma-only tokens remain unmatched. The large gap reflects different token architectures: Figma uses mode-based contextual variables (layer-01 per theme mode) while code uses flat JS exports (textPrimary resolves per theme function call).",
+      "evidence": [
+        "Matched: 116 (95% value parity)",
+        "Value mismatches: 6",
+        "Code-only: 518",
+        "Figma-only: 1164",
+        "Total: 1924 unique tokens"
+      ],
+      "recommendation": "The low match rate is architectural, not a quality issue. Document the architectural differences between Figma's mode-based variables and code's JS exports. Create a mapping document that explains how each Figma collection maps to code packages.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": null,
+        "path": null,
+        "field": null
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TVP-002",
+      "dimension": "6.2_token_naming_parity",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Token naming differs architecturally between Figma and code",
+      "description": "Matching relied on colour value comparison rather than name matching, indicating that naming conventions differ significantly. Figma: Theme/text-primary. Code: textPrimary. Figma: Colors/blue/60. Code: blue60. The gap is systematic and consistent \u2014 a deterministic transform could bridge it.",
+      "evidence": [
+        "Match method: 115 of 116 matches via color_value_match, 1 via name_normalised",
+        "Figma convention: slash-separated paths",
+        "Code convention: camelCase or kebab-case"
+      ],
+      "recommendation": "Publish a naming convention mapping (Figma name <-> code export name) as a structured data file. This enables automated parity checking and reduces false positives in drift detection.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": null,
+        "path": null,
+        "field": null
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "DPG-001",
+      "dimension": "6.6_documentation_of_parity_gaps",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "No parity gap register \u2014 1682 unmatched tokens undocumented",
+      "description": "518 code-only tokens and 1164 Figma-only tokens have no documentation explaining whether gaps are intentional or bugs. The naming convention differences are undocumented. Motion tokens existing only in code is undocumented. Without a gap register, automated drift detection will generate false positives, and agents cannot distinguish intentional omissions from actual gaps.",
+      "evidence": [
+        "Code-only tokens: 518",
+        "Figma-only tokens: 1164",
+        "Documented gaps: 0",
+        "Naming convention mapping: none"
+      ],
+      "recommendation": "Create a parity gap register documenting: (1) known architectural differences (mode-based variables vs flat exports), (2) intentional omissions (motion in code only, grid styles in Figma only), (3) naming convention mapping. Store as a structured JSON file alongside the token definitions.",
+      "contract_ref": {
+        "type": "governance_rule",
+        "level": null,
+        "path": null,
+        "field": "parity_gap_register"
+      },
+      "auto_fixable": false
+    }
+  ],
+  "remediation": {
+    "quick_wins": [
+      {
+        "id": "REM-001",
+        "action": "Port one-line intent summaries from MDX overview paragraphs to Figma COMPONENT_SET description fields for the 45 primary components. The content already exists in code \u2014 this is a copy operation, not content creation.",
+        "affected_cluster": "3_documentation_and_intent",
+        "affected_dimensions": [
+          "3.1_component_description_coverage",
+          "3.3_intent_quality",
+          "3.5_documentation_frame_metadata"
+        ],
+        "effort_estimate": "days",
+        "ownership": "design",
+        "value_framing": "Without Figma descriptions, any agent using the Figma API to select or configure components will be operating blind. The content exists in code but is inaccessible to design-side tooling.",
+        "impact_categories": [
+          "correction_cycles"
+        ],
+        "projected_score_improvement": "Cluster 3 from 41.3 to ~60, Overall from 62.8 to ~67",
+        "finding_ids": [
+          "CDC-001",
+          "IQ-001",
+          "DFM-001"
+        ]
+      },
+      {
+        "id": "REM-002",
+        "action": "Create a parity gap register documenting known architectural differences between Figma variables and code tokens, naming convention mapping, and intentional omissions (motion, grid styles).",
+        "affected_cluster": "6_design_to_code_parity",
+        "affected_dimensions": [
+          "6.1_token_value_parity",
+          "6.2_token_naming_parity",
+          "6.6_documentation_of_parity_gaps"
+        ],
+        "effort_estimate": "days",
+        "ownership": "both",
+        "value_framing": "Without a gap register, automated drift detection generates false positives on every run. The 1682 unmatched tokens will appear as new issues each time until the intentional gaps are documented.",
+        "impact_categories": [
+          "parity_defects"
+        ],
+        "projected_score_improvement": "Cluster 6 from 54.2 to ~71, Overall from 62.8 to ~65",
+        "finding_ids": [
+          "TVP-001",
+          "TVP-002",
+          "DPG-001"
+        ]
+      },
+      {
+        "id": "REM-003",
+        "action": "Add YAML frontmatter to MDX component documentation files with structured fields (component_name, purpose, category, status, related_components). Start with the 10 most-used components.",
+        "affected_cluster": "3_documentation_and_intent",
+        "affected_dimensions": [
+          "3.2_documentation_structure_machine_readability"
+        ],
+        "effort_estimate": "hours",
+        "ownership": "engineering",
+        "value_framing": "Without structured metadata, agents must parse prose to extract component purpose and relationships. Frontmatter makes this a single JSON-like lookup.",
+        "impact_categories": [
+          "correction_cycles"
+        ],
+        "finding_ids": [
+          "DS-001"
+        ]
+      }
+    ],
+    "foundational_blockers": [
+      {
+        "id": "REM-004",
+        "action": "Add descriptions to Figma variable definitions, prioritising Theme semantics (548 vars) and Colors primitives (135 vars). Use code-side JSDoc comments and naming conventions as the source for descriptions.",
+        "affected_cluster": "1_token_and_variable_system",
+        "affected_dimensions": [
+          "1.6_token_documentation"
+        ],
+        "effort_estimate": "weeks",
+        "ownership": "design",
+        "value_framing": "Token descriptions are the primary mechanism for agents to understand token purpose. At 0.3% coverage, agents will misuse tokens by guessing from names alone. The Theme collection (548 tokens across 4 modes) is the highest-impact target \u2014 these are consumed by every component.",
+        "impact_categories": [
+          "correction_cycles",
+          "token_efficiency"
+        ],
+        "projected_score_improvement": "Cluster 1 from 58.8 to ~71, Overall from 62.8 to ~66",
+        "finding_ids": [
+          "TD-001"
+        ]
+      },
+      {
+        "id": "REM-005",
+        "action": "Refactor code-side component tokens (packages/themes/src/component-tokens/) to alias semantic theme tokens rather than hardcoding hex values. This restores the three-layer alias chain.",
+        "affected_cluster": "1_token_and_variable_system",
+        "affected_dimensions": [
+          "1.2_alias_chain_integrity",
+          "1.3_token_architecture_depth"
+        ],
+        "effort_estimate": "weeks",
+        "ownership": "engineering",
+        "value_framing": "Broken alias chains mean that a theme change at the semantic level will not propagate to component tokens. Each component token must be manually updated per theme \u2014 a process that does not scale with 4 themes and growing component count.",
+        "impact_categories": [
+          "theme_rework",
+          "token_efficiency"
+        ],
+        "finding_ids": [
+          "AC-001",
+          "TA-001"
+        ]
+      },
+      {
+        "id": "REM-006",
+        "action": "Create a Motion variable collection in Figma with duration and easing tokens matching the code definitions (6 durations, 6 easing curves). Or document the absence as intentional with a note in the file's Read me page.",
+        "affected_cluster": "4_design_quality_baseline",
+        "affected_dimensions": [
+          "4.7_motion_duration_ranges",
+          "4.8_motion_easing"
+        ],
+        "effort_estimate": "hours",
+        "ownership": "design",
+        "value_framing": "Motion specifications exist in code but are invisible in Figma. Designers working in Figma cannot reference canonical motion values, leading to inconsistent animation timing across products.",
+        "impact_categories": [
+          "parity_defects"
+        ],
+        "finding_ids": [
+          "MOT-001",
+          "MOT-002"
+        ]
+      }
+    ],
+    "post_migration": [
+      {
+        "id": "REM-007",
+        "action": "Publish tokens in DTCG (Design Token Community Group) format alongside the existing JS exports. This enables standard tooling interop (Style Dictionary, Token Studio) without replacing the current workflow.",
+        "affected_cluster": "1_token_and_variable_system",
+        "affected_dimensions": [
+          "1.5_token_format_machine_readability"
+        ],
+        "effort_estimate": "weeks",
+        "ownership": "engineering",
+        "value_framing": "Custom JS format requires Carbon-specific extraction tooling. DTCG format would allow any standard token tool to consume Carbon tokens, reducing integration friction for teams adopting the system.",
+        "impact_categories": [
+          "token_efficiency"
+        ],
+        "finding_ids": [
+          "TF-001"
+        ]
+      },
+      {
+        "id": "REM-008",
+        "action": "Add empty state variants to data-dependent components (Data Table, Dropdown, List, Select) or create a reusable EmptyState component pattern.",
+        "affected_cluster": "4_design_quality_baseline",
+        "affected_dimensions": [
+          "4.12_empty_state_coverage"
+        ],
+        "effort_estimate": "days",
+        "ownership": "both",
+        "value_framing": "Without empty state patterns, every team using data-driven components must design their own empty states. This leads to inconsistent experiences and wasted design effort across products.",
+        "impact_categories": [
+          "correction_cycles"
+        ],
+        "finding_ids": [
+          "ES-001"
+        ]
+      },
+      {
+        "id": "REM-009",
+        "action": "Add Error handling and Edge cases sections to MDX documentation for the 10 most-used components. This completes the six-level documentation hierarchy.",
+        "affected_cluster": "3_documentation_and_intent",
+        "affected_dimensions": [
+          "3.3_intent_quality"
+        ],
+        "effort_estimate": "days",
+        "ownership": "both",
+        "value_framing": "Agents generating UI code from component documentation will produce implementations that handle the happy path but not error or edge cases. This creates correction cycles when QA reveals unhandled states.",
+        "impact_categories": [
+          "correction_cycles"
+        ],
+        "finding_ids": [
+          "IQ-001"
+        ]
+      },
+      {
+        "id": "REM-010",
+        "action": "Standardise token binding depth across all components to match the Text Input level (colour, typography, spacing, contextual layer variables). Audit and bind under-bound components.",
+        "affected_cluster": "2_component_quality",
+        "affected_dimensions": [
+          "2.1_component_to_token_binding"
+        ],
+        "effort_estimate": "weeks",
+        "ownership": "design",
+        "value_framing": "Inconsistent binding depth means agents will get different quality results depending on which component they inspect. Fully-bound components resolve tokens correctly; under-bound components produce hardcoded values.",
+        "impact_categories": [
+          "correction_cycles",
+          "token_efficiency"
+        ],
+        "finding_ids": [
+          "CTB-001"
+        ]
+      }
+    ]
+  },
+  "data_gaps": [
+    {
+      "id": "GAP-001",
+      "description": "Code-side token extraction used static parsing of GitHub raw files rather than runtime execution. Computed values (adjustAlpha(), rem() with complex expressions) may not be fully resolved.",
+      "reason": "scope_excluded",
+      "impact": "Some theme token values show as [ref:variableName] rather than resolved hex values. This likely deflates the token match count in the parity diff, understating actual value parity."
+    },
+    {
+      "id": "GAP-002",
+      "description": "Token diff matching relied primarily on colour value comparison rather than name-based matching. Non-colour tokens (spacing, typography, motion) had lower match rates due to different naming architectures.",
+      "reason": "not_auditable",
+      "impact": "The 6.3% overall match rate understates actual parity for colour tokens (where matching works well) and overstates the gap for non-colour tokens (where different naming makes matching hard)."
+    },
+    {
+      "id": "GAP-003",
+      "description": "MCP spot-check limited to 2 components (Button, Text Input). Token binding depth across all 2856 components was not assessed.",
+      "reason": "scope_excluded",
+      "affected_components": [
+        "All components except Button and Text Input"
+      ],
+      "impact": "Dimension 2.1 score based on 2-component sample. Actual binding coverage may be higher or lower."
+    },
+    {
+      "id": "GAP-004",
+      "description": "Carbon's Figma file includes AI-related collections (AI, AI presence, AI revert, AI Chat Modality, AI label, AI layer) that were not assessed as part of the core design system audit.",
+      "reason": "scope_excluded",
+      "impact": "AI-related tokens and components represent a significant portion of the file (121 AI variables, multiple AI component pages) but are newer additions that may follow different conventions."
+    }
+  ],
+  "config_ref": {
+    "path": "config/scoring-weights.json",
+    "version": "2.1"
+  }
+}

@@ -51,7 +51,7 @@ list, mini knowledge layer sketch) and continued in the thinking track.
 |---|---|---|---|
 | Releases 1.3--2.1 | Material UI | Figma community file + GitHub repo | Public, well-documented, known gaps between Figma and code |
 | Release 2.2 | Material UI (re-run) | Figma community file + GitHub repo | Fresh audit against updated schema; produces clean baseline for comparison |
-| Release 2.2 | Carbon or Ant Design (TBC) | Figma community file + GitHub repo | Second audit for benchmark/comparison screen data |
+| Release 2.2 | Carbon Design System v11 | Figma community file + GitHub repo | Second benchmark audit confirmed. Carbon scores 62.5/100 vs MUI 55.3/100. Scripts refactored to be system-agnostic. |
 | Release 2.3 | Public design system with Storybook | Figma + Storybook (no source repo) | Stress test against a less-maintained system; tests Storybook as evidence source |
 | Release 2.3 fallback | Nordea | Client Figma + code | If no public system is found, Nordea serves as both stress test and first client application |
 | Release 3.0 | Nordea | Client Figma + code | First client engagement. Adaptation sprint, not development sprint |

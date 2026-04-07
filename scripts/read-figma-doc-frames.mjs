@@ -1,24 +1,27 @@
 /**
  * read-figma-doc-frames.mjs
  *
- * Documentation frame reader for the MUI Figma community file.
+ * Documentation frame reader for Figma design system files.
  * Extracts structural metadata from component pages: component name,
  * category, description, sub-component inventory, variant axes,
  * property types, and composition structure.
  *
  * Feeds Cluster 3 dimension 3.5 (documentation frame metadata).
  *
- * The reader schema is adapted to the MUI Figma file's convention:
- *   - *Library / Component Heading (page-level metadata)
- *   - *Library / Component Information (sub-component metadata)
- *   - COMPONENT_SET / COMPONENT nodes (variant and property data)
+ * Supports multiple conventions:
+ *   - MUI: *Library / Component Heading + *Library / Component Information
+ *   - Generic: COMPONENT_SET / COMPONENT node extraction from any page
  *
  * Usage:
- *   FIGMA_ACCESS_TOKEN=xxx node scripts/read-figma-doc-frames.mjs
+ *   node scripts/read-figma-doc-frames.mjs [fileKey] [system]
+ *
+ * Arguments:
+ *   fileKey — Figma file key (default: MUI '0C5ShRQnETNce2CoupX1IJ')
+ *   system  — slug for the design system (default: 'mui')
  *
  * Output:
- *   scripts/output/mui-doc-frames.json
- *   audit/material-ui/v2.0/doc-frame-findings.json
+ *   scripts/output/{system}-doc-frames.json
+ *   audit/{system}/v2.2/doc-frame-findings.json
  */
 
 import { writeFileSync, mkdirSync } from 'node:fs';
@@ -28,7 +31,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
 
-const FILE_KEY = '0C5ShRQnETNce2CoupX1IJ';
+const FILE_KEY = process.argv[2] || '0C5ShRQnETNce2CoupX1IJ';
+const SYSTEM = process.argv[3] || 'mui';
 const TOKEN = process.env.FIGMA_ACCESS_TOKEN;
 if (!TOKEN) {
   console.error('FIGMA_ACCESS_TOKEN not set.');
@@ -82,19 +86,16 @@ function isPlaceholder(text) {
 }
 
 // ---------------------------------------------------------------------------
-// Component Heading parser
+// MUI-specific: Component Heading parser
 // ---------------------------------------------------------------------------
 
-function parseComponentHeading(headingNode) {
+function parseMuiComponentHeading(headingNode) {
   const texts = collectTexts(headingNode);
 
-  // The heading contains breadcrumb Parent/Child, Title, description, docs link, footer.
   const parentText = texts.find((t) => t.name === 'Parent');
   const childText = texts.find((t) => t.name === 'Child');
   const titleText = texts.find((t) => t.name === 'Title');
 
-  // The description is the long text that is not the title, not breadcrumbs,
-  // not the footer, and not the docs link.
   const skipNames = new Set(['Parent', 'Child', 'Title', 'body1', '© mui.com']);
   const descCandidate = texts.find(
     (t) =>
@@ -105,7 +106,6 @@ function parseComponentHeading(headingNode) {
       t.text.length > 20
   );
 
-  // Extract version from footer.
   const versionText = texts.find((t) => t.text.includes('MUI for Figma'));
   const versionMatch = versionText
     ? versionText.text.match(/v([\d.]+)/)
@@ -123,13 +123,12 @@ function parseComponentHeading(headingNode) {
 }
 
 // ---------------------------------------------------------------------------
-// Component Information parser
+// MUI-specific: Component Information parser
 // ---------------------------------------------------------------------------
 
-function parseComponentInfo(infoNode) {
+function parseMuiComponentInfo(infoNode) {
   const texts = collectTexts(infoNode);
 
-  // First meaningful text in the Heading frame is the component name.
   const headingFrame = infoNode.children
     ? infoNode.children.find((c) => c.name === 'Heading')
     : null;
@@ -138,27 +137,23 @@ function parseComponentInfo(infoNode) {
 
   if (headingFrame) {
     const headingTexts = collectTexts(headingFrame);
-    // Component name is typically the first text starting with < or a capitalised name.
     const nameText = headingTexts.find(
       (t) => t.name === 'Component' || t.text.startsWith('<') || t.text.startsWith('Card')
     );
     name = nameText ? nameText.text : null;
 
-    // Description is the longer text after the name.
     const descText = headingTexts.find(
       (t) => t !== nameText && t.text.length > 20
     );
     description = descText ? descText.text : null;
   }
 
-  // Properties: collect from the Properties frame.
   const propsFrame = infoNode.children
     ? infoNode.children.find((c) => c.name === 'Properties')
     : null;
   const propertyNames = [];
   if (propsFrame) {
     const propTexts = collectTexts(propsFrame);
-    // Property names are the non-generic texts (not "Secondary", "Property", "Properties").
     const skip = new Set(['Secondary', 'Property', 'Properties']);
     for (const t of propTexts) {
       if (!skip.has(t.text) && t.text.length > 1) {
@@ -176,7 +171,7 @@ function parseComponentInfo(infoNode) {
 }
 
 // ---------------------------------------------------------------------------
-// COMPONENT_SET / COMPONENT parser
+// Generic: COMPONENT_SET / COMPONENT parser (works for any system)
 // ---------------------------------------------------------------------------
 
 function parseComponentNode(node) {
@@ -187,7 +182,6 @@ function parseComponentNode(node) {
   const instanceSwapProps = [];
 
   for (const [key, def] of Object.entries(props)) {
-    // Strip the internal ID suffix (e.g. "Badge#9899:0" -> "Badge").
     const cleanName = key.replace(/#[\d:]+$/, '').replace(/[?↳ ]+$/, '').trim();
 
     switch (def.type) {
@@ -220,11 +214,79 @@ function parseComponentNode(node) {
   };
 }
 
+/** Recursively find the first COMPONENT_SET or angle-bracket COMPONENT in a subtree. */
+function findComponentNode(node) {
+  if (node.type === 'COMPONENT_SET') return node;
+  if (
+    node.type === 'COMPONENT' &&
+    node.name.startsWith('<')
+  ) {
+    return node;
+  }
+  if (node.children) {
+    for (const child of node.children) {
+      const found = findComponentNode(child);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+/** Recursively find ALL COMPONENT_SET nodes in a subtree. */
+function findAllComponentSets(node, results = []) {
+  if (node.type === 'COMPONENT_SET') {
+    results.push(node);
+    return results; // Don't recurse into component sets
+  }
+  if (node.children) {
+    for (const child of node.children) {
+      findAllComponentSets(child, results);
+    }
+  }
+  return results;
+}
+
 // ---------------------------------------------------------------------------
-// Page parser
+// Convention detection
 // ---------------------------------------------------------------------------
 
-function parsePage(pageNode) {
+/**
+ * Detect which documentation convention a page uses.
+ * Returns 'mui' if MUI-style frames are found, 'generic' otherwise.
+ */
+function detectConvention(pageNode) {
+  if (!pageNode.children) return 'generic';
+
+  for (const topFrame of pageNode.children) {
+    if (!topFrame.children) continue;
+    const hasHeading = topFrame.children.some((c) =>
+      c.name.includes('Component Heading')
+    );
+    const hasInfo = topFrame.children.some((c) =>
+      c.name.includes('Component Information')
+    );
+    if (hasHeading || hasInfo) return 'mui';
+
+    // Check nested grids too
+    const grid = topFrame.children.find((c) => c.name === 'Grid');
+    if (grid && grid.children) {
+      for (const section of grid.children) {
+        if (!section.children) continue;
+        const nestedInfo = section.children.some((c) =>
+          c.name.includes('Component Information')
+        );
+        if (nestedInfo) return 'mui';
+      }
+    }
+  }
+  return 'generic';
+}
+
+// ---------------------------------------------------------------------------
+// MUI page parser
+// ---------------------------------------------------------------------------
+
+function parseMuiPage(pageNode) {
   const result = {
     figmaPageId: pageNode.id,
     componentName: null,
@@ -240,7 +302,6 @@ function parsePage(pageNode) {
   if (!pageNode.children) return result;
 
   for (const topFrame of pageNode.children) {
-    // Identify example frames (name contains "examples" or starts with emoji).
     if (
       topFrame.name.includes('examples') ||
       topFrame.name.startsWith('▶️')
@@ -251,12 +312,11 @@ function parsePage(pageNode) {
 
     if (!topFrame.children) continue;
 
-    // Parse Component Heading.
     const heading = topFrame.children.find((c) =>
       c.name.includes('Component Heading')
     );
     if (heading) {
-      const headingData = parseComponentHeading(heading);
+      const headingData = parseMuiComponentHeading(heading);
       result.componentName = headingData.componentName;
       result.category = headingData.category;
       result.pageDescription = headingData.pageDescription;
@@ -265,7 +325,6 @@ function parsePage(pageNode) {
       result.version = headingData.version;
     }
 
-    // Parse Grid sections.
     const topGrid = topFrame.children.find((c) => c.name === 'Grid');
     if (!topGrid || !topGrid.children) continue;
 
@@ -286,12 +345,11 @@ function parsePage(pageNode) {
         documentedProperties: [],
       };
 
-      // Parse Component Information.
       const info = section.children.find((c) =>
         c.name.includes('Component Information')
       );
       if (info) {
-        const infoData = parseComponentInfo(info);
+        const infoData = parseMuiComponentInfo(info);
         subComponent.name = infoData.name;
         subComponent.description = infoData.description;
         subComponent.hasPlaceholderDescription =
@@ -299,7 +357,6 @@ function parsePage(pageNode) {
         subComponent.documentedProperties = infoData.documentedProperties;
       }
 
-      // Find the COMPONENT_SET or COMPONENT node.
       const compNode = findComponentNode(section);
       if (compNode) {
         subComponent.figmaNodeId = compNode.id;
@@ -311,19 +368,16 @@ function parsePage(pageNode) {
         subComponent.textProps = compData.textProps;
         subComponent.instanceSwapProps = compData.instanceSwapProps;
 
-        // If name was not found from Component Information, use the node name.
         if (!subComponent.name) {
           subComponent.name = compNode.name;
         }
       }
 
-      // Only add if we found something meaningful.
       if (subComponent.name || subComponent.figmaNodeId) {
         result.subComponents.push(subComponent);
       }
     }
 
-    // Composition notes for compound components (e.g. Card with multiple sub-components).
     if (result.subComponents.length > 2) {
       const subNames = result.subComponents.map((s) => s.name).filter(Boolean);
       result.compositionNotes = `Compound component with ${subNames.length} sub-components: ${subNames.join(', ')}`;
@@ -333,22 +387,103 @@ function parsePage(pageNode) {
   return result;
 }
 
-/** Recursively find the first COMPONENT_SET or angle-bracket COMPONENT in a subtree. */
-function findComponentNode(node) {
-  if (node.type === 'COMPONENT_SET') return node;
-  if (
-    node.type === 'COMPONENT' &&
-    node.name.startsWith('<')
-  ) {
-    return node;
+// ---------------------------------------------------------------------------
+// Generic page parser — extracts COMPONENT_SET nodes from any page structure
+// ---------------------------------------------------------------------------
+
+function parseGenericPage(pageNode) {
+  const result = {
+    figmaPageId: pageNode.id,
+    componentName: pageNode.name ? pageNode.name.trim() : null,
+    category: null,
+    pageDescription: null,
+    pageDescriptionIsPlaceholder: true,
+    version: null,
+    subComponents: [],
+    exampleFrames: [],
+    compositionNotes: null,
+    convention: 'generic',
+  };
+
+  if (!pageNode.children) return result;
+
+  // Extract any page-level text that looks like a description
+  const topTexts = collectTexts(pageNode).filter((t) => t.text.length > 30);
+  if (topTexts.length > 0) {
+    // Use the longest text as the page description
+    const longest = topTexts.sort((a, b) => b.text.length - a.text.length)[0];
+    result.pageDescription = longest.text;
+    result.pageDescriptionIsPlaceholder = isPlaceholder(longest.text);
   }
-  if (node.children) {
-    for (const child of node.children) {
-      const found = findComponentNode(child);
-      if (found) return found;
-    }
+
+  // Find all COMPONENT_SET nodes anywhere in the page
+  const componentSets = findAllComponentSets(pageNode);
+
+  for (const compNode of componentSets) {
+    const compData = parseComponentNode(compNode);
+    const subComponent = {
+      name: compNode.name,
+      description: compNode.description || null,
+      hasPlaceholderDescription: compNode.description
+        ? isPlaceholder(compNode.description)
+        : true,
+      figmaNodeId: compNode.id,
+      type: compData.type,
+      variantCount: compData.variantCount,
+      variantAxes: compData.variantAxes,
+      booleanProps: compData.booleanProps,
+      textProps: compData.textProps,
+      instanceSwapProps: compData.instanceSwapProps,
+      documentedProperties: [],
+    };
+
+    result.subComponents.push(subComponent);
   }
-  return null;
+
+  if (result.subComponents.length > 2) {
+    const subNames = result.subComponents.map((s) => s.name).filter(Boolean);
+    result.compositionNotes = `Compound component with ${subNames.length} sub-components: ${subNames.join(', ')}`;
+  }
+
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// Page identification — detect which pages contain components
+// ---------------------------------------------------------------------------
+
+/**
+ * Identify component pages from the file structure.
+ * MUI uses ❖ prefix. Other systems may use different conventions.
+ * Falls back to filtering out known non-component pages.
+ */
+function identifyComponentPages(pages) {
+  // Strategy 1: MUI convention — ❖ prefix
+  const muiPages = pages.filter((p) => p.name.trim().startsWith('❖'));
+  if (muiPages.length > 0) {
+    console.log(`Detected MUI page convention (❖ prefix): ${muiPages.length} pages`);
+    return { pages: muiPages, convention: 'mui_prefix' };
+  }
+
+  // Strategy 2: Filter out known non-component pages
+  const skipPatterns = [
+    /^cover$/i,
+    /^readme$/i,
+    /^changelog$/i,
+    /^getting started$/i,
+    /^_/,           // Internal/hidden pages
+    /^---/,         // Separator pages
+    /thumbnail/i,
+    /^index$/i,
+  ];
+
+  const componentPages = pages.filter((p) => {
+    const name = p.name.trim();
+    return !skipPatterns.some((pat) => pat.test(name));
+  });
+
+  console.log(`Using generic page identification: ${componentPages.length} of ${pages.length} pages (filtered ${pages.length - componentPages.length} non-component pages)`);
+  return { pages: componentPages, convention: 'generic' };
 }
 
 // ---------------------------------------------------------------------------
@@ -356,18 +491,16 @@ function findComponentNode(node) {
 // ---------------------------------------------------------------------------
 
 async function main() {
+  console.log(`Reading doc frames for ${SYSTEM} (file: ${FILE_KEY})...`);
   console.log('Fetching file structure...');
   const fileData = await figmaGet(`/files/${FILE_KEY}?depth=1`);
 
-  // Identify component pages (name starts with spaces + ❖).
-  const componentPages = fileData.document.children.filter((page) =>
-    page.name.trim().startsWith('❖')
-  );
+  const allPages = fileData.document.children;
+  const { pages: componentPages, convention: pageConvention } = identifyComponentPages(allPages);
 
-  console.log(`Found ${componentPages.length} component pages.`);
+  console.log(`Found ${componentPages.length} component pages (convention: ${pageConvention}).`);
 
   // Fetch all component pages at sufficient depth.
-  // Batch into groups to avoid URL length limits.
   const BATCH_SIZE = 3;
   const allPageData = {};
 
@@ -375,7 +508,7 @@ async function main() {
     const batch = componentPages.slice(i, i + BATCH_SIZE);
     const ids = batch.map((p) => p.id).join(',');
     console.log(
-      `Fetching batch ${Math.floor(i / BATCH_SIZE) + 1}: ${batch.map((p) => p.name.trim()).join(', ')}...`
+      `Fetching batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(componentPages.length / BATCH_SIZE)}: ${batch.map((p) => p.name.trim()).join(', ')}...`
     );
     const nodeData = await figmaGet(
       `/files/${FILE_KEY}/nodes?ids=${ids}&depth=12`
@@ -383,15 +516,26 @@ async function main() {
     Object.assign(allPageData, nodeData.nodes);
   }
 
-  // Parse each page.
+  // Parse each page using the appropriate convention.
   const components = [];
+  const conventionStats = { mui: 0, generic: 0 };
+
   for (const [pageId, pageNode] of Object.entries(allPageData)) {
-    const parsed = parsePage(pageNode.document);
+    const convention = detectConvention(pageNode.document);
+    conventionStats[convention]++;
+
+    const parsed = convention === 'mui'
+      ? parseMuiPage(pageNode.document)
+      : parseGenericPage(pageNode.document);
+
+    if (!parsed.convention) parsed.convention = convention;
     components.push(parsed);
     console.log(
-      `  ${parsed.componentName || pageId}: ${parsed.subComponents.length} sub-components`
+      `  [${convention}] ${parsed.componentName || pageId}: ${parsed.subComponents.length} sub-components`
     );
   }
+
+  console.log(`Convention breakdown: MUI=${conventionStats.mui}, Generic=${conventionStats.generic}`);
 
   // ---------------------------------------------------------------------------
   // Output: documentation frame metadata
@@ -402,21 +546,23 @@ async function main() {
       generatedAt: new Date().toISOString(),
       source: `Figma REST API /v1/files/${FILE_KEY}/nodes`,
       fileKey: FILE_KEY,
+      system: SYSTEM,
       description:
-        'Documentation frame metadata extracted from MUI Figma community file. Feeds Cluster 3 dimension 3.5.',
-      readerVersion: '1.0',
+        `Documentation frame metadata extracted from ${SYSTEM} Figma file. Feeds Cluster 3 dimension 3.5.`,
+      readerVersion: '2.0',
       totalPages: components.length,
       totalSubComponents: components.reduce(
         (sum, c) => sum + c.subComponents.length,
         0
       ),
+      conventionBreakdown: conventionStats,
     },
     components,
   };
 
   const outputDir = join(__dirname, 'output');
   mkdirSync(outputDir, { recursive: true });
-  const outputPath = join(outputDir, 'mui-doc-frames.json');
+  const outputPath = join(outputDir, `${SYSTEM}-doc-frames.json`);
   writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf-8');
 
   // ---------------------------------------------------------------------------
@@ -451,7 +597,7 @@ async function main() {
         : 'None missing',
     ],
     recommendation:
-      'Page-level descriptions from the *Library / Component Heading are the primary source of intent metadata readable from the Figma file. Replace placeholder text with functional descriptions.',
+      'Page-level descriptions are the primary source of intent metadata readable from the Figma file. Replace placeholder text with functional descriptions.',
     contract_ref: {
       type: 'documentation_contract',
       level: null,
@@ -474,7 +620,7 @@ async function main() {
     severity: subsWithDesc.length > allSubs.length * 0.5 ? 'warning' : 'blocker',
     node_id: null,
     node_name: null,
-    description: `${subsWithDesc.length} of ${allSubs.length} sub-component sections have a real description in *Library / Component Information. ${subsPlaceholder.length} have placeholder text.`,
+    description: `${subsWithDesc.length} of ${allSubs.length} sub-component sections have a real description. ${subsPlaceholder.length} have placeholder text or no description.`,
     evidence: [
       `Total sub-components: ${allSubs.length}`,
       `With real description: ${subsWithDesc.length}`,
@@ -482,7 +628,7 @@ async function main() {
       `Coverage: ${allSubs.length > 0 ? Math.round((subsWithDesc.length / allSubs.length) * 100) : 0}%`,
     ],
     recommendation:
-      'Sub-component descriptions in *Library / Component Information are placeholder lorem ipsum across almost all components. These should contain functional intent: when to use the sub-component, constraints, and expected behaviour.',
+      'Sub-component descriptions should contain functional intent: when to use the sub-component, constraints, and expected behaviour.',
     contract_ref: {
       type: 'documentation_contract',
       level: null,
@@ -505,7 +651,7 @@ async function main() {
     severity: 'note',
     node_id: null,
     node_name: null,
-    description: `Structural metadata is rich: ${totalVariants} total variants across ${allSubs.length} sub-components, with ${totalAxes} variant axes. This data is machine-readable and supports agent reasoning about component capabilities.`,
+    description: `Structural metadata: ${totalVariants} total variants across ${allSubs.length} sub-components, with ${totalAxes} variant axes. This data is machine-readable and supports agent reasoning about component capabilities.`,
     evidence: [
       `Sub-components: ${allSubs.length}`,
       `Total variants: ${totalVariants}`,
@@ -515,7 +661,7 @@ async function main() {
       `Instance swap props: ${allSubs.reduce((s, c) => s + c.instanceSwapProps.length, 0)}`,
     ],
     recommendation:
-      'The variant and property structure is well-defined and extractable. Use this as the structural backbone for AI agent reasoning. Pair with descriptions that carry intent.',
+      'The variant and property structure is well-defined and extractable. Pair with descriptions that carry intent.',
     contract_ref: null,
     auto_fixable: false,
   });
@@ -546,9 +692,10 @@ async function main() {
   const findingsOutput = {
     _meta: {
       generatedAt: new Date().toISOString(),
-      schema_version: '1.4',
+      schema_version: '2.2',
+      system: SYSTEM,
       description:
-        'Documentation frame metadata findings for MUI. Cluster 3 dimension 3.5. Generated by read-figma-doc-frames.mjs.',
+        `Documentation frame metadata findings for ${SYSTEM}. Cluster 3 dimension 3.5. Generated by read-figma-doc-frames.mjs.`,
     },
     summary: {
       total_findings: findings.length,
@@ -570,7 +717,7 @@ async function main() {
     findings,
   };
 
-  const findingsDir = join(repoRoot, 'audit', 'material-ui', 'v2.0');
+  const findingsDir = join(repoRoot, 'audit', SYSTEM === 'mui' ? 'material-ui' : SYSTEM, 'v2.2');
   mkdirSync(findingsDir, { recursive: true });
   const findingsPath = join(findingsDir, 'doc-frame-findings.json');
   writeFileSync(
@@ -584,7 +731,7 @@ async function main() {
   // ---------------------------------------------------------------------------
 
   console.log('');
-  console.log('=== Documentation Frame Reader ===');
+  console.log(`=== Documentation Frame Reader (${SYSTEM}) ===`);
   console.log(`Pages processed:     ${components.length}`);
   console.log(`Sub-components:      ${allSubs.length}`);
   console.log(`Total variants:      ${totalVariants}`);
