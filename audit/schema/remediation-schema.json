@@ -99,6 +99,12 @@
           "$comment": "relocate: docs exist externally but not co-located or declared. refactor: component sound but docs missing/thin. rebuild: component structurally poor, must rebuild before documenting."
         },
 
+        "action_type": {
+          "type": "string",
+          "enum": ["move", "rework", "create"],
+          "$comment": "Display vocabulary for client-facing copy. Maps from remediation_type: relocate→move, refactor→rework, rebuild→create. May diverge when a refactor action creates a new artefact (e.g. a register that does not yet exist). Every action description must start with the label: 'Move: ...', 'Rework: ...', 'Create: ...'. Never use synonyms (relocate, refactor, rebuild, migrate, restructure) in prose."
+        },
+
         "value_framing": {
           "type": "string",
           "$comment": "Optional. Operational consequence of not fixing this item."

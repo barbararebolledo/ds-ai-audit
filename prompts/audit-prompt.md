@@ -1,7 +1,7 @@
-# AI-Readiness Audit Prompt v3.1
+# AI-Readiness Audit Prompt v3.2
 
-Version: 3.1
-Date: 2026-04-08
+Version: 3.2
+Date: 2026-04-10
 Schema: `audit/schema/audit-schema.json` (v3.0), `audit/schema/remediation-schema.json` (v1.0), `audit/schema/editorial-schema.json` (v1.0)
 Weights: `config/scoring-weights.json`
 
@@ -249,6 +249,14 @@ patterns, or tokens inspected as evidence, (b) state what exists and what is
 missing, and (c) for a score of 1 ("partially addressed"), describe what
 "systematically addressed" would require to reach a score of 2. A narrative
 that says only "partially addressed" without naming evidence is insufficient.
+
+**Narrative format:** Structure every dimension narrative as "what should happen
+vs what does happen" -- state the ideal condition first, then describe the
+current gap. Example: "Component descriptions should carry functional intent --
+what a component does, when to use it, and what to expect. Current descriptions
+are code import snippets that carry no intent, requiring a human to specify
+context on every AI-driven component selection." Register three is in effect:
+domain terms expected. Name specific artefacts, counts, and evidence.
 
 For dimensions with sub-checks, record each sub-check score in the
 `sub_check_scores` field.
@@ -699,7 +707,7 @@ Required fields in `meta`:
 - `audit_id`: format `{target}-v3.0-{YYYY-MM-DD}`
 - `timestamp`: ISO 8601 UTC, when the audit completed
 - `auditor`: "Claude Code via Figma REST API + MCP"
-- `prompt_version`: "3.0"
+- `prompt_version`: "3.2"
 - `git_tag`: the release tag that produced this output
 - `target_system`: name of the design system being audited
 - `figma_files`: keyed by library role, with file_key and file_name
@@ -728,7 +736,7 @@ Required fields in each DimensionEntry:
 - `score`: 0-4 integer or null
 - `score_max`: 4 (standard) or 2 (Tier 2 craft)
 - `severity`: derived from thresholds and override rule, or null
-- `narrative`: prose summary
+- `narrative`: prose summary. Structure as "what should happen vs what does happen": state the ideal first, then the current gap. Register three -- name specific artefacts as evidence.
 - `evidence_sources`: array of data sources
 - `finding_ids`: array of finding IDs. Use full prefixed keys matching the
   dimension keys in the clusters object (e.g. `1.1_token_implementation`,
@@ -769,6 +777,12 @@ Each RemediationItem must have:
 - `ownership` (string, required: design/engineering/both)
 - `priority_tier` (integer, required: 1/2/3)
 - `remediation_type` (string, required: relocate/refactor/rebuild)
+- `action_type` (string, required: move/rework/create) — display label for
+  client-facing copy. Lowercase. Maps from remediation_type: relocate→move,
+  refactor→rework, rebuild→create. May diverge when a refactor action creates
+  a new artefact (e.g. a register that does not yet exist → create). Every
+  `action` field must start with the label: "Move: ...", "Rework: ...",
+  "Create: ...".
 
 Optional fields:
 - `value_framing` (string): one to two sentences on the operational consequence
@@ -791,18 +805,36 @@ Required fields in `meta`:
 Pre-populate the following sections from the audit output:
 
 `report`:
-- `executive_summary`: two to three sentences summarising overall score, phase
-  readiness, and the single most important action. Write this as client-facing
-  prose, not technical summary.
+- `executive_summary`: one sentence. Register one: human experience framing,
+  no domain terms. Name the team consequence, not the technical gap. The score
+  number is already visible -- this sentence says what it means for the team.
+  Example: "MUI has strong component foundations but one structural gap means
+  AI tools cannot select the right component without a human reviewing every
+  choice." Not: "A co-location gap means Figma component descriptions lack
+  functional intent and block AI readiness." Banned at this register: co-location,
+  alias chain, token architecture, variant, primitive, semantic layer, component
+  binding, and any term requiring design-system knowledge to parse.
+- `methodology_note`: two to three sentences. Register two: cause and effect,
+  no jargon. Explain what the audit measures and how, for a reader who has not
+  seen it before. Example: "This audit checks whether the design system can
+  explain itself to an AI agent without human intervention. It scores 56
+  dimensions across seven clusters using Figma and code evidence. A higher
+  score means less manual correction when AI tools generate or select UI."
 
 `clusters`: for each scored cluster, populate:
 - `narrative`: the `cluster_summary` value from the audit JSON
-- `value_framing`: one sentence on what this cluster's current state means
-  operationally for the client. Draw from the impact model category definitions
-  below (see Impact model guidance).
+- `value_framing`: one sentence. Register one: no domain terms. Describe the
+  team consequence in terms of visible output, manual work, or team time --
+  not in terms of architecture or tooling. Example: "Colour theming updates
+  automatically, but spacing and typography changes still require manual work
+  across every component." Not: "Token architecture gaps mean spacing and
+  typography cannot propagate changes automatically." Draw from the impact
+  model category definitions below (see Impact model guidance) for causal
+  language; translate to register one.
 
 `dimensions`: for each scored dimension, populate:
-- `narrative`: the `narrative` value from the audit JSON
+- `narrative`: the `narrative` value from the audit JSON (already structured
+  as "what should happen vs what does happen" per Phase 2 requirements)
 
 `findings`: for each finding with severity blocker or warning, populate:
 - `summary`: the `summary` value from the audit JSON
@@ -813,10 +845,62 @@ Pre-populate the following sections from the audit output:
 - `action`: the `action` value from the remediation JSON
 - `value_framing`: the `value_framing` value from the remediation JSON
 
-All pre-populated fields are drafts. A human editor reviews and rewrites any
-field that needs client-facing polish. The front-end merge logic is unchanged:
-it prefers editorial content over audit content when present, and falls back
-to audit JSON content when a field is absent.
+All pre-populated fields are drafts. A human editor (Eeva) will do a polish
+pass on copy later, but the structural framing and vocabulary must be correct
+from the engine. The front-end merge logic is unchanged: it prefers editorial
+content over audit content when present, and falls back to audit JSON content
+when a field is absent.
+
+### Editorial copy register rules
+
+Every prose field in the editorial JSON has an assigned register. Follow these
+rules when pre-populating. The register determines vocabulary, length, and
+framing -- not how much effort to put in.
+
+**Three registers:**
+
+| Register | Fields | Length | Rule |
+|---|---|---|---|
+| One | `executive_summary`, `cluster.value_framing` | One sentence | Human experience. No domain terms. |
+| Two | `methodology_note`, `cluster.narrative` | Two sentences | Cause and effect. What the reader would observe, not what it is called. |
+| Three | `dimension.narrative`, finding summaries, action descriptions | As needed | Domain terms expected. Evidence named by artefact. |
+
+**Domain terms banned at registers one and two:** co-location, alias chain,
+token architecture, variant, primitive, semantic layer, component binding,
+remediation type, and any other term requiring design-system knowledge to
+parse. If a concept has a technical name, describe what the reader would see
+or experience instead.
+
+**Register one writing rule:** Start from the human experience. Name the team
+consequence, not the technical gap. "Colour theming updates automatically,
+but spacing and typography changes still require manual work across every
+component." -- not "Token architecture gaps mean spacing and typography cannot
+propagate theme changes automatically."
+
+**Register two writing rule:** State what should happen (the ideal), then what
+does happen (the gap). Two sentences. "Theme changes should require updating
+one file. Right now, changing spacing or typography requires editing every
+component that references those values."
+
+**Action vocabulary** -- three labels only, never swapped for synonyms:
+
+| Label | Meaning | Effort |
+|---|---|---|
+| Move | Content exists in the wrong place | Lightest |
+| Rework | Content exists but needs restructuring or completing | Medium |
+| Create | Content does not exist, must be authored | Heaviest |
+
+Rules:
+- Every `action` field must start with the label: "Move: [description]",
+  "Rework: [description]", "Create: [description]".
+- Never use in prose: relocate, refactor, rebuild, migrate, transfer,
+  restructure, or any synonym of the three labels.
+- Set `action_type` to the matching lowercase label. Derive from the action
+  content -- do not copy mechanically from `remediation_type`. A "refactor"
+  `remediation_type` that creates a new artefact (a register, a doc, a file
+  that does not yet exist) uses `action_type: "create"`.
+
+---
 
 ### Editable Markdown template
 
@@ -949,6 +1033,31 @@ retain that prefix for continuity; new findings in Dimension 8 use `PRG-`.
 ---
 
 ## Changelog
+
+### v3.2 (2026-04-10)
+
+- **`action_type` field added to RemediationItem.** Required field with enum
+  `move | rework | create`. Maps from `remediation_type` (relocate→move,
+  refactor→rework, rebuild→create) but may diverge when a refactor action
+  creates a new artefact. Every `action` description must start with the label.
+  Schema updated: `remediation-schema.json` now defines the `action_type` property.
+- **Action vocabulary locked.** Three labels only: Move, Rework, Create. Never
+  synonyms (relocate, refactor, rebuild, migrate, restructure) in prose.
+- **Editorial copy register rules added.** New prompt section defines three
+  registers with specific rules for vocabulary, length, and framing. Enforces
+  that domain terms do not appear at registers one or two.
+- **`executive_summary` respecified.** One sentence, register one (human
+  experience, no domain terms). Previously: two to three sentences.
+- **`methodology_note` now pre-populated.** Two to three sentences, register
+  two. Previously not generated.
+- **`cluster.value_framing` respecified.** Register one (no domain terms).
+  Previously: "one sentence operationally". Domain term examples added showing
+  what not to write.
+- **Narrative format made explicit.** All dimension narratives must follow
+  "what should happen vs what does happen" structure. Added to Phase 2 Step 2.2
+  and to the DimensionEntry `narrative` field description.
+- **`prompt_version` corrected.** Now "3.2". (v3.1 bumped the version in the
+  changelog but not in the meta field instruction -- fixed here.)
 
 ### v3.1 (2026-04-08)
 
