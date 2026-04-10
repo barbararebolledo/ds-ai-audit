@@ -1,0 +1,300 @@
+{
+  "meta": {
+    "audit_id": "carbon-v3.2-2026-04-10",
+    "system_name": "Carbon Design System",
+    "schema_version": "1.0",
+    "generated_at": "2026-04-10T00:00:00Z"
+  },
+  "items": [
+    {
+      "id": "REM-004",
+      "action": "Create: Build a Motion variable collection in Figma with duration and easing tokens matching the code definitions (fast01: 70ms, fast02: 110ms, moderate01: 150ms, moderate02: 240ms, slow01: 400ms, slow02: 700ms). Alternatively, create a documentation page in the Figma file declaring the code-side motion token values and linking to packages/motion.",
+      "action_type": "create",
+      "affected_cluster": "4_design_quality_baseline",
+      "affected_dimensions": [
+        "4.7_motion_duration_ranges",
+        "4.8_motion_easing"
+      ],
+      "effort_estimate": "hours",
+      "ownership": "design",
+      "priority_tier": 1,
+      "remediation_type": "relocate",
+      "value_framing": "Motion specifications exist in code but are invisible from Figma. An agent building from Figma alone will produce static components with no motion guidance, requiring post-generation correction on every animated interaction.",
+      "impact_categories": [
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "4.7: 0→2 (+50), 4.8: 2→3 (+25). Cluster 4: 76.9→80.8. Overall: +0.4 points.",
+      "finding_ids": [
+        "MOT-001",
+        "MOT-002"
+      ]
+    },
+    {
+      "id": "REM-001",
+      "action": "Move: Port functional intent descriptions from code-side MDX overview paragraphs to Figma COMPONENT_SET root entries for all 45 primary components. Start with the 10 most-used components (Button, Data Table, Dropdown, Text Input, Accordion, Modal, Notification, Tabs, Checkbox, Toggle).",
+      "action_type": "move",
+      "affected_cluster": "3_documentation_readiness",
+      "affected_dimensions": [
+        "3.1_component_description_coverage",
+        "3.3_intent_quality",
+        "3.5_documentation_frame_metadata"
+      ],
+      "effort_estimate": "days",
+      "ownership": "design",
+      "priority_tier": 1,
+      "remediation_type": "relocate",
+      "value_framing": "Without component descriptions, an AI agent cannot determine component purpose from the Figma API. Every agent interaction requires manual lookup, adding correction cycles to every design-to-code handoff.",
+      "impact_categories": [
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "3.1: 0→3 (+75), 3.3: 2→3 (+25), 3.5: 1→2 (+25). Cluster 3: 45.0→65.0. Overall: +5.0 points.",
+      "finding_ids": [
+        "CDC-001",
+        "IQ-001",
+        "DFM-001"
+      ]
+    },
+    {
+      "id": "REM-002",
+      "action": "Create: Write descriptions for Figma variable definitions, prioritising Theme semantics (548 vars) and Colors primitives (135 vars). At minimum, add collection-level descriptions and descriptions for the 20 most-consumed semantic tokens (text-primary, background, layer-01, support-error, interactive, border-strong, etc.).",
+      "action_type": "create",
+      "affected_cluster": "1_token_and_variable_system",
+      "affected_dimensions": [
+        "1.6_token_documentation"
+      ],
+      "effort_estimate": "days",
+      "ownership": "design",
+      "priority_tier": 1,
+      "remediation_type": "refactor",
+      "value_framing": "Without token descriptions, an AI agent cannot distinguish tokens by purpose. Token selection errors propagate to every component generated, requiring theme rework on each affected component.",
+      "impact_categories": [
+        "theme_rework",
+        "token_efficiency"
+      ],
+      "projected_score_improvement": "1.6: 0→2 (+50). Cluster 1: 58.3→66.7. Overall: +2.1 points.",
+      "finding_ids": [
+        "TD-001"
+      ]
+    },
+    {
+      "id": "REM-003",
+      "action": "Create: Build a parity gap register as a structured JSON file documenting: (1) known architectural differences between Figma mode-based variables and code flat JS exports, (2) intentional omissions (motion in code only, grid styles in Figma only), (3) naming convention mapping (Figma slash-paths to code camelCase/kebab-case).",
+      "action_type": "create",
+      "affected_cluster": "6_design_to_code_parity",
+      "affected_dimensions": [
+        "6.6_documentation_of_parity_gaps",
+        "6.1_token_value_parity",
+        "6.2_token_naming_parity"
+      ],
+      "effort_estimate": "days",
+      "ownership": "both",
+      "priority_tier": 1,
+      "remediation_type": "refactor",
+      "value_framing": "Without a gap register, automated drift detection generates false positives on 1682 tokens. Every parity check requires manual triage, blocking CI/CD integration of token sync tooling.",
+      "impact_categories": [
+        "parity_defects"
+      ],
+      "projected_score_improvement": "6.6: 0→3 (+75). Cluster 6: 54.2→66.7. Overall: +1.5 points.",
+      "finding_ids": [
+        "DPG-001",
+        "TVP-001",
+        "TVP-002"
+      ]
+    },
+    {
+      "id": "REM-005",
+      "action": "Rework: Add YAML frontmatter to MDX documentation files with structured fields: component_name, purpose, category, status, related_components. Apply to all 126 component MDX files. Auto-fixable with a script.",
+      "action_type": "rework",
+      "affected_cluster": "3_documentation_readiness",
+      "affected_dimensions": [
+        "3.2_documentation_structure_machine_readability"
+      ],
+      "effort_estimate": "hours",
+      "ownership": "engineering",
+      "priority_tier": 2,
+      "remediation_type": "refactor",
+      "value_framing": "Without structured metadata, an agent must parse prose to extract component purpose and status. Frontmatter enables instant structured lookup, reducing per-component context processing.",
+      "impact_categories": [
+        "correction_cycles",
+        "token_efficiency"
+      ],
+      "projected_score_improvement": "3.2: 2→3 (+25). Cluster 3: 45.0→48.8. Overall: +0.9 points.",
+      "finding_ids": [
+        "DS-001"
+      ]
+    },
+    {
+      "id": "REM-006",
+      "action": "Create: Build a naming convention mapping as a structured JSON file documenting Figma slash-separated paths and their code camelCase/kebab-case equivalents. This enables automated parity checking without value-based fallback.",
+      "action_type": "create",
+      "affected_cluster": "6_design_to_code_parity",
+      "affected_dimensions": [
+        "6.2_token_naming_parity",
+        "5.1_naming_convention_consistency"
+      ],
+      "effort_estimate": "hours",
+      "ownership": "engineering",
+      "priority_tier": 2,
+      "remediation_type": "refactor",
+      "value_framing": "Without a naming map, every token parity check must fall back to value matching. Name-based matching is faster, more reliable, and catches value drift that value-only matching misses.",
+      "impact_categories": [
+        "parity_defects"
+      ],
+      "projected_score_improvement": "6.2: 2→3 (+25). Overall: +0.2 points.",
+      "finding_ids": [
+        "TVP-002",
+        "NC-001"
+      ]
+    },
+    {
+      "id": "REM-010",
+      "action": "Rework: Add Error handling and Edge cases sections to the 10 most-used component MDX files (Button, Data Table, Dropdown, Text Input, Accordion, Modal, Notification, Form, Select, Tabs). This completes levels 5 and 6 of the documentation hierarchy.",
+      "action_type": "rework",
+      "affected_cluster": "3_documentation_readiness",
+      "affected_dimensions": [
+        "3.3_intent_quality"
+      ],
+      "effort_estimate": "days",
+      "ownership": "both",
+      "priority_tier": 2,
+      "remediation_type": "refactor",
+      "value_framing": "Missing error handling and edge case documentation means agents produce components that work for happy paths but fail on boundary conditions. Each edge case failure requires a correction cycle.",
+      "impact_categories": [
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "3.3: 2→3 (+25). Cluster 3: 45.0→52.5. Overall: +1.9 points.",
+      "finding_ids": [
+        "IQ-001"
+      ]
+    },
+    {
+      "id": "REM-007",
+      "action": "Create: Publish tokens in DTCG (Design Token Community Group) format alongside the existing JS exports. This enables standard tooling interop (Style Dictionary, token transformers) without replacing the JS-primary workflow.",
+      "action_type": "create",
+      "affected_cluster": "1_token_and_variable_system",
+      "affected_dimensions": [
+        "1.5_token_format_machine_readability"
+      ],
+      "effort_estimate": "weeks",
+      "ownership": "engineering",
+      "priority_tier": 2,
+      "remediation_type": "refactor",
+      "value_framing": "Custom JS token format requires Carbon-specific extraction logic. DTCG format would enable any standard token tool to consume Carbon tokens without custom parsing, reducing integration effort for downstream teams.",
+      "impact_categories": [
+        "token_efficiency"
+      ],
+      "projected_score_improvement": "1.5: 2→3 (+25). Cluster 1: 58.3→60.8. Overall: +0.6 points.",
+      "finding_ids": [
+        "TF-001"
+      ]
+    },
+    {
+      "id": "REM-008",
+      "action": "Rework: Update code-side component tokens (packages/themes/src/component-tokens/) to alias semantic theme tokens instead of hardcoding hex values. This completes the three-layer alias chain in code, matching the Figma architecture.",
+      "action_type": "rework",
+      "affected_cluster": "1_token_and_variable_system",
+      "affected_dimensions": [
+        "1.2_alias_chain_integrity",
+        "1.3_token_architecture_depth"
+      ],
+      "effort_estimate": "weeks",
+      "ownership": "engineering",
+      "priority_tier": 2,
+      "remediation_type": "refactor",
+      "value_framing": "Broken alias chain at the component level means an agent following token references from component to primitive hits a dead end in code. Theme changes require manual hex updates in component-tokens/ instead of cascading automatically.",
+      "impact_categories": [
+        "theme_rework"
+      ],
+      "projected_score_improvement": "1.2: 2→3 (+25), 1.3: 3→4 (+25). Cluster 1: 58.3→66.7. Overall: +2.1 points.",
+      "finding_ids": [
+        "AC-001",
+        "TA-001"
+      ]
+    },
+    {
+      "id": "REM-009",
+      "action": "Rework: Audit all components for token binding completeness. Use Text Input/Accordion binding depth as the target standard (colour + typography + spacing + contextual layer). Prioritise the 10 most-used interactive components.",
+      "action_type": "rework",
+      "affected_cluster": "2_component_quality",
+      "affected_dimensions": [
+        "2.1_component_to_token_binding"
+      ],
+      "effort_estimate": "weeks",
+      "ownership": "design",
+      "priority_tier": 2,
+      "remediation_type": "refactor",
+      "value_framing": "Inconsistent token binding means an agent generates theme-aware code for some components but hardcoded values for others. This creates per-component rework when switching themes.",
+      "impact_categories": [
+        "theme_rework",
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "2.1: 2→3 (+25). Cluster 2: 81.2→87.5. Overall: +0.9 points.",
+      "finding_ids": [
+        "CTB-001"
+      ]
+    },
+    {
+      "id": "REM-011",
+      "action": "Create: Build empty state variants for data-dependent components (Data Table, Dropdown, List, Contained List) or create a reusable EmptyState component pattern with documentation on when and how to use it.",
+      "action_type": "create",
+      "affected_cluster": "4_design_quality_baseline",
+      "affected_dimensions": [
+        "4.12_empty_state_coverage"
+      ],
+      "effort_estimate": "weeks",
+      "ownership": "design",
+      "priority_tier": 3,
+      "remediation_type": "rebuild",
+      "value_framing": "Without empty state patterns, every data-dependent view requires custom empty state design. This is a design quality gap that affects end-user experience and adds design debt to every consuming team.",
+      "impact_categories": [
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "4.12: 0→2 (+50). Cluster 4: 76.9→78.8. Overall: +0.2 points.",
+      "finding_ids": [
+        "ES-001"
+      ]
+    },
+    {
+      "id": "REM-012",
+      "action": "Create: Add skeleton/loading state variants to async-capable components (Data Table, Dropdown, Select) or document that the Loading component should be used as a wrapper pattern for these cases.",
+      "action_type": "create",
+      "affected_cluster": "4_design_quality_baseline",
+      "affected_dimensions": [
+        "4.11_loading_state_coverage"
+      ],
+      "effort_estimate": "weeks",
+      "ownership": "design",
+      "priority_tier": 3,
+      "remediation_type": "refactor",
+      "value_framing": "Inconsistent loading patterns mean agents must decide per-component whether to use a dedicated skeleton or a wrapper Loading component. Documented patterns eliminate this ambiguity.",
+      "impact_categories": [
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "4.11: 2→3 (+25). Cluster 4: 76.9→77.8. Overall: +0.1 points.",
+      "finding_ids": [
+        "LS-001"
+      ]
+    },
+    {
+      "id": "REM-013",
+      "action": "Rework: Standardise typography binding in Figma -- choose either individual variable bindings or composite text styles as the canonical approach, and apply consistently across all components. Document the chosen approach.",
+      "action_type": "rework",
+      "affected_cluster": "4_design_quality_baseline",
+      "affected_dimensions": [
+        "4.4_type_completeness"
+      ],
+      "effort_estimate": "weeks",
+      "ownership": "design",
+      "priority_tier": 3,
+      "remediation_type": "refactor",
+      "value_framing": "Inconsistent typography binding means an agent extracting type styles gets different data shapes from different components. Standardisation enables reliable automated typography extraction.",
+      "impact_categories": [
+        "correction_cycles"
+      ],
+      "projected_score_improvement": "4.4: 2→3 (+25). Cluster 4: 76.9→77.8. Overall: +0.1 points.",
+      "finding_ids": [
+        "TC-001"
+      ]
+    }
+  ]
+}

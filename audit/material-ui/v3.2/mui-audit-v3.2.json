@@ -1,0 +1,1017 @@
+{
+  "meta": {
+    "schema_version": "3.0",
+    "system_name": "Material UI",
+    "audit_date": "2026-04-10",
+    "run_id": "3f8a1c2d-9b4e-47a6-b1c5-8d2e7f3a0b91",
+    "audit_id": "material-ui-v3.2-2026-04-10",
+    "timestamp": "2026-04-10T00:00:00Z",
+    "auditor": "Claude Code via Figma REST API + MCP (get_variable_defs) + GitHub raw file inspection + cached token diff + cached doc frames",
+    "prompt_version": "3.2",
+    "git_tag": "v3.2",
+    "target_system": "Material UI for Figma (Community) + GitHub repo mui/material-ui",
+    "figma_files": {
+      "component": {
+        "file_key": "0C5ShRQnETNce2CoupX1IJ",
+        "file_version": "2336732980966601131",
+        "file_name": "Material UI for Figma"
+      }
+    },
+    "evidence_sources": [
+      "Figma REST API (file structure, components, styles, variables/local) -- cached from 2026-04-07, unchanged",
+      "MCP get_variable_defs spot-check (Button, Checkbox, TextField, Card, Avatar, Alert component sets)",
+      "Token parity diff (scripts/output/mui-token-diff.json, refreshed 2026-04-06)",
+      "Documentation frame reader (scripts/output/mui-doc-frames.json, refreshed 2026-04-06)",
+      "MUI GitHub repo raw file inspection (packages/mui-material/src/, docs/data/material/components/, test/)",
+      "MUI GitHub repo governance files (CONTRIBUTING.md, CHANGELOG.md, .eslintrc.js, .prettierrc.js, .github/)",
+      "MUI docs site (mui.com/material-ui/) -- component pages, accessibility sections, API docs"
+    ]
+  },
+  "summary": {
+    "overall_score": 63.6,
+    "phase_readiness": "not_ready",
+    "phase_readiness_detail": {
+      "blocking_dimensions": [
+        "1.6_token_documentation",
+        "3.1_component_description_coverage",
+        "4.12_empty_state_coverage",
+        "6.6_documentation_of_parity_gaps"
+      ],
+      "warning_dimensions": [
+        "1.2_alias_chain_integrity",
+        "1.3_token_architecture_depth",
+        "2.1_component_to_token_binding",
+        "3.3_intent_quality",
+        "3.4_usage_guidance_formalisation",
+        "3.5_documentation_frame_metadata",
+        "4.4_type_completeness",
+        "4.7_motion_duration_ranges",
+        "4.8_motion_easing",
+        "4.11_loading_state_coverage",
+        "4.24_error_recovery",
+        "4.25_help_and_documentation",
+        "4.26_visual_hierarchy",
+        "4.27_visual_rhythm_and_proportion",
+        "5.4_deprecation_patterns",
+        "6.5_behaviour_parity"
+      ],
+      "conditions_for_advancement": [
+        "Resolve CDC-001: port functional intent descriptions from code MDX docs to Figma component set root entries -- currently 96.2% of 370 Figma descriptions are code import snippets with zero functional intent",
+        "Resolve TD-001: add descriptions to token variables -- currently 81.6% of 532 variables have no description, and existing descriptions are mechanical ('Reflects the X variable from the theme object')",
+        "Resolve ES-001: create empty state patterns or components for data-dependent views -- no empty state coverage exists in the system",
+        "Resolve DPG-001: create a parity gap register documenting the 7 known token value mismatches, 125 code-only tokens, and 123 Figma-only tokens"
+      ]
+    },
+    "top_blockers": [
+      "CDC-001",
+      "TD-001",
+      "DPG-001"
+    ],
+    "blocker_count": 4,
+    "dimension_scores": {
+      "0.1_platform_architecture_clarity": 75,
+      "1.1_token_implementation": 75,
+      "1.2_alias_chain_integrity": 50,
+      "1.3_token_architecture_depth": 50,
+      "1.4_primitive_naming": 75,
+      "1.5_token_format_machine_readability": 75,
+      "1.6_token_documentation": 25,
+      "2.1_component_to_token_binding": 50,
+      "2.2_component_api_composability": 100,
+      "2.3_variant_completeness": 100,
+      "2.4_escape_hatch_usage": 75,
+      "3.1_component_description_coverage": 25,
+      "3.2_documentation_structure_machine_readability": 75,
+      "3.3_intent_quality": 50,
+      "3.4_usage_guidance_formalisation": 50,
+      "3.5_documentation_frame_metadata": 50,
+      "4.1_interaction_targets": 75,
+      "4.2_contrast_ratios": 75,
+      "4.3_type_scale_consistency": 75,
+      "4.4_type_completeness": 50,
+      "4.5_spacing_scale_regularity": 100,
+      "4.6_grid_and_layout_system": 75,
+      "4.7_motion_duration_ranges": 50,
+      "4.8_motion_easing": 50,
+      "4.9_focus_state_presence": 75,
+      "4.10_error_state_coverage": 75,
+      "4.11_loading_state_coverage": 50,
+      "4.12_empty_state_coverage": 0,
+      "4.13_colour_system_structure": 100,
+      "4.14_icon_sizing_consistency": 75,
+      "4.15_elevation_shadow_system": 75,
+      "4.16_visibility_of_system_status": 100,
+      "4.17_match_between_system_and_real_world": 100,
+      "4.18_user_control_and_freedom": 100,
+      "4.19_consistency_and_standards": 100,
+      "4.20_error_prevention": 100,
+      "4.21_recognition_rather_than_recall": 100,
+      "4.22_flexibility_and_efficiency": 100,
+      "4.23_aesthetic_and_minimalist_design": 100,
+      "4.24_error_recovery": 50,
+      "4.25_help_and_documentation": 50,
+      "4.26_visual_hierarchy": 50,
+      "4.27_visual_rhythm_and_proportion": 50,
+      "5.1_naming_convention_consistency": 75,
+      "5.2_versioning_and_changelog_discipline": 75,
+      "5.3_contribution_standards": 75,
+      "5.4_deprecation_patterns": 50,
+      "5.5_test_coverage": 75,
+      "5.6_adoption_visibility": 75,
+      "5.7_code_consistency_and_pattern_predictability": 75,
+      "6.1_token_value_parity": 75,
+      "6.2_token_naming_parity": 100,
+      "6.3_component_naming_parity": 75,
+      "6.4_variant_and_state_coverage_parity": 75,
+      "6.5_behaviour_parity": 50,
+      "6.6_documentation_of_parity_gaps": 0
+    },
+    "cluster_scores": {
+      "0_prerequisites": 75.0,
+      "1_token_and_variable_system": 58.3,
+      "2_component_quality": 81.2,
+      "3_documentation_readiness": 50.0,
+      "4_design_quality_baseline": 74.1,
+      "5_governance_and_ecosystem": 71.4,
+      "6_design_to_code_parity": 62.5
+    },
+    "dimensions_scored": 56,
+    "dimensions_total": 56,
+    "dimensions_null": 0,
+    "component_count": 1034
+  },
+  "clusters": {
+    "0_prerequisites": {
+      "cluster_name": "Prerequisites",
+      "cluster_summary": "Platform architecture is documented and discoverable from code evidence, meeting the minimum threshold for downstream cluster validity.",
+      "cluster_score": 75.0,
+      "dimensions": {
+        "0.1_platform_architecture_clarity": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Platform architecture should be explicitly documented as a single queryable source so an AI agent can determine scope, constraints, and conventions without inference. MUI achieves this to a high degree: the system is documented as web-primary, docs site frontmatter establishes Material Design and WCAG linkages, and the codebase structure is legible from repository conventions. Minor gap: no machine-readable manifest declares platform boundaries; the architecture is discoverable from code evidence but not declared as a structured, queryable artefact.",
+          "evidence_sources": ["Figma REST API", "MUI GitHub repo", "MUI docs site"],
+          "finding_ids": []
+        }
+      }
+    },
+    "1_token_and_variable_system": {
+      "cluster_name": "Token and Variable System",
+      "cluster_summary": "Colour tokens are fully implemented as Figma Variables with alias chains. Non-colour categories (spacing, typography) lack semantic and component layers, and 81.6% of variables have no descriptions.",
+      "cluster_score": 58.3,
+      "dimensions": {
+        "1.1_token_implementation": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "All design properties should be implemented as Figma Variables so an agent can resolve them from the file without reading CSS or code. Colour is fully tokenised: 532 variables across 5 collections including palette (195 vars, 2 modes) and material/colors primitives (262 vars). Non-colour categories are partially implemented: spacing has 20 Variables and typography has partial coverage, but elevation relies on effect styles that cannot be aliased or mode-switched.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "sub_check_scores": {"1a": 4, "1b": 3, "1c": 3, "1d": 2},
+          "finding_ids": ["TI-001"]
+        },
+        "1.2_alias_chain_integrity": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Token alias chains should traverse three layers -- primitive to semantic to component -- so that a single token change propagates correctly to every affected property. Only 125 of 767 variable values (16.3%) are aliases; 642 are direct values. Colour has a one-hop alias chain (palette -> material/colors), but spacing, breakpoints, shape, and most typography have no aliasing at all. Multi-theme support and contextual overrides are blocked for all non-colour categories.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "sub_check_scores": {"2a": 3, "2b": 2, "2c": 1},
+          "finding_ids": ["AC-001"]
+        },
+        "1.3_token_architecture_depth": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "A mature token system requires all three layers -- primitive, semantic, and component -- for every property category so theme changes propagate automatically and component-level overrides are possible. MUI has this architecture for colour only: material/colors (primitive), palette (semantic), _components/* (component). Non-colour categories stop at the primitive layer in Figma: spacing has 20 direct primitives, typography has partial semantic coverage, and no component-level tokens exist for non-colour categories.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "sub_check_scores": {"3a": 4, "3b": 3, "3c": 2, "3d": 1},
+          "finding_ids": ["TA-001"]
+        },
+        "1.4_primitive_naming": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Primitive token names should follow a consistent, machine-parseable convention using full words and slash separators so an agent can parse the taxonomy without documentation. 91% of MUI variables (486/532) meet this standard: palette/primary/main, material/colors/blue/500, and _components/alert/color follow the convention consistently. The 9% exception is typography collection variables using dot-style paths, which are inconsistent with the slash convention used everywhere else.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "sub_check_scores": {"4a": 4, "4b": 3, "4c": 3},
+          "finding_ids": []
+        },
+        "1.5_token_format_machine_readability": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Code-side token definitions should be fully typed, namespaced, and machine-parseable without runtime execution so agents can read them statically. MUI's TypeScript interfaces (Theme, ThemeOptions, Palette, Typography) achieve this: the full token tree is inspectable at compile time via createTheme(). Gap: the theme is a JS/TS module, not a DTCG-format token file. Tokens cannot be consumed by non-JS agents without additional transformation.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "1.6_token_documentation": {
+          "score": 1,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "Every token variable should have a description explaining its semantic purpose -- what property it controls, when to use it, and what it communicates -- so an agent can select the correct token without inference. Only 98 of 532 variables (18.4%) have descriptions, all in the palette collections. The 252 material/colors primitives, all 20 spacing variables, all breakpoints, and all shape variables have no descriptions. The 98 existing descriptions are mechanical reflections rather than intent documentation: 'Reflects the text.primary variable from the theme object' carries no actionable guidance.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "finding_ids": ["TD-001"]
+        }
+      }
+    },
+    "2_component_quality": {
+      "cluster_name": "Component Quality",
+      "cluster_summary": "Component APIs are composable and fully typed. Variant coverage is comprehensive. Token binding is inconsistent across component sets, with some components relying on hardcoded values.",
+      "cluster_score": 81.2,
+      "dimensions": {
+        "2.1_component_to_token_binding": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Every visual property on every component should be bound to a Variable so theme switches propagate correctly and agents can trace each value to its token. MCP spot-checks on 6 component sets show inconsistent binding: Button and Alert use palette and component-level tokens; TextField uses _components/input/* tokens. However, Avatar has only 3 variable bindings with fills and borders unbound, and Card uses elevation effect styles rather than Variables. 68 component-level tokens exist but do not cover all 34 component sets.",
+          "evidence_sources": ["MCP get_variable_defs spot-check"],
+          "sub_check_scores": {"5a": 3, "5b": 2, "5c": 2, "5d": 2},
+          "finding_ids": ["CTB-001"]
+        },
+        "2.2_component_api_composability": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Component APIs should be composable, typed, and constrained so agents can generate valid combinations without testing invalid prop states. MUI fully satisfies this: TypeScript interfaces with generics and discriminated unions enforce valid prop combinations at compile time. Composition mechanisms include slots API (replacing classes), renderItem prop, and children as render functions. No gaps: the API is designed for programmatic consumption.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "2.3_variant_completeness": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Component variant coverage should include all meaningful interactive states so agents can render any scenario without inventing or omitting states. MUI achieves complete coverage: 33 variant properties across 34 component sets; Focused (171 variants), Hovered (172), Disabled (173), and Error states all present. Every state required for production UI is available as a named variant.",
+          "evidence_sources": ["Figma REST API components"],
+          "finding_ids": []
+        },
+        "2.4_escape_hatch_usage": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Escape hatches should be typed, namespaced, and constrained to prevent ad-hoc overrides that break token binding and produce untraceable styling. MUI's escape hatches are well-designed: sx prop (accepts SystemStyleObject), className, and classes API (typed per component with named slots) all preserve traceability. Minor gap: sx prop allows arbitrary CSS values alongside theme tokens, so overrides may bypass the token system without generating type errors.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        }
+      }
+    },
+    "3_documentation_readiness": {
+      "cluster_name": "Documentation Readiness",
+      "cluster_summary": "Rich documentation exists on the docs site but is entirely absent from Figma component metadata. The co-location gap means agents reading from Figma get code snippets instead of intent.",
+      "cluster_score": 50.0,
+      "dimensions": {
+        "3.1_component_description_coverage": {
+          "score": 1,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 370 of 1034 components (35.8%) have any description, but 356 of those (96.2%) are code import snippets: 'import TextField from \"@mui/material/TextField\"' carries zero functional intent. At the component set level, 0 of 40 sets have intent-carrying descriptions. Rich intent documentation exists on mui.com but is not declared or linked from Figma component metadata.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": ["CDC-001"]
+        },
+        "3.2_documentation_structure_machine_readability": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Documentation should be structured and indexed so an agent can retrieve the specific section it needs rather than reading linearly through prose. Code-side MDX docs achieve this: consistent frontmatter (materialDesign, waiAria links), description-first ordering, and API tables with typed prop signatures. Gap: frontmatter lacks structured fields for usage constraints (when to use, when not to use), requiring prose parsing to extract decision rules. The Figma file has no queryable documentation structure.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection", "Figma REST API"],
+          "finding_ids": []
+        },
+        "3.3_intent_quality": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Documentation should cover the six-level hierarchy -- purpose, structure, intended behaviour, main use cases, error handling, and edge cases -- at a quality that allows an agent to make correct decisions without human review. The docs site covers Levels 1-4 across all components, but Levels 5 (error handling) and 6 (edge cases) are absent. In Figma, all six levels score zero: every description is a code snippet with no documentation content. Documentation quality is split by platform: good in code, absent in Figma.",
+          "evidence_sources": ["MUI docs site", "Figma REST API components"],
+          "finding_ids": ["IQ-001"]
+        },
+        "3.4_usage_guidance_formalisation": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Usage guidance should be structured as explicit, labelled rules -- 'When to use', 'When not to use', 'Prefer this over X when...' -- so an agent can apply constraints without natural language parsing. MUI guidance is embedded in descriptive prose: 'Text buttons are typically used for less-pronounced actions' requires interpretation to derive a rule. One exception: Checkbox has explicit 'use Switch instead' guidance. Material Design frontmatter links provide indirect access but require parsing an external standard to extract rules.",
+          "evidence_sources": ["MUI docs site"],
+          "finding_ids": ["UGF-001"]
+        },
+        "3.5_documentation_frame_metadata": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Figma files should contain structured documentation frames (anatomy, states, behaviour, usage guidelines) alongside component definitions so an agent reading the file gets documentation without an external lookup. 6 of 40 component pages (15%) have page-level descriptions derived from docs site one-liners. No anatomy frames, states frames, or behaviour documentation frames exist anywhere in the file. Documentation exists externally but is not co-located or declared from within Figma.",
+          "evidence_sources": ["Figma REST API", "Documentation frame reader (scripts/output/mui-doc-frames.json)"],
+          "finding_ids": ["DFM-001"]
+        }
+      }
+    },
+    "4_design_quality_baseline": {
+      "cluster_name": "Design Quality Baseline",
+      "cluster_summary": "Strong foundations across colour, spacing, and component states. Empty state coverage is absent. Motion tokens exist only in code.",
+      "cluster_score": 74.1,
+      "dimensions": {
+        "4.1_interaction_targets": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Interactive components should meet platform minimum touch target sizes (44px WCAG 2.1 for web) so an agent can guarantee accessibility without per-component checks. Most MUI components meet this: Button default and large variants exceed 44px height. Minor gaps: Button Small variant may fall below at 30px, and Icon-only variants (IconButton) require inspection to confirm. No systematic touch target documentation exists in the Figma file.",
+          "evidence_sources": ["MCP get_variable_defs spot-check", "MUI docs site"],
+          "finding_ids": []
+        },
+        "4.2_contrast_ratios": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Colour tokens should be defined so an agent can derive WCAG AA compliant foreground/background pairs without runtime checking. MUI's palette provides contrastText values for all semantic colours, and createPalette() enforces minimum contrast. Gap: contrast ratios for non-primary interactive colours (warning, info states) are not explicitly documented and rely on theme defaults rather than declared ratios.",
+          "evidence_sources": ["Figma REST API variables/local", "MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "4.3_type_scale_consistency": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Typography scale steps should follow a mathematical relationship so text sizes form a predictable progression an agent can extend. 17 fontSize variables span 10px-96px with a broadly consistent ratio. Gap: the scale mixes responsive pairs (h1: 96px/60px) with fixed values (body1: 16px) and includes some irregular steps (subtitle1 at 16px vs subtitle2 at 14px), making the mathematical relationship non-uniform.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "finding_ids": []
+        },
+        "4.4_type_completeness": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Typography Variables should cover all five typographic properties -- font size, line height, letter spacing, weight, and case -- per role so an agent can fully reconstruct any text style from Variables alone. fontSize (17 vars), fontWeight (5 vars), and fontFamily (1 var) are available as standalone Variables. lineHeight and letterSpacing exist only within composite Font references -- they cannot be independently referenced or aliased, requiring any consumer to destructure compound values rather than bind to individual properties.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "finding_ids": ["CB-04-001"]
+        },
+        "4.5_spacing_scale_regularity": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Spacing scale should use a defined base unit with consistent mathematical progression so agents can infer spacing values at any scale position. MUI fully satisfies this: 8px base unit with 4px half-step, 20 spacing variables (4px-96px), consistent progression across both collections, and no irregular values. The scale is fully machine-parseable.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "finding_ids": []
+        },
+        "4.6_grid_and_layout_system": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "A layout system should define columns, gutters, margins, and breakpoints as Variables so agents can generate responsive layouts without hardcoding dimension values. MUI has 6 grid styles and 7 breakpoint Variables (0px-1536px). Gap: column counts and gutter sizes are not defined as Variables -- they live in code-side Grid component defaults only, so the layout system is not fully legible from the Figma file alone.",
+          "evidence_sources": ["Figma REST API styles", "Figma REST API variables/local"],
+          "finding_ids": []
+        },
+        "4.7_motion_duration_ranges": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Motion duration tokens should exist in both Figma and code so design and engineering share the same timing values and agents can read motion specifications from the design file. Code-side theme.transitions.duration defines 7 values (150ms-375ms) with entries-slower-than-exits pattern. No motion Variables or styles exist in the Figma file. Motion specifications are entirely invisible to any agent reading from Figma.",
+          "evidence_sources": ["Figma REST API variables/local", "Figma REST API styles", "MUI GitHub repo raw file inspection"],
+          "finding_ids": ["CB-07-001"]
+        },
+        "4.8_motion_easing": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Easing values should be defined in both Figma and code with distinct curves for standard, enter, and exit interactions. Code defines 4 easing curves (easeInOut, easeOut, easeIn, sharp) and avoids linear. No easing definitions exist in Figma. An agent reading the design file cannot determine transition behaviour without cross-referencing the code theme.",
+          "evidence_sources": ["Figma REST API styles", "MUI GitHub repo raw file inspection"],
+          "finding_ids": ["CB-08-001"]
+        },
+        "4.9_focus_state_presence": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Every interactive component should have an explicit focus state variant so an agent can verify accessibility coverage without runtime testing. 171 focused-state variants exist across the component library. Button, Checkbox, TextField, and Switch all have explicit Focused variants. Gap: some interactive components (Slider, SpeedDial) have no documented focus state in Figma, requiring code inspection to confirm coverage.",
+          "evidence_sources": ["Figma REST API components"],
+          "finding_ids": []
+        },
+        "4.10_error_state_coverage": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Form components should define error, success, and disabled states so an agent can render validation scenarios without invention. 113 error-state variants cover the library. TextField, Select, and Checkbox have comprehensive coverage. Gap: numeric inputs and date pickers have limited error state coverage, and success state is handled through colour conventions rather than named variants.",
+          "evidence_sources": ["Figma REST API components"],
+          "finding_ids": []
+        },
+        "4.11_loading_state_coverage": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Async-capable components should have documented loading states and a pattern defining how the system handles in-progress operations. MUI has individual solutions: LoadingButton, Skeleton, and Progress components. Gap: no loading interaction pattern document defines how loading states work across the system -- what shows during fetch, how transitions work, what persists vs replaces. Components solve this independently with no shared pattern.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": ["CB-11-001"]
+        },
+        "4.12_empty_state_coverage": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "Data-dependent components should include empty state variants defining what displays when a dataset is empty, so agents can render complete product flows. No empty state patterns, components, or variants exist anywhere in the MUI system. Data Grid, Table, List, and Image List have no empty state definitions. There is no EmptyState component and no documented pattern for zero-data scenarios.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": ["ES-001"]
+        },
+        "4.13_colour_system_structure": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "A colour system should define named scales with predictable step increments and semantic aliases so agents can construct any colour combination from the documented structure. MUI has this fully: 19 material colour scales (amber through yellow) with 10-14 steps each, semantic palette aliases (primary, secondary, error, warning, info, success) with main/light/dark/contrastText for each role, and mode support (light/dark). The system is complete and machine-parseable.",
+          "evidence_sources": ["Figma REST API variables/local"],
+          "finding_ids": []
+        },
+        "4.14_icon_sizing_consistency": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Icon sizes should align with the spacing scale so agents can pair icons with text and UI elements without ad-hoc sizing. MUI has a defined 4-size system (Small, Medium, Large, Inherit) for both SVG and Font icons with consistent scale (small: 20px, medium: 24px, large: 35px). Gap: icon sizes are not expressed as Variables referencing the spacing scale -- they are hardcoded in the component, making the relationship to the spacing system opaque.",
+          "evidence_sources": ["Figma REST API components"],
+          "finding_ids": []
+        },
+        "4.15_elevation_shadow_system": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Elevation should be a defined, numbered scale with predictable progression so agents can apply appropriate depth without guessing. MUI has a 24-level system (elevation/1 through elevation/24) using three-shadow compositions per level. Gap: the system is implemented as effect styles, not Variables, so elevation values cannot be mode-switched, aliased to semantic tokens, or referenced from the Variables API.",
+          "evidence_sources": ["Figma REST API styles"],
+          "finding_ids": []
+        },
+        "4.16_visibility_of_system_status": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "System status feedback should be systematically available via dedicated components and documented patterns. Snackbar (transient), Alert (persistent), Progress (linear and circular), and LinearProgress/CircularProgress with determinate and indeterminate modes are all present. Coverage is comprehensive for the supported status cases.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": []
+        },
+        "4.17_match_between_system_and_real_world": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "System interactions should use familiar conventions aligned with real-world models so users and agents can predict behaviour without explanation. MUI follows Material Design conventions throughout -- FAB for primary actions, bottom navigation for mobile, standard icon metaphors. Components use standard HTML element affordances (button, input, select) as their accessible base.",
+          "evidence_sources": ["MUI docs site", "Figma REST API components"],
+          "finding_ids": []
+        },
+        "4.18_user_control_and_freedom": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "Users should be able to cancel, undo, or escape from any system state. Dialog with dismiss patterns (Escape key + backdrop click), Drawer close, Snackbar auto-dismiss + action button, and modal patterns are all present. Form field clearing is supported. No undo pattern is defined at the system level.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": []
+        },
+        "4.19_consistency_and_standards": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "Consistent API patterns and naming should apply across all components so behaviour learned on one component transfers to others. MUI enforces this through its prop system (variant/color/size across components), Material Design alignment, and TypeScript interfaces. Consistent slot naming enables predictable composition.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "4.20_error_prevention": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "Components should prevent invalid states through typed constraints and validation patterns. TextField error state + helper text, typed API enums preventing invalid prop combinations, Select controlled/uncontrolled patterns, and form library integrations cover the primary prevention cases.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection", "Figma REST API components"],
+          "finding_ids": []
+        },
+        "4.21_recognition_rather_than_recall": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "Users should recognise actions and options rather than recalling them from memory. Consistent iconography patterns, labelled action buttons, tooltips for icon-only actions, and breadcrumbs for navigation context all support recognition. No systematic recall burden identified.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": []
+        },
+        "4.22_flexibility_and_efficiency": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "Power users should be able to work more efficiently through shortcuts, customisation, and advanced patterns. sx prop and slots API provide deep theming customisation. SpeedDial provides access shortcuts. Keyboard shortcuts are documented for applicable components. Theme customisation enables system-level efficiency.",
+          "evidence_sources": ["MUI docs site", "MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "4.23_aesthetic_and_minimalist_design": {
+          "score": 2,
+          "score_max": 2,
+          "severity": "pass",
+          "narrative": "Components should contain only information necessary for their purpose. Clean Material Design aesthetic with consistent elevation, typography hierarchy, and whitespace. No decorative elements or unnecessary complexity in component variants.",
+          "evidence_sources": ["Figma REST API components"],
+          "finding_ids": []
+        },
+        "4.24_error_recovery": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "narrative": "Error recovery should be documented as interaction patterns -- how users retry failed operations, how validation errors resolve, how destructive confirmations work -- not just as visual states. Error states exist (TextField error, Alert error severity) but no pattern documents how users recover from them. Error-to-resolved transitions, retry patterns, and undo patterns are absent from both Figma and the docs site.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": ["CB-24-001"]
+        },
+        "4.25_help_and_documentation": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "narrative": "Help documentation should be accessible from the component itself -- via tooltip, link, or declared documentation path -- not only from an external site. mui.com has comprehensive documentation but nothing in Figma links to it. From the Figma API, the help documentation is entirely invisible: no link field values, no documentation frames, no declared paths.",
+          "evidence_sources": ["Figma REST API components", "MUI docs site"],
+          "finding_ids": ["CB-25-001"]
+        },
+        "4.26_visual_hierarchy": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "narrative": "Visual hierarchy should be documented as a compositional system -- how type scale, elevation, and colour emphasis combine -- not just as individual tools. MUI provides the tools (type scale h1-h6, 24-level elevation, semantic colour) but there is no documentation on how they are meant to be composed to create emphasis and depth. Each product team constructs hierarchy independently.",
+          "evidence_sources": ["MUI docs site", "Figma REST API styles"],
+          "finding_ids": ["CB-26-001"]
+        },
+        "4.27_visual_rhythm_and_proportion": {
+          "score": 1,
+          "score_max": 2,
+          "severity": "warning",
+          "narrative": "Spacing scale and grid system should be applied consistently within components so rhythm is predictable and agents can reproduce layouts from token values alone. The 8px base grid is well-defined but component internal spacing does not consistently reference spacing Variables. Some components use hardcoded internal padding, breaking the relationship to the spacing scale.",
+          "evidence_sources": ["Figma REST API components", "Figma REST API variables/local"],
+          "finding_ids": ["CB-27-001"]
+        }
+      }
+    },
+    "5_governance_and_ecosystem": {
+      "cluster_name": "Governance and Ecosystem",
+      "cluster_summary": "Mature code governance with strict versioning, contribution standards, and test coverage. Figma-side deprecation is absent and version history is not linked to code releases.",
+      "cluster_score": 71.4,
+      "dimensions": {
+        "5.1_naming_convention_consistency": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Naming conventions should be consistent across Figma, code, and documentation so an agent can map between layers without a translation table. 91% of Figma variables use slash-separated convention (palette/primary/main). Code exports PascalCase components (Button, Alert, TextField). Component sets use angle-bracket PascalCase (<Button>, <Alert>) which maps cleanly. Gap: typography Variables use dot-style naming inconsistent with the slash convention elsewhere, creating a 9% exception that requires special handling.",
+          "evidence_sources": ["Figma REST API variables/local", "MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "5.2_versioning_and_changelog_discipline": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Every release should be tagged, changelogged, and traceable so agents can distinguish current from deprecated behaviour and reason about upgrade paths. MUI follows strict semver, maintains a detailed CHANGELOG.md per version, and documents migration paths. Gap: Figma file versioning is not linked to code versioning -- there is no documented relationship between Figma file versions and npm package versions.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "5.3_contribution_standards": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Contribution standards should be documented, enforced, and accessible from the repository so agents can predict the pattern for new contributions. CONTRIBUTING.md covers commit conventions, coding style, PR process, and issue templates. .github/ templates enforce structure. Gap: no machine-readable contribution schema (e.g. JSON of required PR checks) that an agent could validate against before submitting.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "5.4_deprecation_patterns": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Deprecated components and properties should be marked in both Figma and code with documented migration paths so agents do not select or generate deprecated patterns. Code-side deprecation is well-managed: console.warn for deprecated props, migration guides, and codemods. Gap: no Figma deprecation markers exist. An agent reading the Figma file cannot distinguish current from deprecated components. No cross-platform deprecation register tracks which items are deprecated on each side.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection", "Figma REST API components"],
+          "finding_ids": ["DEP-001"]
+        },
+        "5.5_test_coverage": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Components should have automated test coverage -- unit, visual regression, and accessibility -- so agents can verify that generated changes do not break existing behaviour. MUI has comprehensive coverage: Jest for unit tests, Playwright for visual regression, and @testing-library/user-event for interaction testing. Gap: no automated design-to-code parity tests verify that Figma variants match code states.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "5.6_adoption_visibility": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Adoption data should be queryable so agents can assess the impact of changes before recommending them. npm download counts, GitHub stars, and per-package version tracking are publicly available. Gap: no internal adoption dashboard aggregates version distribution across consuming products, making it impossible to assess breaking change blast radius without a manual consumer survey.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "5.7_code_consistency_and_pattern_predictability": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Code patterns should be predictable and enforced so an agent generating new components or modifying existing ones produces code that matches the system. ESLint and Prettier enforce style; consistent file structure (imports -> interface -> styled -> component -> exports) is followed across all 34 component sets. Gap: the consistent structure is convention, not enforced by tooling -- a linter rule for file structure order does not exist.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        }
+      }
+    },
+    "6_design_to_code_parity": {
+      "cluster_name": "Design-to-Code Parity",
+      "cluster_summary": "Token naming parity is perfect. Value parity is strong (only 7 mismatches). Behaviour parity and parity gap documentation are the two weak points.",
+      "cluster_score": 62.5,
+      "dimensions": {
+        "6.1_token_value_parity": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Token values in Figma and code should match exactly so agents generating from design get the same values as agents generating from code. The token diff shows 330 of 462 tokens matching (71.4%), with only 7 value mismatches -- strong parity for a mature system. The 7 mismatches (palette/warning/main, material/colors/lightGreen/400, typography/h4/fontSize, fontFamily format) are small in absolute terms but represent divergence at the most-used semantic tokens, affecting all downstream consumers.",
+          "evidence_sources": ["Token parity diff (scripts/output/mui-token-diff.json)"],
+          "finding_ids": ["TVP-001"]
+        },
+        "6.2_token_naming_parity": {
+          "score": 4,
+          "score_max": 4,
+          "severity": "pass",
+          "narrative": "Token names in code and Figma should be identical so references can be matched across platforms without a mapping table. The token diff shows zero naming mismatches: palette/primary/main in code maps exactly to palette/primary/main in Figma. This is the expected state and MUI achieves it fully.",
+          "evidence_sources": ["Token parity diff (scripts/output/mui-token-diff.json)"],
+          "finding_ids": []
+        },
+        "6.3_component_naming_parity": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Component names should be identical between Figma and code so agents can map a design file component to its code implementation without a translation table. The naming convention is consistent: Figma's <Button> maps to code's Button export. Gap: Figma uses angle-bracket notation (<Button>) that requires stripping before code matching. Some compound names differ in formatting (Figma: <Text Field>, code: TextField), requiring normalization logic.",
+          "evidence_sources": ["Figma REST API components", "MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "6.4_variant_and_state_coverage_parity": {
+          "score": 3,
+          "score_max": 4,
+          "severity": "note",
+          "narrative": "Variant coverage in Figma should match state coverage in code so every prop combination a developer can write has a corresponding visual representation. Figma variant properties (Variant, Color, Size, State) map well to code props. Gap: some Figma-specific states (Hovered, Focused as visual variants) have no code prop equivalents -- they are CSS pseudo-states rather than explicit props. Some code states (loading, indeterminate) have no Figma variant.",
+          "evidence_sources": ["Figma REST API components", "MUI GitHub repo raw file inspection"],
+          "finding_ids": []
+        },
+        "6.5_behaviour_parity": {
+          "score": 2,
+          "score_max": 4,
+          "severity": "warning",
+          "narrative": "Behaviours specified in code should be documented in Figma so an agent reading the design file produces implementations that match the system's interactive specifications. Code implements keyboard navigation, focus management, ARIA attributes, transition animations, and responsive behaviour. None of these appear in the Figma file. Figma captures static visual states only. An agent reading from Figma produces a visually correct but behaviourally incomplete implementation requiring engineering correction before shipping.",
+          "evidence_sources": ["MUI GitHub repo raw file inspection", "Figma REST API components"],
+          "finding_ids": ["BP-001"]
+        },
+        "6.6_documentation_of_parity_gaps": {
+          "score": 0,
+          "score_max": 4,
+          "severity": "blocker",
+          "narrative": "Known gaps between Figma and code should be documented in a parity gap register so agents can distinguish intentional differences from accidental drift. No parity register exists. The token diff identifies 7 value mismatches, 125 code-only tokens, and 123 Figma-only tokens -- none of these are tracked, classified as intentional or unintentional, or assigned owners. An agent encountering a mismatch cannot determine whether it should follow Figma, follow code, or flag for human review.",
+          "evidence_sources": ["Token parity diff (scripts/output/mui-token-diff.json)"],
+          "finding_ids": ["DPG-001"]
+        }
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "TI-001",
+      "dimension": "1.1_token_implementation",
+      "severity": "note",
+      "severity_rank": 1,
+      "summary": "Elevation tokens implemented as effect styles, not Variables",
+      "description": "24 elevation levels are implemented as Figma effect styles rather than Variables. This means elevation values cannot be aliased, do not support mode switching, and are not accessible via the Variables API. Typography is partially duplicated between text styles and Variables.",
+      "recommendation": "Migrate elevation to Variables with alias chains. Consolidate typography to Variables only, retiring duplicate text styles.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "primitive",
+        "path": null,
+        "field": "elevation"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "AC-001",
+      "dimension": "1.2_alias_chain_integrity",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Alias chains absent for non-colour categories",
+      "description": "Only colour tokens have alias chains (palette -> material/colors, 29 cross-collection aliases). Spacing (20 vars), breakpoints (7 vars), shape (5 vars), and partially typography have zero alias relationships -- all direct values. This means non-colour tokens cannot be themed or switched contextually.",
+      "recommendation": "Create semantic alias layers for spacing, breakpoints, and shape. At minimum: semantic spacing tokens (spacing/compact, spacing/comfortable) aliasing to primitive spacing values.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "composite",
+        "path": null,
+        "field": "alias_chains"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TA-001",
+      "dimension": "1.3_token_architecture_depth",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Three-layer architecture only complete for colour",
+      "description": "Colour has all three layers: primitive (material/colors), semantic (palette), component (_components/*). Non-colour categories lack one or more layers in Figma. Spacing has primitives only. Typography has primitives and partial semantic. The code-side theme provides all three layers for all categories.",
+      "recommendation": "Extend the three-layer architecture to spacing and typography in Figma. Create semantic spacing (e.g. spacing/element, spacing/section) and component spacing (e.g. _components/card/padding) variable collections.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "composite",
+        "path": null,
+        "field": "architecture_depth"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TD-001",
+      "dimension": "1.6_token_documentation",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "81.6% of token variables have no description",
+      "description": "Only 98 of 532 variables (18.4%) have descriptions. All 252 material/colors primitives have no description. All spacing, typography, breakpoints, and shape variables have no description. The 98 described palette variables use mechanical descriptions ('Reflects the text.primary variable from the theme object') rather than intent-driven documentation.",
+      "recommendation": "Add descriptions to all token collections, prioritising semantic palette tokens and component-level tokens. Descriptions should explain the token's purpose and when to use it, not just mirror its name.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": null,
+        "path": null,
+        "field": "description"
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "CTB-001",
+      "dimension": "2.1_component_to_token_binding",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Component-to-token binding inconsistent across component sets",
+      "description": "MCP spot-checks show Button uses palette and typography tokens. Alert uses _components/alert/* tokens. TextField uses _components/input/* tokens. However, Avatar has minimal bindings (3 variables), and Card relies on elevation styles rather than Variable bindings. 68 component-level tokens exist but do not cover all 34 component sets.",
+      "recommendation": "Audit all component sets for Variable bindings. Prioritise interactive components (inputs, buttons). Create _components/* tokens for components that currently bind directly to semantic tokens or use hardcoded values.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": "composite",
+        "path": null,
+        "field": "token_bindings"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CDC-001",
+      "dimension": "3.1_component_description_coverage",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "96.2% of component descriptions are code import snippets with zero functional intent",
+      "description": "370 of 1034 components (35.8%) have descriptions, but 356 of those (96.2%) are code import snippets (e.g. 'import TextField from \"@mui/material/TextField\"'). Only 14 components have real descriptions. At the component set level: 0 of 40 sets carry functional intent descriptions. The docs site has rich intent descriptions for every component, but these are not linked from or declared in Figma component metadata.",
+      "recommendation": "Port functional intent descriptions from the docs site to Figma component set root entries. At minimum: one-sentence purpose + 'when to use' + 'when not to use'. Add docs site URL to the Figma component link field to establish co-location.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": "composite",
+        "path": null,
+        "field": "description"
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "IQ-001",
+      "dimension": "3.3_intent_quality",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Documentation hierarchy covers 4 of 6 levels on docs site, 0 in Figma",
+      "description": "The docs site covers: Level 1 (purpose) on all component pages, Level 2 (structure) via API docs, Level 3 (behaviour) via variant descriptions, Level 4 (use cases) partially via prose. Levels 5 (error handling) and 6 (edge cases) absent. In Figma: zero intent coverage -- all descriptions are code snippets. The co-location gap means the quality assessment differs dramatically depending on the data source.",
+      "recommendation": "First: establish co-location (CDC-001). Then: add structured error handling and edge case sections to component documentation on the docs site. For Figma: add at minimum Level 1 (purpose) descriptions to all component set roots.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": "composite",
+        "path": null,
+        "field": "intent_quality"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "UGF-001",
+      "dimension": "3.4_usage_guidance_formalisation",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Usage guidance scattered in prose, not formalised as structured rules",
+      "description": "Usage guidance exists on the docs site but is embedded in descriptive paragraphs rather than structured do/don't sections. Example: Button variant guidance ('Text buttons are typically used for less-pronounced actions') requires prose parsing. One exception: Checkbox has explicit 'use switch instead' guidance. Material Design links in frontmatter provide indirect access to formalised guidance.",
+      "recommendation": "Add structured 'When to use' / 'When not to use' sections to component docs pages. Create a machine-readable frontmatter field (e.g. usage_guidance) with structured rules.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "usage_guidance"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "DFM-001",
+      "dimension": "3.5_documentation_frame_metadata",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "No documentation frames in Figma file -- page descriptions only",
+      "description": "6 component pages have page-level descriptions derived from docs site one-liners (Alert, Card, Avatar, Button, Checkbox, TextField). No anatomy frames, states frames, or behaviour documentation frames exist. The Figma file structure uses component pages with variant showcases but no structured documentation metadata beyond page descriptions.",
+      "recommendation": "Add documentation frames to component pages following a consistent template: anatomy, states, behaviour, usage guidelines. Alternatively, declare the external documentation path in CLAUDE.md so agents know where to find structured docs.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "doc_frames"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-04-001",
+      "dimension": "4.4_type_completeness",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "lineHeight and letterSpacing not available as standalone Variables",
+      "description": "fontSize (17 vars), fontWeight (5 vars), and fontFamily (1 var) exist as standalone Variables. lineHeight and letterSpacing exist only within composite Font references in typography Variables -- they cannot be independently referenced or aliased.",
+      "recommendation": "Extract lineHeight and letterSpacing as standalone Variables alongside fontSize, allowing flexible composition outside predefined typography roles.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "primitive",
+        "path": null,
+        "field": "typography"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-07-001",
+      "dimension": "4.7_motion_duration_ranges",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Motion duration tokens exist in code only, not in Figma",
+      "description": "Code-side theme.transitions.duration defines 7 duration values (150ms-375ms) with entries slower than exits pattern. No motion Variables or styles exist in the Figma file.",
+      "recommendation": "Create a motion variable collection in Figma with duration values matching the code theme, or document the code-side motion tokens in CLAUDE.md as the authoritative source.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "semantic",
+        "path": null,
+        "field": "motion.duration"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-08-001",
+      "dimension": "4.8_motion_easing",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Motion easing tokens exist in code only, not in Figma",
+      "description": "Code-side theme.transitions.easing defines 4 easing curves (easeInOut, easeOut, easeIn, sharp). No easing definitions exist in the Figma file.",
+      "recommendation": "Document motion easing values in Figma or declare the code theme as the authoritative motion token source.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": "semantic",
+        "path": null,
+        "field": "motion.easing"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-11-001",
+      "dimension": "4.11_loading_state_coverage",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "No systematic loading interaction pattern across components",
+      "description": "LoadingButton, Skeleton, and Progress components exist as individual solutions. No documented loading pattern defines how the system handles async operations across components (what shows during fetch, how transitions work, what persists vs replaces).",
+      "recommendation": "Document a loading interaction pattern: define which components show loading states, what triggers them, and how transitions between loading/loaded/error work.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": "pattern",
+        "path": null,
+        "field": "loading_pattern"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "ES-001",
+      "dimension": "4.12_empty_state_coverage",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "Zero empty state coverage -- no patterns or components for zero-data scenarios",
+      "description": "No empty state patterns or components exist. Data Grid, Table, List, and other data-dependent views have no defined empty state variants. No EmptyState component. No documented pattern for zero-data scenarios.",
+      "recommendation": "Create empty state patterns for data-dependent components (Table, List, Data Grid). Define at minimum: illustration/icon + message + action template. Add empty state variants to data display components.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": "pattern",
+        "path": null,
+        "field": "empty_state"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-24-001",
+      "dimension": "4.24_error_recovery",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "No systematic error recovery patterns documented",
+      "description": "Error states exist on form components but no pattern documents how users recover from errors -- no undo, retry, or error-to-resolved transition guidance.",
+      "recommendation": "Document error recovery patterns: how form validation errors clear, how async operation failures offer retry, how destructive action confirmation works.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": "pattern",
+        "path": null,
+        "field": "error_recovery"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-25-001",
+      "dimension": "4.25_help_and_documentation",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Help documentation entirely external, not accessible from Figma",
+      "description": "Comprehensive docs site exists (mui.com) but is not linked from or declared in Figma component metadata. An agent working from the Figma API gets zero help content.",
+      "recommendation": "Add docs site URLs to Figma component link fields. Declare the documentation path in CLAUDE.md or component descriptions.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "help_docs"
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "CB-26-001",
+      "dimension": "4.26_visual_hierarchy",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Visual hierarchy tools exist but hierarchy system not documented",
+      "description": "Type scale, elevation system, and colour emphasis provide hierarchy building blocks but there is no documented system for combining them to create visual hierarchy.",
+      "recommendation": "Document visual hierarchy guidelines: how type scale, elevation, and colour interact to create emphasis levels.",
+      "contract_ref": {
+        "type": "documentation_contract",
+        "level": null,
+        "path": null,
+        "field": "visual_hierarchy"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "CB-27-001",
+      "dimension": "4.27_visual_rhythm_and_proportion",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Spacing scale provides rhythm foundation but component internal spacing inconsistent",
+      "description": "8px base spacing scale is well-defined but component internal spacing does not consistently reference the spacing scale Variables.",
+      "recommendation": "Audit component internal spacing to ensure all padding and gap values reference spacing Variables.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": null,
+        "path": null,
+        "field": "internal_spacing"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "DEP-001",
+      "dimension": "5.4_deprecation_patterns",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Deprecation tracked in code but not in Figma",
+      "description": "Code-side deprecation is well-managed: console.warn for deprecated props, migration guides, codemods. Figma has no deprecation markers on components or variants. No cross-platform deprecation register.",
+      "recommendation": "Add deprecation status to Figma component descriptions or variant naming. Create a cross-platform deprecation register tracking deprecated items in both Figma and code.",
+      "contract_ref": {
+        "type": "governance_rule",
+        "level": null,
+        "path": null,
+        "field": "deprecation"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "TVP-001",
+      "dimension": "6.1_token_value_parity",
+      "severity": "note",
+      "severity_rank": 1,
+      "summary": "7 token value mismatches between Figma and code",
+      "description": "Token diff shows 330 matches, 7 value mismatches: palette/warning/main (#ed6c02 vs #ef6c00), material/colors/lightGreen/400 (#9ccc65 vs #8bc34a), material/colors/red/50 (#ffebee vs #feebee), material/colors/red/100 (#ffcdd2 vs #fecdd2), typography/h4/fontSize (2.125rem vs 32), typography/fontFamily (with vs without fallback stack), breakpoints/xs (0 vs 444). 125 code-only tokens, 123 Figma-only tokens.",
+      "recommendation": "Resolve the 7 value mismatches -- determine which source is authoritative and update the other. Review the 248 unmatched tokens to determine which should exist in both platforms.",
+      "contract_ref": {
+        "type": "token_definition",
+        "level": null,
+        "path": null,
+        "field": "value_parity"
+      },
+      "auto_fixable": true
+    },
+    {
+      "id": "BP-001",
+      "dimension": "6.5_behaviour_parity",
+      "severity": "warning",
+      "severity_rank": 2,
+      "summary": "Code-side behaviours (animations, keyboard, ARIA) invisible in Figma",
+      "description": "Code implements transitions, keyboard navigation, focus management, ARIA attributes, and responsive behaviour. None of these are visible or documented in the Figma file. Figma captures static visual states only.",
+      "recommendation": "Document key behaviours in Figma component descriptions or documentation frames: keyboard interaction patterns, transition specifications, ARIA requirements per component.",
+      "contract_ref": {
+        "type": "component_contract",
+        "level": "composite",
+        "path": null,
+        "field": "behaviour"
+      },
+      "auto_fixable": false
+    },
+    {
+      "id": "DPG-001",
+      "dimension": "6.6_documentation_of_parity_gaps",
+      "severity": "blocker",
+      "severity_rank": 3,
+      "summary": "No parity gap register -- 248 unmatched tokens and 7 value mismatches undocumented",
+      "description": "The token diff identifies 125 code-only tokens, 123 Figma-only tokens, and 7 value mismatches. These gaps are not documented or tracked anywhere in the system. No process exists for reviewing or resolving parity differences. An agent cannot distinguish intentional differences from accidental drift.",
+      "recommendation": "Create a parity gap register (JSON file in the repo) documenting each gap: whether it is intentional or needs resolution, which platform is authoritative, and target resolution date.",
+      "contract_ref": {
+        "type": "governance_rule",
+        "level": null,
+        "path": null,
+        "field": "parity_register"
+      },
+      "auto_fixable": false
+    }
+  ],
+  "data_gaps": [],
+  "version_delta": {
+    "previous_run_id": "7af6729b-25cb-48e5-ac3a-331e55db45db",
+    "previous_audit_id": "material-ui-v3.1-2026-04-08",
+    "overall_score_delta": 0.0,
+    "cluster_score_deltas": {
+      "0_prerequisites": 0.0,
+      "1_token_and_variable_system": 0.0,
+      "2_component_quality": 0.0,
+      "3_documentation_readiness": 0.0,
+      "4_design_quality_baseline": 0.0,
+      "5_governance_and_ecosystem": 0.0,
+      "6_design_to_code_parity": 0.0
+    },
+    "note": "v3.2 re-run: prompt update only. No evidence changes. Scores unchanged. Narratives restructured to 'what should happen vs what does happen' format. prompt_version corrected to 3.2."
+  }
+}
