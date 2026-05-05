@@ -7,6 +7,7 @@
       "name": "Platform Architecture Clarity",
       "cluster": "0_prerequisites",
       "description": "Does the system have a coherent, documented strategy for serving its target platforms, and is that strategy legible to an AI agent?",
+      "plain_description": "Whether the system has a clear, documented strategy for which platforms it serves, written in a way an AI tool can understand and act on.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No platform strategy documented or inferable. Multiple conflicting conventions.",
@@ -21,6 +22,7 @@
       "name": "Token Implementation",
       "cluster": "1_token_and_variable_system",
       "description": "Are design tokens implemented as Figma Variables? Are hardcoded values present where tokens should be used?",
+      "plain_description": "Whether colours, spacing, and other design values are defined as named Figma Variables rather than typed in as individual numbers.",
       "evidence_sources": ["Figma"],
       "score_levels": {
         "0": "No Figma Variables. All values hardcoded.",
@@ -35,6 +37,7 @@
       "name": "Alias Chain Integrity",
       "cluster": "1_token_and_variable_system",
       "description": "Are semantic tokens correctly aliased to primitive tokens? Are alias chains intact, unbroken, and resolvable?",
+      "plain_description": "Whether the three-layer token chain — from raw values through role-based names to component-specific names — is intact and every reference resolves correctly.",
       "evidence_sources": ["Figma"],
       "score_levels": {
         "0": "No alias chains. All variables hold direct values.",
@@ -49,6 +52,7 @@
       "name": "Token Architecture Depth",
       "cluster": "1_token_and_variable_system",
       "description": "Does the system implement all three layers: primitive, semantic, and component-level tokens? Are the layers correctly separated or collapsed?",
+      "plain_description": "Whether the system has all three required token layers — raw values, role-based names, and component-specific names — rather than collapsing or skipping layers.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No layered architecture. Flat values only.",
@@ -63,6 +67,7 @@
       "name": "Primitive Naming",
       "cluster": "1_token_and_variable_system",
       "description": "Do primitive tokens follow a defined, machine-parseable naming convention using full words and slashes? Is the scale defined rather than exhaustive?",
+      "plain_description": "Whether the lowest-level token names follow a clear, predictable pattern that an AI tool can parse without guessing.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No naming convention. Names are arbitrary or developer shorthand.",
@@ -77,6 +82,7 @@
       "name": "Token Format and Machine-Readability",
       "cluster": "1_token_and_variable_system",
       "description": "Are code-side tokens in a format an AI agent can parse without transformation (JSON, DTCG-compliant, CSS custom properties)?",
+      "plain_description": "Whether the code-side token definitions are in a standard file format that an AI tool can read directly, without needing to run the application.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No code-side token definitions. Tokens exist only in Figma.",
@@ -91,6 +97,7 @@
       "name": "Token Documentation",
       "cluster": "1_token_and_variable_system",
       "description": "Are token descriptions or metadata present in both Figma and code? Can an agent determine when to use a token from its name and description alone?",
+      "plain_description": "Whether individual tokens have written explanations of what they are for, so an AI tool can choose the right one without guessing.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No descriptions on any tokens in Figma or code.",
@@ -105,6 +112,7 @@
       "name": "Component-to-Token Binding",
       "cluster": "2_component_quality",
       "description": "Are component properties (fill, stroke, spacing, typography) bound to tokens rather than hardcoded values?",
+      "plain_description": "Whether component colours, spacing, and type properties are wired to named tokens in the design file rather than set as raw numbers.",
       "evidence_sources": ["Figma"],
       "score_levels": {
         "0": "No token bindings. All component properties use hardcoded values.",
@@ -119,6 +127,7 @@
       "name": "Component API Composability",
       "cluster": "2_component_quality",
       "description": "Are component APIs explicit, typed, and constrained to valid system values? Are components built to compose or are they monolithic?",
+      "plain_description": "Whether code components accept a defined set of valid options and are built to combine together, rather than accepting arbitrary values and behaving as self-contained units.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No typed APIs. Components accept arbitrary props.",
@@ -133,6 +142,7 @@
       "name": "Variant Completeness",
       "cluster": "2_component_quality",
       "description": "Are all meaningful visual and interactive states represented as named variants rather than style overrides?",
+      "plain_description": "Whether all meaningful states of a component — such as hover, focus, disabled, and error — exist as named, selectable variants rather than being applied manually each time.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No named variants. States achieved through overrides only.",
@@ -147,6 +157,7 @@
       "name": "Escape Hatch Usage",
       "cluster": "2_component_quality",
       "description": "Are className, style, or equivalent overrides available? How frequently are they used in the consuming codebase?",
+      "plain_description": "How often consuming code bypasses the component's intended API by applying custom styles directly — high frequency signals the component does not cover enough cases.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "Escape hatches are the primary styling mechanism. System has no constraint model.",
@@ -161,6 +172,7 @@
       "name": "Functional Intent Coverage",
       "cluster": "3_documentation_readiness",
       "description": "Do components have descriptions that carry functional intent rather than visual description or implementation detail? Scores whether intent is present, not whether a description field exists.",
+      "plain_description": "Whether component descriptions explain what each component is for, when to use it, and when not to — rather than just showing what it looks like or how to import it.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No descriptions with functional intent. Descriptions absent or are code snippets / visual descriptions only.",
@@ -175,6 +187,7 @@
       "name": "Documentation Indexing",
       "cluster": "3_documentation_readiness",
       "description": "Is component documentation indexed via schemas, frontmatter, or queryable structure that lets an agent look things up rather than reading everything linearly?",
+      "plain_description": "Whether documentation is organised so an AI tool can look up a specific answer directly, rather than having to read through large bodies of prose.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No structured documentation. Prose-only or absent.",
@@ -189,6 +202,7 @@
       "name": "Intent Quality",
       "cluster": "3_documentation_readiness",
       "description": "Is the documentation well-structured, appropriately concise, free of redundancy, and useful to an agent? Scored against the six-level documentation hierarchy: purpose, structure, intended behaviour, main use cases, error handling, edge cases.",
+      "plain_description": "How well the documentation covers the full picture of a component or pattern — its purpose, anatomy, behaviour, use cases, error handling, and edge conditions — and whether it is written clearly enough to be directly useful to an AI tool.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No structured intent documentation against the hierarchy. Zero levels covered.",
@@ -203,6 +217,7 @@
       "name": "Usage Guidance Structure",
       "cluster": "3_documentation_readiness",
       "description": "Are usage constraints organised with labelled sections and explicit rules rather than narrative prose?",
+      "plain_description": "Whether guidance about when and how to use components is written as clear, labelled rules rather than flowing prose that is harder to parse.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No usage guidance documented.",
@@ -217,6 +232,7 @@
       "name": "In-File Documentation Structure",
       "cluster": "3_documentation_readiness",
       "description": "Does the Figma file contain structured documentation an agent can read directly, without external lookup? Scores whether documentation is co-located with components and readable from the file structure.",
+      "plain_description": "Whether the Figma file itself contains structured documentation that an AI tool can read, without having to look up a separate website or codebase.",
       "evidence_sources": ["Figma"],
       "score_levels": {
         "0": "No documentation frames or extractable metadata in Figma.",
@@ -231,6 +247,7 @@
       "name": "Interaction Targets",
       "cluster": "4_design_quality_baseline",
       "description": "Minimum touch/click target sizes per platform. Mobile: 44x44pt (iOS), 48x48dp (Android). Web: 24x24px.",
+      "plain_description": "Whether clickable and tappable elements are large enough to meet the minimum size requirements for the platforms the system targets.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No consideration of target sizes. Most interactive elements below minimum.",
@@ -245,6 +262,7 @@
       "name": "Contrast Ratios",
       "cluster": "4_design_quality_baseline",
       "description": "WCAG AA minimum: 4.5:1 normal text, 3:1 large text and UI components. Derivable from token alias chain.",
+      "plain_description": "Whether text and interface elements have enough colour contrast to meet the WCAG AA accessibility standard.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No contrast consideration. Multiple failures against WCAG AA.",
@@ -259,6 +277,7 @@
       "name": "Type Scale Consistency",
       "cluster": "4_design_quality_baseline",
       "description": "Is there a mathematical relationship between type scale steps (modular scale)?",
+      "plain_description": "Whether the type sizes in the system follow a mathematical progression rather than being chosen arbitrarily.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No discernible scale relationship. Ad-hoc sizes throughout.",
@@ -273,6 +292,7 @@
       "name": "Type Completeness",
       "cluster": "4_design_quality_baseline",
       "description": "Does the type system define size, line height, letter spacing, weight, and case for every semantic role?",
+      "plain_description": "Whether every text role — heading, body, label, caption, and so on — has all its properties defined: size, line height, letter spacing, weight, and case.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No semantic type roles defined. Raw sizes only.",
@@ -287,6 +307,7 @@
       "name": "Spacing Scale Regularity",
       "cluster": "4_design_quality_baseline",
       "description": "Is the spacing system built on a base unit (4pt, 8pt) with consistent progression?",
+      "plain_description": "Whether spacing values follow a consistent pattern based on a base unit, rather than being chosen individually for each component.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No spacing system. Arbitrary values throughout.",
@@ -301,6 +322,7 @@
       "name": "Grid and Layout System",
       "cluster": "4_design_quality_baseline",
       "description": "Is there a defined column grid with documented gutters, margins, and breakpoints?",
+      "plain_description": "Whether the system defines a column grid with gutters, margins, and breakpoints that all layouts are expected to follow.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No grid or layout system defined.",
@@ -315,6 +337,7 @@
       "name": "Motion Duration Ranges",
       "cluster": "4_design_quality_baseline",
       "description": "UI transitions in 100-500ms range. Entry animations 200-300ms, exit animations 150-250ms.",
+      "plain_description": "Whether animation timings are defined within the ranges considered appropriate for user interfaces (roughly 100–500 milliseconds).",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No motion duration tokens or definitions.",
@@ -329,6 +352,7 @@
       "name": "Motion Easing",
       "cluster": "4_design_quality_baseline",
       "description": "Standard easing defined (ease-out for entries, ease-in for exits). Linear easing flagged.",
+      "plain_description": "Whether the system defines appropriate easing curves for animations — gentler on entry, sharper on exit — rather than defaulting to linear timing throughout.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No easing curves defined.",
@@ -343,6 +367,7 @@
       "name": "Focus State Presence",
       "cluster": "4_design_quality_baseline",
       "description": "Every interactive component has a visible focus state. WCAG 2.4.7 requirement.",
+      "plain_description": "Whether every interactive component has a visible focus indicator so keyboard users can see where they are on the page.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No focus states on any component.",
@@ -357,6 +382,7 @@
       "name": "Error State Coverage",
       "cluster": "4_design_quality_baseline",
       "description": "Input components define error, success, and disabled states. Forms define error summary behaviour.",
+      "plain_description": "Whether input components define what they look like in error, success, and disabled states.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No error states on any component.",
@@ -371,6 +397,7 @@
       "name": "Loading State Coverage",
       "cluster": "4_design_quality_baseline",
       "description": "Asynchronous actions have defined loading states. Skeleton screens, spinners, or progress indicators exist as system patterns.",
+      "plain_description": "Whether the system provides defined loading patterns — such as spinners or skeleton screens — for actions that take time to complete.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No loading state patterns or components.",
@@ -385,6 +412,7 @@
       "name": "Empty State Coverage",
       "cluster": "4_design_quality_baseline",
       "description": "Lists, tables, and data-dependent views define empty states as system patterns.",
+      "plain_description": "Whether views that depend on data define what they show when that data is absent.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No empty state patterns or components.",
@@ -399,6 +427,7 @@
       "name": "Colour System Structure",
       "cluster": "4_design_quality_baseline",
       "description": "Primitive palette has defined steps per hue. Semantic colours are role-based, not hue-based.",
+      "plain_description": "Whether the colour system uses a defined palette with a clear progression of steps per hue, and assigns semantic roles such as 'error' or 'primary surface' rather than referencing raw hues by name.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No colour system. Arbitrary hex values throughout.",
@@ -413,6 +442,7 @@
       "name": "Icon Sizing Consistency",
       "cluster": "4_design_quality_baseline",
       "description": "Icons use a defined size scale aligned with spacing system.",
+      "plain_description": "Whether icon sizes follow a defined scale that aligns with the spacing system, rather than being set individually per component.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No icon sizing system. Arbitrary sizes.",
@@ -427,6 +457,7 @@
       "name": "Elevation/Shadow System",
       "cluster": "4_design_quality_baseline",
       "description": "Shadows or elevation follow a defined scale, not arbitrary per-component values.",
+      "plain_description": "Whether depth and shadow effects follow a defined scale rather than being applied differently on each component.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No elevation system. Arbitrary shadows per component.",
@@ -441,6 +472,7 @@
       "name": "Visibility of System Status",
       "cluster": "4_design_quality_baseline",
       "description": "Does the system define patterns for communicating state? Loading, progress, feedback, real-time validation.",
+      "plain_description": "Whether the system provides defined patterns for communicating progress and feedback — such as loading indicators, validation messages, and success or error states — to users.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No status communication patterns.",
@@ -453,6 +485,7 @@
       "name": "Match Between System and Real World",
       "cluster": "4_design_quality_baseline",
       "description": "Are component and variant names user-facing rather than developer-internal? Are content guidelines documented?",
+      "plain_description": "Whether component names and content guidelines use language that matches how users and designers think, rather than developer shorthand.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. Names are developer-internal jargon.",
@@ -465,6 +498,7 @@
       "name": "User Control and Freedom",
       "cluster": "4_design_quality_baseline",
       "description": "Are undo, cancel, dismiss, and back navigation defined as system patterns?",
+      "plain_description": "Whether the system provides defined patterns for cancelling, undoing, and dismissing actions.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No dismissal or undo patterns.",
@@ -477,6 +511,7 @@
       "name": "Consistency and Standards",
       "cluster": "4_design_quality_baseline",
       "description": "Are interaction patterns consistent across similar components? Are similar components structured consistently?",
+      "plain_description": "Whether similar components behave and are structured in the same way throughout the system.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. Significant inconsistency across similar components.",
@@ -489,6 +524,7 @@
       "name": "Error Prevention",
       "cluster": "4_design_quality_baseline",
       "description": "Do form components define validation rules? Are input constraints part of the component API?",
+      "plain_description": "Whether the system provides patterns and constraints that help prevent users from making mistakes in the first place, rather than only handling errors after they occur.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No validation or constraint patterns.",
@@ -501,6 +537,7 @@
       "name": "Recognition Rather Than Recall",
       "cluster": "4_design_quality_baseline",
       "description": "Are component options constrained to enumerated values? Documented with visual examples and decision trees?",
+      "plain_description": "Whether components present users and developers with options to choose from, rather than requiring them to remember valid values or rules.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No enumerated options or decision support.",
@@ -513,6 +550,7 @@
       "name": "Flexibility and Efficiency",
       "cluster": "4_design_quality_baseline",
       "description": "Are density variants available? Are shortcut and progressive disclosure patterns documented?",
+      "plain_description": "Whether the system supports different information densities and provides patterns for progressive disclosure and shortcuts.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No density or efficiency patterns.",
@@ -525,6 +563,7 @@
       "name": "Aesthetic and Minimalist Design",
       "cluster": "4_design_quality_baseline",
       "description": "Is there a defined visual hierarchy system? Are information density and truncation rules documented?",
+      "plain_description": "Whether the system defines rules for visual hierarchy and information density, so interfaces show only what is needed and present it in a clear order.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No visual hierarchy or density guidelines.",
@@ -537,6 +576,7 @@
       "name": "Error Recovery",
       "cluster": "4_design_quality_baseline",
       "description": "Are error messages structured (what happened, why, what to do)? Are recovery actions defined as patterns?",
+      "plain_description": "Whether error messages in the system are structured to explain what went wrong and offer a clear next step for recovery.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No error recovery patterns.",
@@ -549,6 +589,7 @@
       "name": "Help and Documentation",
       "cluster": "4_design_quality_baseline",
       "description": "Do components have descriptions explaining when to use them? Is there a searchable pattern library? Are X vs Y decisions documented?",
+      "plain_description": "Whether the system provides guidance that helps people decide which component to use and how to use it correctly.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No help patterns or contextual documentation.",
@@ -561,6 +602,7 @@
       "name": "Visual Hierarchy",
       "cluster": "4_design_quality_baseline",
       "description": "Are elevation/layering rules documented? Are grouping patterns defined with spacing rules?",
+      "plain_description": "Whether the system defines rules for how elements should be layered and grouped to guide attention and communicate relative importance.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No hierarchy guidelines.",
@@ -573,6 +615,7 @@
       "name": "Visual Rhythm and Proportion",
       "cluster": "4_design_quality_baseline",
       "description": "Is vertical spacing governed by a system? Are component internal proportions consistent?",
+      "plain_description": "Whether the system defines a consistent spatial model that governs vertical spacing and component proportions, so layouts feel visually coherent.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "Not addressed. No spatial model.",
@@ -585,6 +628,7 @@
       "name": "Naming Convention Consistency",
       "cluster": "5_governance_and_ecosystem",
       "description": "Are naming conventions consistent across tokens, components, styles, and files? Do names use full words and slashes?",
+      "plain_description": "Whether tokens, components, styles, and files all follow the same naming patterns, making the system predictable to navigate and extend.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No naming conventions. Inconsistent throughout.",
@@ -599,6 +643,7 @@
       "name": "Versioning and Changelog Discipline",
       "cluster": "5_governance_and_ecosystem",
       "description": "Is there a structured changelog? Semantic versioning in use?",
+      "plain_description": "Whether the system records its changes in a structured log and uses version numbers that communicate what kind of change was made.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No versioning or changelog.",
@@ -613,6 +658,7 @@
       "name": "Contribution Standards",
       "cluster": "5_governance_and_ecosystem",
       "description": "Are there explicit, machine-readable contribution guidelines?",
+      "plain_description": "Whether there are clear, documented rules for how changes to the system should be proposed and reviewed.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No contribution guidelines.",
@@ -627,6 +673,7 @@
       "name": "Deprecation Patterns",
       "cluster": "5_governance_and_ecosystem",
       "description": "Are deprecated components and tokens clearly marked with migration paths?",
+      "plain_description": "Whether removed or replaced components and tokens are clearly labelled as deprecated and accompanied by instructions for migrating to their replacements.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No deprecation markers anywhere.",
@@ -641,6 +688,7 @@
       "name": "Test Coverage",
       "cluster": "5_governance_and_ecosystem",
       "description": "Are components covered by visual regression tests, unit tests, or accessibility tests?",
+      "plain_description": "Whether components are covered by automated tests for visual appearance, functional behaviour, and accessibility.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No tests.",
@@ -655,6 +703,7 @@
       "name": "Adoption Visibility",
       "cluster": "5_governance_and_ecosystem",
       "description": "Is there tooling to understand which consuming applications use which components at which versions?",
+      "plain_description": "Whether the system has tooling to show which products use which components at which version.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No adoption tracking.",
@@ -669,6 +718,7 @@
       "name": "Code Consistency and Pattern Predictability",
       "cluster": "5_governance_and_ecosystem",
       "description": "Do components follow consistent internal structure? Are conventions enforced by linting?",
+      "plain_description": "Whether components are built according to a consistent internal structure that an AI tool can learn and rely on when generating or modifying code.",
       "evidence_sources": ["Code"],
       "score_levels": {
         "0": "No consistent patterns. High structural divergence.",
@@ -683,6 +733,7 @@
       "name": "Token Value Parity",
       "cluster": "6_design_to_code_parity",
       "description": "Do the token values in code match those in the Figma Variables? Drift means an agent working from one source will generate incorrect code.",
+      "plain_description": "Whether the actual values assigned to tokens in code match those in Figma, so an AI tool working from either source produces the same result.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No matched tokens or widespread value divergence.",
@@ -697,6 +748,7 @@
       "name": "Token Naming Parity",
       "cluster": "6_design_to_code_parity",
       "description": "Do the token names in code match the Figma Variable names? Misalignment forces human translation.",
+      "plain_description": "Whether tokens are named consistently between Figma and code, so there is no manual translation step when moving between the two.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No naming alignment. Completely different naming schemes.",
@@ -711,6 +763,7 @@
       "name": "Component Naming Parity",
       "cluster": "6_design_to_code_parity",
       "description": "Do component names, variant names, and prop names align between Figma and code?",
+      "plain_description": "Whether component names, variant names, and property names match between Figma and code.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No component naming alignment.",
@@ -725,6 +778,7 @@
       "name": "Variant and State Coverage Parity",
       "cluster": "6_design_to_code_parity",
       "description": "Are all Figma-defined states implemented in code? Are all coded states specified in Figma?",
+      "plain_description": "Whether every visual state defined in Figma has a corresponding implementation in code, and vice versa.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No cross-referencing. Major gaps in both directions.",
@@ -739,6 +793,7 @@
       "name": "Behaviour Parity",
       "cluster": "6_design_to_code_parity",
       "description": "Are there interactive behaviours in code with no corresponding Figma specification, or vice versa?",
+      "plain_description": "Whether interactive behaviours — such as hover, focus, and keyboard navigation — are specified in both Figma and code rather than being decided unilaterally in one place.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No behaviour comparison. Unilateral design decisions in both directions.",
@@ -753,6 +808,7 @@
       "name": "Documentation of Parity Gaps",
       "cluster": "6_design_to_code_parity",
       "description": "Are known gaps between Figma and code tracked and documented? Undocumented gaps become silent agent errors.",
+      "plain_description": "Whether known differences between the Figma design and the code are tracked and documented, so AI tools know which source to follow.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No documented parity gaps. Gaps exist but are undocumented.",
