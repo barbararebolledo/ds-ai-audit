@@ -23,6 +23,195 @@ This audit checks whether the design system can explain itself to an AI agent wi
 
 ---
 
+## Scope Statement
+
+> Register note: the "edges, not gaps" framing in paragraph 3 is non-negotiable.
+> Do not soften "It does not claim to measure" with "fully" or "comprehensively".
+> All four scope-list items must be retained.
+> {overall_score} and {phase_readiness} are placeholders interpolated by the front-end at render time.
+
+<!-- field: scope_statement -->
+The audit measures the design system as an artefact. Tokens, components, documentation, governance, parity. It scores these through an AI consumption lens: whether the content is right, whether the mechanism delivers it to the AI consumer, whether the consumer in fact uses what arrives. That is the instrument.
+
+There are things this instrument does not measure. Organisational capacity to operate the system at AI speed sits outside the artefact and outside the score. So does designer judgement under tension: knowing which rule to break, against which brief, for which moment. So does accessibility-in-the-trenches, the ongoing practice of working with disabled users that sits behind the accessibility properties measurable at the artefact level. So does brand-as-lived-practice, the accumulated decisions that give a product its character, distinct from brand-as-encoded-rules.
+
+These are not gaps in the audit. They are the instrument's edges. The audit is a focused diagnostic of one layer. It does not claim to measure the team that builds the system, the judgement that shapes individual decisions, or the cultural fabric that holds brand expression together. Those questions need other tools.
+
+A score of {overall_score}/100 on this audit means the artefact is at {phase_readiness} for AI consumption. It does not mean the system is AI-ready in the broader organisational sense, and it does not relieve the team of the harder work that sits above the artefact layer.
+<!-- /field -->
+
+---
+
+## Organisational Implications
+
+> Register note: opening and closing are invariant -- do not edit them.
+> Edit only the pattern blocks. "Often suggests" is the required modal phrase.
+> "We'd like to validate this with you in Phase 2" closes every pattern without variation.
+
+### Opening (invariant)
+
+> The audit measures the artefact, not the team. The artefact carries traces of how the team works, and the patterns below are inferences read from the score profile. They are suggestions, not diagnoses. The audit invites validation in Phase 2.
+
+### Patterns
+
+#### Pattern 1
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.0.pattern_name -->
+Figma documentation entirely absent
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.0.cluster_or_dimension_reference -->
+Dimensions 3.1 (Functional Intent Coverage) and 3.5 (In-File Documentation Structure)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.0.score_value -->
+0/100 and 25/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.0.supporting_observation -->
+94.9% of Carbon's 2856 components have no Figma description and the file has no structured documentation frame convention, while the carbondesignsystem.com docs site scores 3.4 (Usage Guidance Structure) at 100%
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.0.artefact_pattern_described -->
+excellent documentation written for the docs site but with no route to the design file -- an AI tool reading the Figma API receives no component purpose, no usage guidance, no constraints
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.0.organisational_implication -->
+documentation may be owned by a content or developer experience team that publishes to the site but has no workflow for keeping Figma component descriptions synchronised with what is published. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+#### Pattern 2
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.1.pattern_name -->
+Full token coverage, zero token explanation
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.1.cluster_or_dimension_reference -->
+Dimensions 1.1 (Token Implementation) and 1.6 (Token Documentation)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.1.score_value -->
+100/100 and 0/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.1.supporting_observation -->
+1804 variables across 34 collections with four theme modes, but only 5 of those 1804 variables carry any description
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.1.artefact_pattern_described -->
+a comprehensively tokenised system where the tokens themselves carry no explanation of what they mean or when to use them
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.1.organisational_implication -->
+token implementation may have been executed as a technical migration effort, with description-writing deferred as a lower-priority follow-on task that has not yet been resourced. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+#### Pattern 3
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.2.pattern_name -->
+Strong governance, documentation workflow gap
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.2.cluster_or_dimension_reference -->
+Cluster 5 (Governance and Ecosystem) and Cluster 3 (Documentation Readiness)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.2.score_value -->
+82.1/100 and 45.0/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.2.supporting_observation -->
+formal deprecation patterns (100%), three-tier test coverage (100%), and a comprehensive developer contribution handbook alongside a Cluster 3 score anchored by zero Figma-side intent coverage
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.2.artefact_pattern_described -->
+a governance-mature system that has built strong process around code but has not extended that process discipline to the design file as a documentation surface
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.2.organisational_implication -->
+governance investment may have been driven by engineering leadership, with the design file treated as a source for handoff rather than as a maintained documentation artefact in its own right. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+#### Pattern 4
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.3.pattern_name -->
+Parity gap structural but undocumented
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.3.cluster_or_dimension_reference -->
+Cluster 6 (Design-to-Code Parity)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.3.score_value -->
+54.2/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.3.supporting_observation -->
+518 code-only tokens and 1164 Figma-only tokens with no parity gap register, alongside a naming convention mismatch between Figma (kebab-case) and code (camelCase) that is systematic but undocumented
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.3.artefact_pattern_described -->
+a large token gap that likely reflects a deliberate architectural difference -- Figma variables and code tokens were not designed to be 1:1 -- but has never been written down, making it indistinguishable from drift
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.3.organisational_implication -->
+the Figma token architecture and code token architecture may have been developed by different teams or at different points in the system's history, without a shared contract establishing which differences are intentional. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+### Closing (invariant)
+
+> These are the implications the audit can read in the artefact. They are not the totality of the organisational picture. They are the parts visible from the design system's score profile. Phase 2 is where these patterns get tested against the team's reality.
+
+---
+
 ## Clusters
 
 ### 0_prerequisites

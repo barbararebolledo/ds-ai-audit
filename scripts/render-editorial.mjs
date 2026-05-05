@@ -112,6 +112,89 @@ if (editorial.report) {
   lines.push('');
 }
 
+// Scope Statement section
+if (editorial.scope_statement !== undefined) {
+  lines.push('## Scope Statement');
+  lines.push('');
+  lines.push('> Register note: the "edges, not gaps" framing in paragraph 3 is non-negotiable.');
+  lines.push('> Do not soften "It does not claim to measure" with "fully" or "comprehensively".');
+  lines.push('> All four scope-list items must be retained.');
+  lines.push('> {overall_score} and {phase_readiness} are placeholders interpolated by the front-end at render time.');
+  lines.push('');
+  lines.push(field('scope_statement', editorial.scope_statement));
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+}
+
+// Organisational Implications section
+if (editorial.organisational_implications) {
+  const oi = editorial.organisational_implications;
+  lines.push('## Organisational Implications');
+  lines.push('');
+  lines.push('> Register note: opening and closing are invariant -- do not edit them.');
+  lines.push('> Edit only the pattern blocks. "Often suggests" is the required modal phrase.');
+  lines.push('> "We\'d like to validate this with you in Phase 2" closes every pattern without variation.');
+  lines.push('');
+
+  if (oi.opening) {
+    lines.push('### Opening (invariant)');
+    lines.push('');
+    lines.push('> ' + oi.opening);
+    lines.push('');
+  }
+
+  if (oi.patterns && oi.patterns.length > 0) {
+    lines.push('### Patterns');
+    lines.push('');
+
+    oi.patterns.forEach((pattern, i) => {
+      lines.push(`#### Pattern ${i + 1}`);
+      lines.push('');
+
+      lines.push('**Pattern name**');
+      lines.push('');
+      lines.push(field(`organisational_implications.patterns.${i}.pattern_name`, pattern.pattern_name));
+      lines.push('');
+
+      lines.push('**Cluster or dimension reference**');
+      lines.push('');
+      lines.push(field(`organisational_implications.patterns.${i}.cluster_or_dimension_reference`, pattern.cluster_or_dimension_reference));
+      lines.push('');
+
+      lines.push('**Score value**');
+      lines.push('');
+      lines.push(field(`organisational_implications.patterns.${i}.score_value`, pattern.score_value));
+      lines.push('');
+
+      lines.push('**Supporting observation**');
+      lines.push('');
+      lines.push(field(`organisational_implications.patterns.${i}.supporting_observation`, pattern.supporting_observation));
+      lines.push('');
+
+      lines.push('**Artefact pattern described**');
+      lines.push('');
+      lines.push(field(`organisational_implications.patterns.${i}.artefact_pattern_described`, pattern.artefact_pattern_described));
+      lines.push('');
+
+      lines.push('**Organisational implication**');
+      lines.push('');
+      lines.push(field(`organisational_implications.patterns.${i}.organisational_implication`, pattern.organisational_implication));
+      lines.push('');
+    });
+  }
+
+  if (oi.closing) {
+    lines.push('### Closing (invariant)');
+    lines.push('');
+    lines.push('> ' + oi.closing);
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('');
+}
+
 // Clusters section
 if (editorial.clusters && Object.keys(editorial.clusters).length > 0) {
   lines.push('## Clusters');

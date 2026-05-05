@@ -1,9 +1,48 @@
 {
   "meta": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "audit_ref": "carbon-v3.2-2026-04-10",
     "last_edited_by": "Barbara",
     "last_edited_at": "2026-04-10T15:55:40.589Z"
+  },
+  "scope_statement": "The audit measures the design system as an artefact. Tokens, components, documentation, governance, parity. It scores these through an AI consumption lens: whether the content is right, whether the mechanism delivers it to the AI consumer, whether the consumer in fact uses what arrives. That is the instrument.\n\nThere are things this instrument does not measure. Organisational capacity to operate the system at AI speed sits outside the artefact and outside the score. So does designer judgement under tension: knowing which rule to break, against which brief, for which moment. So does accessibility-in-the-trenches, the ongoing practice of working with disabled users that sits behind the accessibility properties measurable at the artefact level. So does brand-as-lived-practice, the accumulated decisions that give a product its character, distinct from brand-as-encoded-rules.\n\nThese are not gaps in the audit. They are the instrument's edges. The audit is a focused diagnostic of one layer. It does not claim to measure the team that builds the system, the judgement that shapes individual decisions, or the cultural fabric that holds brand expression together. Those questions need other tools.\n\nA score of {overall_score}/100 on this audit means the artefact is at {phase_readiness} for AI consumption. It does not mean the system is AI-ready in the broader organisational sense, and it does not relieve the team of the harder work that sits above the artefact layer.",
+  "organisational_implications": {
+    "opening": "The audit measures the artefact, not the team. The artefact carries traces of how the team works, and the patterns below are inferences read from the score profile. They are suggestions, not diagnoses. The audit invites validation in Phase 2.",
+    "patterns": [
+      {
+        "pattern_name": "Figma documentation entirely absent",
+        "cluster_or_dimension_reference": "Dimensions 3.1 (Functional Intent Coverage) and 3.5 (In-File Documentation Structure)",
+        "score_value": "0/100 and 25/100",
+        "supporting_observation": "94.9% of Carbon's 2856 components have no Figma description and the file has no structured documentation frame convention, while the carbondesignsystem.com docs site scores 3.4 (Usage Guidance Structure) at 100%",
+        "artefact_pattern_described": "excellent documentation written for the docs site but with no route to the design file -- an AI tool reading the Figma API receives no component purpose, no usage guidance, no constraints",
+        "organisational_implication": "documentation may be owned by a content or developer experience team that publishes to the site but has no workflow for keeping Figma component descriptions synchronised with what is published. We'd like to validate this with you in Phase 2."
+      },
+      {
+        "pattern_name": "Full token coverage, zero token explanation",
+        "cluster_or_dimension_reference": "Dimensions 1.1 (Token Implementation) and 1.6 (Token Documentation)",
+        "score_value": "100/100 and 0/100",
+        "supporting_observation": "1804 variables across 34 collections with four theme modes, but only 5 of those 1804 variables carry any description",
+        "artefact_pattern_described": "a comprehensively tokenised system where the tokens themselves carry no explanation of what they mean or when to use them",
+        "organisational_implication": "token implementation may have been executed as a technical migration effort, with description-writing deferred as a lower-priority follow-on task that has not yet been resourced. We'd like to validate this with you in Phase 2."
+      },
+      {
+        "pattern_name": "Strong governance, documentation workflow gap",
+        "cluster_or_dimension_reference": "Cluster 5 (Governance and Ecosystem) and Cluster 3 (Documentation Readiness)",
+        "score_value": "82.1/100 and 45.0/100",
+        "supporting_observation": "formal deprecation patterns (100%), three-tier test coverage (100%), and a comprehensive developer contribution handbook alongside a Cluster 3 score anchored by zero Figma-side intent coverage",
+        "artefact_pattern_described": "a governance-mature system that has built strong process around code but has not extended that process discipline to the design file as a documentation surface",
+        "organisational_implication": "governance investment may have been driven by engineering leadership, with the design file treated as a source for handoff rather than as a maintained documentation artefact in its own right. We'd like to validate this with you in Phase 2."
+      },
+      {
+        "pattern_name": "Parity gap structural but undocumented",
+        "cluster_or_dimension_reference": "Cluster 6 (Design-to-Code Parity)",
+        "score_value": "54.2/100",
+        "supporting_observation": "518 code-only tokens and 1164 Figma-only tokens with no parity gap register, alongside a naming convention mismatch between Figma (kebab-case) and code (camelCase) that is systematic but undocumented",
+        "artefact_pattern_described": "a large token gap that likely reflects a deliberate architectural difference -- Figma variables and code tokens were not designed to be 1:1 -- but has never been written down, making it indistinguishable from drift",
+        "organisational_implication": "the Figma token architecture and code token architecture may have been developed by different teams or at different points in the system's history, without a shared contract establishing which differences are intentional. We'd like to validate this with you in Phase 2."
+      }
+    ],
+    "closing": "These are the implications the audit can read in the artefact. They are not the totality of the organisational picture. They are the parts visible from the design system's score profile. Phase 2 is where these patterns get tested against the team's reality."
   },
   "report": {
     "executive_summary": "Carbon has exceptional governance and component coverage, but AI tools working from the design file cannot read any component purpose or token meaning -- everything they need is in code, not in Figma.",
@@ -12,15 +51,15 @@
   "tiers": {
     "1": {
       "label": "Agent Readability",
-      "value_framing": "Without these, the system is opaque to AI tooling. Components and tokens cannot be reliably selected, named, or reasoned about by an agent \u2014 every AI-assisted workflow downstream of the design system is blocked at the entry point. Effort is not the question here. These are the changes that make the rest of the audit's work meaningful."
+      "value_framing": "Without these, the system is opaque to AI tooling. Components and tokens cannot be reliably selected, named, or reasoned about by an agent — every AI-assisted workflow downstream of the design system is blocked at the entry point. Effort is not the question here. These are the changes that make the rest of the audit's work meaningful."
     },
     "2": {
       "label": "High Impact, Low Effort",
-      "value_framing": "These cost little and change a lot. Each one improves the quality of AI-assisted decisions made against the system \u2014 better selections, fewer corrections, faster iteration \u2014 without requiring structural change. The return is immediate and visible in daily work."
+      "value_framing": "These cost little and change a lot. Each one improves the quality of AI-assisted decisions made against the system — better selections, fewer corrections, faster iteration — without requiring structural change. The return is immediate and visible in daily work."
     },
     "3": {
       "label": "Strategic Investment",
-      "value_framing": "These take real cross-functional effort and return slower than Tier 2. What they build is different: design quality, governance maturity, parity discipline \u2014 the foundations that make the system continuously better rather than just currently usable. The value grows over time."
+      "value_framing": "These take real cross-functional effort and return slower than Tier 2. What they build is different: design quality, governance maturity, parity discipline — the foundations that make the system continuously better rather than just currently usable. The value grows over time."
     }
   },
   "clusters": {

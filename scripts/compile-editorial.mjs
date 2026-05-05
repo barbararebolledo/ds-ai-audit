@@ -139,6 +139,26 @@ function parsePath(path) {
 }
 
 function setField(obj, path, value) {
+  // Handle top-level scalar (no dots) e.g. "scope_statement"
+  if (!path.includes('.')) {
+    obj[path] = value;
+    return;
+  }
+
+  // Handle organisational_implications.patterns.<index>.<field>
+  const patternMatch = path.match(/^organisational_implications\.patterns\.(\d+)\.(.+)$/);
+  if (patternMatch) {
+    const idx = parseInt(patternMatch[1], 10);
+    const fieldName = patternMatch[2];
+    if (!obj.organisational_implications) obj.organisational_implications = {};
+    if (!obj.organisational_implications.patterns) obj.organisational_implications.patterns = [];
+    while (obj.organisational_implications.patterns.length <= idx) {
+      obj.organisational_implications.patterns.push({});
+    }
+    obj.organisational_implications.patterns[idx][fieldName] = value;
+    return;
+  }
+
   const [section, key, field] = parsePath(path);
 
   if (!section || !field) return;

@@ -9,10 +9,9 @@ without explicit instruction and a documented reason.
 
 ## What this repo is
 
-A proof-of-concept audit tool that reads an existing design system — Figma library
-files plus a code repository — and produces a structured AI-readiness report. The
-audit runs as a script. It does not write to Figma. It does not automate remediation.
-It flags problems and makes recommendations.
+The audit measures design system maturity through an AI consumption lens. AI is the diagnostic. It reveals whether intent and context are separated, whether tokens are enforced, whether documentation reaches the consumer, whether contribution scales beyond human throughput. _AI-ready_ is the visible result; maturity is the underlying property the audit scores.
+
+Operationally, the tool is a proof-of-concept audit script that reads an existing design system (Figma library files plus a code repository) and produces a structured maturity report. The audit runs as a script. It does not write to Figma. It does not automate remediation. It flags problems and makes recommendations.
 
 The repo also contains a POC design system (system/) built from scratch to validate
 the audit methodology. It has no component code. All component definitions live in
@@ -28,6 +27,30 @@ answers questions about system health. The current phase is script-based auditin
 Getting there is a sequence, not a rebuild.
 
 ---
+### The content + mechanism + delivery pattern
+
+The audit measures three layers, not one. Content is whether the artefact is right: well-named tokens, structured documentation, well-typed APIs, contribution standards. Mechanism is the infrastructure that delivers that content to the AI consumer in a form the consumer can use: CI enforcement of token usage, queryable documentation interfaces, always-on context, contribution rules differentiated for AI contributors. Delivery is whether the consumer actually receives and uses the content as intended: agents reference tokens rather than inventing values, agents query documentation at generation time rather than falling back to training data, agent contributions land in the right tier of the contribution hierarchy.
+
+Content quality is necessary but not sufficient. Tokens defined but not enforced at build produce tokens-as-decoration: an LLM writes `padding: 12px` because 12px is plausible, the build accepts it, the rule does no work. Documentation written but not queryable at generation time produces fallback to training data: agents output system-agnostic code that ignores the system. Contribution rules written for human reviewers but not differentiated for agents produce review bottleneck or quiet erosion as agents multiply contributors faster than review can absorb.
+
+The mechanism layer's central architectural move is partitioning. Same source, different renderings, gated by consumption mode. The audit's mechanism dimensions score whether the system has achieved this partitioning at the relevant layer.
+
+This pattern shapes how cluster narratives read. Each cluster reports content quality and mechanism quality as paired observations, with delivery (agent behaviour) as the consequence the pair predicts. Where mechanism is absent, content quality alone does not predict reliable AI consumption.
+
+----
+### Field references and critical positioning
+
+Four voices anchor the methodology choices.
+
+**Nathan Curtis (EightShapes).** Established the structured documentation content model the six-level hierarchy extends. Curtis's 2025 _Components as Data_ position (express components in YAML or JSON because AI favours structured data) supports Dimension 3.2 (documentation indexing). Curtis has publicly walked back earlier federated-friendly governance assumptions, which informs Cluster 5's scoring of contribution standards. The audit holds the structured-data direction as the target state.
+
+**Murphy Trueman.** _Your design system might be AI-ready, your organisation probably isn't._ The audit cannot directly measure team capacity, review bandwidth, or contribution governance. It reads their shadow in artefact patterns and names the implications. Trueman's argument is why the audit positions itself as the structured entry to a two-phase engagement, with the organisational workshop as Phase 2.
+
+**Eric Bailey.** Compliance-theatre critique: frameworks can optimise for _appearing_ AI-ready by ticking visible boxes (machine-readable tokens, MCP server, structured docs) without addressing the harder substrate (organisational capacity, designer judgement, accessibility-in-the-trenches, brand expression). The audit guards against this by scoring mechanism and delivery alongside content, and by reading substrate gaps in the artefact patterns the audit can see.
+
+**Brad Frost.** MCP is on-demand. If the prompt asks for a card, MCP returns card metadata but ignores spacing, typography, and colour, and the LLM fills the gaps from training. Frost's progressive-disclosure model (always-on AGENTS.md plus on-demand component MCP) is the emerging answer. The audit's content + mechanism + delivery pattern surfaces this as a measurable concern: foundation rules need to be present in working context every turn, not fetched on request.
+
+----
 
 ## How to navigate this repo
 
@@ -246,6 +269,8 @@ cluster scores are calculated from available dimensions only.
 Prompt files reference these dimensions. They do not redefine them. If a dimension
 changes, update it here first, then update the prompt.
 
+For a plain-language explanation of what each dimension measures, written for a non-specialist reader, see the `plain_description` field in `data/dimension-reference.json`. The cluster lists below carry the technical definitions and evidence sources. The JSON file carries the plain-language counterparts.
+
 **Cluster 0: Prerequisites**
 Scored first. A failing score (below 2) flags all downstream clusters as
 conditionally valid.
@@ -435,11 +460,7 @@ The `data/` directory contains static reference data for front-end and agent
 consumption. These files are derived from CLAUDE.md, the audit dimensions
 document, and the scoring weights config. They are not hand-authored.
 
-- `data/dimension-reference.json` -- All 56 dimensions keyed by dimension ID.
-  Each entry has: name, cluster, description, evidence_sources, and score_levels
-  (keys "0" through "4" for standard dimensions, "0" through "2" for Tier 2).
-  The front-end reads this file to render dimension names, descriptions, and
-  scoring rubrics without parsing CLAUDE.md.
+- `data/dimension-reference.json` -- All 56 dimensions keyed by dimension ID. Each entry has: name, cluster, description (technical), plain_description (a single-sentence plain-language explanation of what the dimension measures, written for a non-specialist reader), evidence_sources, and score_levels (keys "0" through "4" for standard dimensions, "0" through "2" for Tier 2). The front-end reads this file to render dimension names, descriptions, and scoring rubrics without parsing CLAUDE.md.
 
 ## Front-end information architecture
 
@@ -539,8 +560,8 @@ Update this section at the end of each release session.
 | Current release | 3.2 (complete) |
 | Active test vehicle | Material UI + Carbon Design System -- both with Figma + GitHub + docs site evidence |
 | Last prompt version | v3.2 (prompts/audit-prompt.md) |
-| Schema version | v3.0 (audit/schema/audit-schema.json) + remediation v1.0 (audit/schema/remediation-schema.json) + editorial v1.0 (audit/schema/editorial-schema.json) |
-| Editorial JSON | v1.0 schema. Pre-populated by audit engine. Editable Markdown template generated by scripts/render-editorial.mjs. Compiled back to JSON by scripts/compile-editorial.mjs. |
+| Schema version | v3.0 (audit/schema/audit-schema.json) + remediation v1.0 (audit/schema/remediation-schema.json) + editorial v1.1 (audit/schema/editorial-schema.json) |
+| Editorial JSON | v1.1 schema. Adds scope_statement and organisational_implications (required). Pre-populated by audit engine. Editable Markdown template generated by scripts/render-editorial.mjs. Compiled back to JSON by scripts/compile-editorial.mjs. |
 | Scoring weights | v2.1 (config/scoring-weights.json) -- cluster-based, 7 clusters sum to 1.00 |
 | Last audit run | MUI v3.2 (63.6/100, not_ready, 4 blockers), Carbon v3.2 (62.5/100, not_ready, 6 blockers) |
 | Benchmark audits | MUI v3.2 (63.6/100), Carbon v3.2 (62.5/100) |

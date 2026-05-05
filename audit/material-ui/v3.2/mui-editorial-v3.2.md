@@ -23,6 +23,157 @@ This audit checks whether the design system can explain itself to an AI agent wi
 
 ---
 
+## Scope Statement
+
+> Register note: the "edges, not gaps" framing in paragraph 3 is non-negotiable.
+> Do not soften "It does not claim to measure" with "fully" or "comprehensively".
+> All four scope-list items must be retained.
+> {overall_score} and {phase_readiness} are placeholders interpolated by the front-end at render time.
+
+<!-- field: scope_statement -->
+The audit measures the design system as an artefact. Tokens, components, documentation, governance, parity. It scores these through an AI consumption lens: whether the content is right, whether the mechanism delivers it to the AI consumer, whether the consumer in fact uses what arrives. That is the instrument.
+
+There are things this instrument does not measure. Organisational capacity to operate the system at AI speed sits outside the artefact and outside the score. So does designer judgement under tension: knowing which rule to break, against which brief, for which moment. So does accessibility-in-the-trenches, the ongoing practice of working with disabled users that sits behind the accessibility properties measurable at the artefact level. So does brand-as-lived-practice, the accumulated decisions that give a product its character, distinct from brand-as-encoded-rules.
+
+These are not gaps in the audit. They are the instrument's edges. The audit is a focused diagnostic of one layer. It does not claim to measure the team that builds the system, the judgement that shapes individual decisions, or the cultural fabric that holds brand expression together. Those questions need other tools.
+
+A score of {overall_score}/100 on this audit means the artefact is at {phase_readiness} for AI consumption. It does not mean the system is AI-ready in the broader organisational sense, and it does not relieve the team of the harder work that sits above the artefact layer.
+<!-- /field -->
+
+---
+
+## Organisational Implications
+
+> Register note: opening and closing are invariant -- do not edit them.
+> Edit only the pattern blocks. "Often suggests" is the required modal phrase.
+> "We'd like to validate this with you in Phase 2" closes every pattern without variation.
+
+### Opening (invariant)
+
+> The audit measures the artefact, not the team. The artefact carries traces of how the team works, and the patterns below are inferences read from the score profile. They are suggestions, not diagnoses. The audit invites validation in Phase 2.
+
+### Patterns
+
+#### Pattern 1
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.0.pattern_name -->
+Documentation low across all surfaces
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.0.cluster_or_dimension_reference -->
+Cluster 3 (Documentation Readiness)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.0.score_value -->
+50.0/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.0.supporting_observation -->
+all five documentation sub-dimensions scoring between 25% and 75%, and 0 of 40 component sets carrying intent descriptions that an AI tool can read from Figma
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.0.artefact_pattern_described -->
+documentation that is thin not in one place but everywhere -- partial on indexing, partial on quality, missing entirely on Figma-side intent coverage
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.0.organisational_implication -->
+writing may be no one's job on the design system team, or documentation has been written for a developer audience and has not yet been routed to the surfaces AI tools can read. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+#### Pattern 2
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.1.pattern_name -->
+Strong components, documentation unreachable from the design file
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.1.cluster_or_dimension_reference -->
+Cluster 2 (Component Quality) and Dimension 3.1 (Functional Intent Coverage)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.1.score_value -->
+81.2/100 and 25/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.1.supporting_observation -->
+component API composability and variant completeness both at 100%, but 0 of 40 component sets carry intent descriptions that an AI tool reading the Figma file can access -- documentation exists on mui.com but has no declared path to Figma metadata
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.1.artefact_pattern_described -->
+well-engineered components whose purpose cannot be determined from the design file -- the engineering quality runs well ahead of documentation co-location
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.1.organisational_implication -->
+engineering excellence in component API design may have run ahead of documentation practice, or the documentation workflow was designed for developer consumers rather than for the design file's AI tooling audience. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+#### Pattern 3
+
+**Pattern name**
+
+<!-- field: organisational_implications.patterns.2.pattern_name -->
+Parity gap, design-engineering disconnect
+<!-- /field -->
+
+**Cluster or dimension reference**
+
+<!-- field: organisational_implications.patterns.2.cluster_or_dimension_reference -->
+Cluster 6 (Design-to-Code Parity)
+<!-- /field -->
+
+**Score value**
+
+<!-- field: organisational_implications.patterns.2.score_value -->
+62.5/100
+<!-- /field -->
+
+**Supporting observation**
+
+<!-- field: organisational_implications.patterns.2.supporting_observation -->
+248 unmatched tokens (125 code-only, 123 Figma-only) and 7 value mismatches with no parity gap register documenting which differences are intentional
+<!-- /field -->
+
+**Artefact pattern described**
+
+<!-- field: organisational_implications.patterns.2.artefact_pattern_described -->
+a token set that has grown in parallel in design and code, with no shared record of which differences reflect deliberate decisions and which reflect drift
+<!-- /field -->
+
+**Organisational implication**
+
+<!-- field: organisational_implications.patterns.2.organisational_implication -->
+design and engineering may be evolving the token system independently, with handoff happening at the visual layer rather than at a shared source of token truth. We'd like to validate this with you in Phase 2.
+<!-- /field -->
+
+### Closing (invariant)
+
+> These are the implications the audit can read in the artefact. They are not the totality of the organisational picture. They are the parts visible from the design system's score profile. Phase 2 is where these patterns get tested against the team's reality.
+
+---
+
 ## Clusters
 
 ### 0_prerequisites

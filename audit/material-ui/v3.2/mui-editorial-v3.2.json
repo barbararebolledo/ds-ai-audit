@@ -1,9 +1,40 @@
 {
   "meta": {
-    "schema_version": "1.0",
+    "schema_version": "1.1",
     "audit_ref": "material-ui-v3.2-2026-04-10",
     "last_edited_by": "Barbara",
-    "last_edited_at": "2026-04-10T15:55:37.279Z"
+    "last_edited_at": "2026-05-05T13:33:31.570Z"
+  },
+  "scope_statement": "The audit measures the design system as an artefact. Tokens, components, documentation, governance, parity. It scores these through an AI consumption lens: whether the content is right, whether the mechanism delivers it to the AI consumer, whether the consumer in fact uses what arrives. That is the instrument.\n\nThere are things this instrument does not measure. Organisational capacity to operate the system at AI speed sits outside the artefact and outside the score. So does designer judgement under tension: knowing which rule to break, against which brief, for which moment. So does accessibility-in-the-trenches, the ongoing practice of working with disabled users that sits behind the accessibility properties measurable at the artefact level. So does brand-as-lived-practice, the accumulated decisions that give a product its character, distinct from brand-as-encoded-rules.\n\nThese are not gaps in the audit. They are the instrument's edges. The audit is a focused diagnostic of one layer. It does not claim to measure the team that builds the system, the judgement that shapes individual decisions, or the cultural fabric that holds brand expression together. Those questions need other tools.\n\nA score of {overall_score}/100 on this audit means the artefact is at {phase_readiness} for AI consumption. It does not mean the system is AI-ready in the broader organisational sense, and it does not relieve the team of the harder work that sits above the artefact layer.",
+  "organisational_implications": {
+    "opening": "The audit measures the artefact, not the team. The artefact carries traces of how the team works, and the patterns below are inferences read from the score profile. They are suggestions, not diagnoses. The audit invites validation in Phase 2.",
+    "patterns": [
+      {
+        "pattern_name": "Documentation low across all surfaces",
+        "cluster_or_dimension_reference": "Cluster 3 (Documentation Readiness)",
+        "score_value": "50.0/100",
+        "supporting_observation": "all five documentation sub-dimensions scoring between 25% and 75%, and 0 of 40 component sets carrying intent descriptions that an AI tool can read from Figma",
+        "artefact_pattern_described": "documentation that is thin not in one place but everywhere -- partial on indexing, partial on quality, missing entirely on Figma-side intent coverage",
+        "organisational_implication": "writing may be no one's job on the design system team, or documentation has been written for a developer audience and has not yet been routed to the surfaces AI tools can read. We'd like to validate this with you in Phase 2."
+      },
+      {
+        "pattern_name": "Strong components, documentation unreachable from the design file",
+        "cluster_or_dimension_reference": "Cluster 2 (Component Quality) and Dimension 3.1 (Functional Intent Coverage)",
+        "score_value": "81.2/100 and 25/100",
+        "supporting_observation": "component API composability and variant completeness both at 100%, but 0 of 40 component sets carry intent descriptions that an AI tool reading the Figma file can access -- documentation exists on mui.com but has no declared path to Figma metadata",
+        "artefact_pattern_described": "well-engineered components whose purpose cannot be determined from the design file -- the engineering quality runs well ahead of documentation co-location",
+        "organisational_implication": "engineering excellence in component API design may have run ahead of documentation practice, or the documentation workflow was designed for developer consumers rather than for the design file's AI tooling audience. We'd like to validate this with you in Phase 2."
+      },
+      {
+        "pattern_name": "Parity gap, design-engineering disconnect",
+        "cluster_or_dimension_reference": "Cluster 6 (Design-to-Code Parity)",
+        "score_value": "62.5/100",
+        "supporting_observation": "248 unmatched tokens (125 code-only, 123 Figma-only) and 7 value mismatches with no parity gap register documenting which differences are intentional",
+        "artefact_pattern_described": "a token set that has grown in parallel in design and code, with no shared record of which differences reflect deliberate decisions and which reflect drift",
+        "organisational_implication": "design and engineering may be evolving the token system independently, with handoff happening at the visual layer rather than at a shared source of token truth. We'd like to validate this with you in Phase 2."
+      }
+    ],
+    "closing": "These are the implications the audit can read in the artefact. They are not the totality of the organisational picture. They are the parts visible from the design system's score profile. Phase 2 is where these patterns get tested against the team's reality."
   },
   "report": {
     "executive_summary": "MUI has strong component foundations but one structural gap means AI tools cannot select the right component without a human reviewing every choice.",
@@ -12,15 +43,15 @@
   "tiers": {
     "1": {
       "label": "Agent Readability",
-      "value_framing": "Without these, the system is opaque to AI tooling. Components and tokens cannot be reliably selected, named, or reasoned about by an agent \u2014 every AI-assisted workflow downstream of the design system is blocked at the entry point. Effort is not the question here. These are the changes that make the rest of the audit's work meaningful."
+      "value_framing": "Without these, the system is opaque to AI tooling. Components and tokens cannot be reliably selected, named, or reasoned about by an agent — every AI-assisted workflow downstream of the design system is blocked at the entry point. Effort is not the question here. These are the changes that make the rest of the audit's work meaningful."
     },
     "2": {
       "label": "High Impact, Low Effort",
-      "value_framing": "These cost little and change a lot. Each one improves the quality of AI-assisted decisions made against the system \u2014 better selections, fewer corrections, faster iteration \u2014 without requiring structural change. The return is immediate and visible in daily work."
+      "value_framing": "These cost little and change a lot. Each one improves the quality of AI-assisted decisions made against the system — better selections, fewer corrections, faster iteration — without requiring structural change. The return is immediate and visible in daily work."
     },
     "3": {
       "label": "Strategic Investment",
-      "value_framing": "These take real cross-functional effort and return slower than Tier 2. What they build is different: design quality, governance maturity, parity discipline \u2014 the foundations that make the system continuously better rather than just currently usable. The value grows over time."
+      "value_framing": "These take real cross-functional effort and return slower than Tier 2. What they build is different: design quality, governance maturity, parity discipline — the foundations that make the system continuously better rather than just currently usable. The value grows over time."
     }
   },
   "clusters": {

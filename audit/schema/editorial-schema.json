@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "editorial-schema.json",
-  "title": "Audit Editorial Content v1.0",
+  "title": "Audit Editorial Content v1.1",
   "$comment": "Prose overrides only. This schema carries human-written content that overrides generated text in the audit and remediation files. It does not carry remediation structure. Joined to audit and remediation files by audit_id. The front-end merges this with the data JSON at render time, preferring editorial content when present. All sections are optional; the front-end falls back to data JSON content when editorial content is absent.",
 
   "type": "object",
-  "required": ["meta"],
+  "required": ["meta", "scope_statement", "organisational_implications"],
   "additionalProperties": false,
 
   "properties": {
@@ -17,7 +17,7 @@
       "properties": {
         "schema_version": {
           "type": "string",
-          "const": "1.0",
+          "const": "1.1",
           "$comment": "Editorial schema version. Independent from audit schema version."
         },
         "audit_ref": {
@@ -32,6 +32,63 @@
           "type": "string",
           "format": "date-time",
           "$comment": "Optional. ISO 8601 timestamp of the last edit."
+        }
+      }
+    },
+
+    "scope_statement": {
+      "type": "string",
+      "$comment": "Required. Multi-paragraph prose rendered after the executive summary and before the cluster scores. States what the audit measures and does not measure, framing the score boundary as the instrument's edges rather than its gaps. Contains {overall_score} and {phase_readiness} placeholders interpolated from the companion audit JSON summary at front-end render time. The 'edges, not gaps' framing and the four-item scope list (organisational capacity, designer judgement, accessibility-in-the-trenches, brand-as-lived-practice) are non-negotiable. Do not soften 'It does not claim to measure' with 'fully' or 'comprehensively'."
+    },
+
+    "organisational_implications": {
+      "type": "object",
+      "$comment": "Required. Reads artefact patterns as shadows of organisational capacity. Never asserts a diagnosis. Phrasing pattern: suggests / pattern / validate-with-you. 'Often suggests' is the load-bearing modal phrase -- not 'indicates', not 'shows that'. 'We'd like to validate this with you in Phase 2' closes every pattern without variation.",
+      "required": ["opening", "patterns", "closing"],
+      "additionalProperties": false,
+      "properties": {
+        "opening": {
+          "type": "string",
+          "$comment": "Invariant. Do not edit. Rendered before the patterns array."
+        },
+        "patterns": {
+          "type": "array",
+          "$comment": "Per-audit. Select 3-5 patterns based on the score profile. Each pattern is a three-part block: artefact pattern, suggested implication, validation invitation.",
+          "items": {
+            "type": "object",
+            "required": ["pattern_name", "cluster_or_dimension_reference", "score_value", "supporting_observation", "artefact_pattern_described", "organisational_implication"],
+            "additionalProperties": false,
+            "properties": {
+              "pattern_name": {
+                "type": "string",
+                "$comment": "Short label naming the artefact pattern."
+              },
+              "cluster_or_dimension_reference": {
+                "type": "string",
+                "$comment": "Which scoring unit anchors the pattern."
+              },
+              "score_value": {
+                "type": "string",
+                "$comment": "Numeric score or score contrast the pattern is read from."
+              },
+              "supporting_observation": {
+                "type": "string",
+                "$comment": "The second data point that triangulates the pattern."
+              },
+              "artefact_pattern_described": {
+                "type": "string",
+                "$comment": "The artefact-level pattern in plain language."
+              },
+              "organisational_implication": {
+                "type": "string",
+                "$comment": "The suggested organisational reading in tentative phrasing ('often suggests...'). Do not assert. Do not diagnose."
+              }
+            }
+          }
+        },
+        "closing": {
+          "type": "string",
+          "$comment": "Invariant. Do not edit. Rendered after the patterns array."
         }
       }
     },
