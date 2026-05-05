@@ -1,11 +1,27 @@
 {
   "meta": {
     "schema_version": "1.0",
-    "audit_ref": "material-ui-v3.2-2026-04-10"
+    "audit_ref": "material-ui-v3.2-2026-04-10",
+    "last_edited_by": "Barbara",
+    "last_edited_at": "2026-04-10T15:55:37.279Z"
   },
   "report": {
     "executive_summary": "MUI has strong component foundations but one structural gap means AI tools cannot select the right component without a human reviewing every choice.",
     "methodology_note": "This audit checks whether the design system can explain itself to an AI agent without human intervention. It scores 56 dimensions across seven clusters using Figma and code evidence. A higher score means less manual correction when AI tools generate or select UI."
+  },
+  "tiers": {
+    "1": {
+      "label": "Agent Readability",
+      "value_framing": "Without these, the system is opaque to AI tooling. Components and tokens cannot be reliably selected, named, or reasoned about by an agent \u2014 every AI-assisted workflow downstream of the design system is blocked at the entry point. Effort is not the question here. These are the changes that make the rest of the audit's work meaningful."
+    },
+    "2": {
+      "label": "High Impact, Low Effort",
+      "value_framing": "These cost little and change a lot. Each one improves the quality of AI-assisted decisions made against the system \u2014 better selections, fewer corrections, faster iteration \u2014 without requiring structural change. The return is immediate and visible in daily work."
+    },
+    "3": {
+      "label": "Strategic Investment",
+      "value_framing": "These take real cross-functional effort and return slower than Tier 2. What they build is different: design quality, governance maturity, parity discipline \u2014 the foundations that make the system continuously better rather than just currently usable. The value grows over time."
+    }
   },
   "clusters": {
     "0_prerequisites": {
@@ -38,9 +54,6 @@
     }
   },
   "dimensions": {
-    "3.1_component_description_coverage": {
-      "narrative": "Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 370 of 1034 components (35.8%) have any description, but 356 of those (96.2%) are code import snippets: 'import TextField from \"@mui/material/TextField\"' carries zero functional intent. At the component set level, 0 of 40 sets have intent-carrying descriptions. Rich intent documentation exists on mui.com but is not declared or linked from Figma component metadata."
-    },
     "1.6_token_documentation": {
       "narrative": "Every token variable should have a description explaining its semantic purpose -- what property it controls, when to use it, and what it communicates -- so an agent can select the correct token without inference. Only 98 of 532 variables (18.4%) have descriptions, all in the palette collections. The 252 material/colors primitives, all 20 spacing variables, all breakpoints, and all shape variables have no descriptions. The 98 existing descriptions are mechanical reflections rather than intent documentation: 'Reflects the text.primary variable from the theme object' carries no actionable guidance."
     },
@@ -49,6 +62,9 @@
     },
     "6.6_documentation_of_parity_gaps": {
       "narrative": "Known gaps between Figma and code should be documented in a parity gap register so agents can distinguish intentional differences from accidental drift. No parity register exists. The token diff identifies 7 value mismatches, 125 code-only tokens, and 123 Figma-only tokens -- none of these are tracked, classified as intentional or unintentional, or assigned owners. An agent encountering a mismatch cannot determine whether it should follow Figma, follow code, or flag for human review."
+    },
+    "3.1_functional_intent_coverage": {
+      "narrative": "Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 370 of 1034 components (35.8%) have any description, but 356 of those (96.2%) are code import snippets: 'import TextField from \"@mui/material/TextField\"' carries zero functional intent. At the component set level, 0 of 40 sets have intent-carrying descriptions. Rich intent documentation exists on mui.com but is not declared or linked from Figma component metadata."
     }
   },
   "findings": {

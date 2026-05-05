@@ -127,28 +127,12 @@ Designs hand off correctly for visual properties, but the 1682 unmatched tokens 
 
 ## Dimensions
 
-### 3.1_component_description_coverage
-
-#### Narrative
-
-<!-- field: dimensions.3.1_component_description_coverage.narrative -->
-Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 147 of 2856 components (5.1%) have any description in Figma. All 147 are Tree View spec implementation notes. Zero components carry functional intent descriptions. Excellent code-side MDX documentation exists but has no declared path from Figma component metadata -- an agent reading the Figma API receives no guidance on component purpose.
-<!-- /field -->
-
 ### 1.6_token_documentation
 
 #### Narrative
 
 <!-- field: dimensions.1.6_token_documentation.narrative -->
 Every token variable should have a description explaining its semantic purpose so an agent can select the correct token without inference. Carbon has 5 of 1804 variables (0.3%) with descriptions -- the lowest coverage of either benchmark system. The Colors collection (135 vars), Theme semantics (548 vars), Spacing (28 vars), Type Primitives (329 vars), Breakpoint (212 vars) all have zero descriptions. Without descriptions, an agent reading the variable data cannot determine token purpose, scope, or constraints from the Figma API alone.
-<!-- /field -->
-
-### 3.5_documentation_frame_metadata
-
-#### Narrative
-
-<!-- field: dimensions.3.5_documentation_frame_metadata.narrative -->
-Figma files should contain structured documentation frames alongside component definitions so an agent reading the file gets documentation without an external lookup. Carbon has 196 COMPONENT_SET nodes with rich structural data (4047 variants, 447 variant axes) but 0 of 196 have Figma descriptions on the COMPONENT_SET node. The Slot component description (a tutorial link) is the only exception. The file has no structured documentation frame convention.
 <!-- /field -->
 
 ### 4.7_motion_duration_ranges
@@ -173,6 +157,22 @@ Data-dependent components should include empty state variants defining what disp
 
 <!-- field: dimensions.6.6_documentation_of_parity_gaps.narrative -->
 Known gaps between Figma and code should be documented in a parity gap register so agents can distinguish intentional differences from accidental drift. No parity register exists. The token diff reveals 518 code-only tokens and 1164 Figma-only tokens with no documentation explaining whether gaps are intentional (different architectures) or unresolved drift. The naming convention differences, motion tokens existing only in code, and grid styles existing only in Figma are all undocumented. Without this register, automated drift detection generates false positives on every gap.
+<!-- /field -->
+
+### 3.1_functional_intent_coverage
+
+#### Narrative
+
+<!-- field: dimensions.3.1_functional_intent_coverage.narrative -->
+Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 147 of 2856 components (5.1%) have any description in Figma. All 147 are Tree View spec implementation notes. Zero components carry functional intent descriptions. Excellent code-side MDX documentation exists but has no declared path from Figma component metadata -- an agent reading the Figma API receives no guidance on component purpose.
+<!-- /field -->
+
+### 3.5_in_file_documentation_structure
+
+#### Narrative
+
+<!-- field: dimensions.3.5_in_file_documentation_structure.narrative -->
+Figma files should contain structured documentation frames alongside component definitions so an agent reading the file gets documentation without an external lookup. Carbon has 196 COMPONENT_SET nodes with rich structural data (4047 variants, 447 variant axes) but 0 of 196 have Figma descriptions on the COMPONENT_SET node. The Slot component description (a tutorial link) is the only exception. The file has no structured documentation frame convention.
 <!-- /field -->
 
 ---

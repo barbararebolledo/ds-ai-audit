@@ -149,3 +149,14 @@ The following tasks are ready for execution in a Claude Code session. Read this 
 - New schemas: `audit/schema/audit-schema.json` (v3.0), `audit/schema/remediation-schema.json` (v1.0)
 - Affected dimensions: 3.1, 3.4, 3.5 (co-location principle)
 - Developer validation needed: Decision 6 (code-side rebuild threshold) -- flag for Konsta
+
+---
+
+## Closure
+
+- Status: implemented
+- Editorial schema updated: editorial-schema.json (tiers property added; label + value_framing per tier)
+- Editorial content populated: mui-editorial-v3.2.json, carbon-editorial-v3.2.json
+- Framework document aligned: impact-model.md (tier headings updated, ADR 009 reference note added)
+- Dashboard front-end consumption: handled in separate handoff (ds-audit-dashboard repo)
+- Verified: 2026-05-04

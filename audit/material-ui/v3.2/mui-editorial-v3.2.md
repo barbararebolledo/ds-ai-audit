@@ -127,14 +127,6 @@ Designs hand off cleanly for visual properties, but interactive behaviour -- key
 
 ## Dimensions
 
-### 3.1_component_description_coverage
-
-#### Narrative
-
-<!-- field: dimensions.3.1_component_description_coverage.narrative -->
-Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 370 of 1034 components (35.8%) have any description, but 356 of those (96.2%) are code import snippets: 'import TextField from "@mui/material/TextField"' carries zero functional intent. At the component set level, 0 of 40 sets have intent-carrying descriptions. Rich intent documentation exists on mui.com but is not declared or linked from Figma component metadata.
-<!-- /field -->
-
 ### 1.6_token_documentation
 
 #### Narrative
@@ -157,6 +149,14 @@ Data-dependent components should include empty state variants defining what disp
 
 <!-- field: dimensions.6.6_documentation_of_parity_gaps.narrative -->
 Known gaps between Figma and code should be documented in a parity gap register so agents can distinguish intentional differences from accidental drift. No parity register exists. The token diff identifies 7 value mismatches, 125 code-only tokens, and 123 Figma-only tokens -- none of these are tracked, classified as intentional or unintentional, or assigned owners. An agent encountering a mismatch cannot determine whether it should follow Figma, follow code, or flag for human review.
+<!-- /field -->
+
+### 3.1_functional_intent_coverage
+
+#### Narrative
+
+<!-- field: dimensions.3.1_functional_intent_coverage.narrative -->
+Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 370 of 1034 components (35.8%) have any description, but 356 of those (96.2%) are code import snippets: 'import TextField from "@mui/material/TextField"' carries zero functional intent. At the component set level, 0 of 40 sets have intent-carrying descriptions. Rich intent documentation exists on mui.com but is not declared or linked from Figma component metadata.
 <!-- /field -->
 
 ---

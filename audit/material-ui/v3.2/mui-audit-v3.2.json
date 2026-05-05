@@ -33,7 +33,7 @@
     "phase_readiness_detail": {
       "blocking_dimensions": [
         "1.6_token_documentation",
-        "3.1_component_description_coverage",
+        "3.1_functional_intent_coverage",
         "4.12_empty_state_coverage",
         "6.6_documentation_of_parity_gaps"
       ],
@@ -42,8 +42,8 @@
         "1.3_token_architecture_depth",
         "2.1_component_to_token_binding",
         "3.3_intent_quality",
-        "3.4_usage_guidance_formalisation",
-        "3.5_documentation_frame_metadata",
+        "3.4_usage_guidance_structure",
+        "3.5_in_file_documentation_structure",
         "4.4_type_completeness",
         "4.7_motion_duration_ranges",
         "4.8_motion_easing",
@@ -80,11 +80,11 @@
       "2.2_component_api_composability": 100,
       "2.3_variant_completeness": 100,
       "2.4_escape_hatch_usage": 75,
-      "3.1_component_description_coverage": 25,
-      "3.2_documentation_structure_machine_readability": 75,
+      "3.1_functional_intent_coverage": 25,
+      "3.2_documentation_indexing": 75,
       "3.3_intent_quality": 50,
-      "3.4_usage_guidance_formalisation": 50,
-      "3.5_documentation_frame_metadata": 50,
+      "3.4_usage_guidance_structure": 50,
+      "3.5_in_file_documentation_structure": 50,
       "4.1_interaction_targets": 75,
       "4.2_contrast_ratios": 75,
       "4.3_type_scale_consistency": 75,
@@ -260,7 +260,7 @@
       "cluster_summary": "Rich documentation exists on the docs site but is entirely absent from Figma component metadata. The co-location gap means agents reading from Figma get code snippets instead of intent.",
       "cluster_score": 50.0,
       "dimensions": {
-        "3.1_component_description_coverage": {
+        "3.1_functional_intent_coverage": {
           "score": 1,
           "score_max": 4,
           "severity": "blocker",
@@ -268,7 +268,7 @@
           "evidence_sources": ["Figma REST API components", "MUI docs site"],
           "finding_ids": ["CDC-001"]
         },
-        "3.2_documentation_structure_machine_readability": {
+        "3.2_documentation_indexing": {
           "score": 3,
           "score_max": 4,
           "severity": "note",
@@ -284,7 +284,7 @@
           "evidence_sources": ["MUI docs site", "Figma REST API components"],
           "finding_ids": ["IQ-001"]
         },
-        "3.4_usage_guidance_formalisation": {
+        "3.4_usage_guidance_structure": {
           "score": 2,
           "score_max": 4,
           "severity": "warning",
@@ -292,7 +292,7 @@
           "evidence_sources": ["MUI docs site"],
           "finding_ids": ["UGF-001"]
         },
-        "3.5_documentation_frame_metadata": {
+        "3.5_in_file_documentation_structure": {
           "score": 2,
           "score_max": 4,
           "severity": "warning",
@@ -727,7 +727,7 @@
     },
     {
       "id": "CDC-001",
-      "dimension": "3.1_component_description_coverage",
+      "dimension": "3.1_functional_intent_coverage",
       "severity": "blocker",
       "severity_rank": 3,
       "summary": "96.2% of component descriptions are code import snippets with zero functional intent",
@@ -759,7 +759,7 @@
     },
     {
       "id": "UGF-001",
-      "dimension": "3.4_usage_guidance_formalisation",
+      "dimension": "3.4_usage_guidance_structure",
       "severity": "warning",
       "severity_rank": 2,
       "summary": "Usage guidance scattered in prose, not formalised as structured rules",
@@ -775,7 +775,7 @@
     },
     {
       "id": "DFM-001",
-      "dimension": "3.5_documentation_frame_metadata",
+      "dimension": "3.5_in_file_documentation_structure",
       "severity": "warning",
       "severity_rank": 2,
       "summary": "No documentation frames in Figma file -- page descriptions only",

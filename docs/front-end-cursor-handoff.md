@@ -200,10 +200,10 @@ const merge = (auditValue, editorialValue) => editorialValue ?? auditValue;
 }
 ```
 
-Priority tiers:
-- 1 = necessary for agent readability (maps to "Quick Wins" in the reference design)
-- 2 = high leverage, low effort (maps to "Foundational")
-- 3 = important but high effort (maps to "Post-Migration")
+Priority tiers (labels from ADR 009 / editorial JSON `tiers` block):
+- 1 = "Agent Readability" — without these the system is opaque to AI tooling; every downstream AI workflow is blocked at the entry point
+- 2 = "High Impact, Low Effort" — each one improves AI-assisted decision quality without requiring structural change; return is immediate
+- 3 = "Strategic Investment" — cross-functional effort that builds design quality, governance maturity, and parity discipline; value grows over time
 
 Sort order: priority_tier asc, effort_estimate asc (hours < days < weeks),
 severity_rank desc.
@@ -362,10 +362,10 @@ Wire to:
   `projected_score_improvement`
 - `value_framing` (merged with editorial) → impact description
 
-Priority tier labels:
-- Tier 1 → "Quick Wins" (green dot)
-- Tier 2 → "Foundational" (amber dot)
-- Tier 3 → "Post-Migration" (dimmed)
+Priority tier labels (read from `editorial.tiers[priority_tier].label`; fall back to these defaults):
+- Tier 1 → "Agent Readability" (green dot)
+- Tier 2 → "High Impact, Low Effort" (amber dot)
+- Tier 3 → "Strategic Investment" (dimmed)
 
 ### 5. Dimension drill-down (NEW -- not in reference pages)
 

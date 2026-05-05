@@ -12,9 +12,9 @@
       "action_type": "move",
       "affected_cluster": "3_documentation_readiness",
       "affected_dimensions": [
-        "3.1_component_description_coverage",
+        "3.1_functional_intent_coverage",
         "3.3_intent_quality",
-        "3.5_documentation_frame_metadata"
+        "3.5_in_file_documentation_structure"
       ],
       "effort_estimate": "days",
       "ownership": "design",
@@ -81,7 +81,7 @@
       "action_type": "rework",
       "affected_cluster": "3_documentation_readiness",
       "affected_dimensions": [
-        "3.4_usage_guidance_formalisation",
+        "3.4_usage_guidance_structure",
         "3.3_intent_quality"
       ],
       "effort_estimate": "days",

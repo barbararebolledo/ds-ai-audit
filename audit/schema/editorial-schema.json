@@ -36,6 +36,26 @@
       }
     },
 
+    "tiers": {
+      "$comment": "Optional. Keyed by tier number ('1', '2', '3'). Defines the label and value framing for each remediation tier. Tier-level effort is computed by the dashboard from item totals, not stored here.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["label", "value_framing"],
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "$comment": "Client-facing tier name, e.g. 'Agent Readability'."
+          },
+          "value_framing": {
+            "type": "string",
+            "$comment": "Why this tier matters operationally. Rendered on the remediation page above the tier's item list."
+          }
+        }
+      }
+    },
+
     "report": {
       "$comment": "Optional. Report-level prose for client-facing output. Has no counterpart in the data JSON.",
       "type": "object",

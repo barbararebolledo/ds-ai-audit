@@ -99,3 +99,20 @@ Dimension 3.3 (Intent Quality) retains its current name.
 ## Implementation route
 
 This ADR is a Thinking Track decision record. Implementation in the ds-ai-audit repo (updating CLAUDE.md, dimension-reference.json, and related files) should be handled in a separate session using this ADR as the handoff brief. Recommended model: Sonnet, as the implementation is structured application of confirmed decisions with no open reasoning required.
+
+---
+
+## Closure
+
+- Status: implemented
+- Dimension keys updated in: `data/dimension-reference.json`, `CLAUDE.md` (Cluster 3 section), `audit/material-ui/v3.2/` (audit, remediation, editorial JSON + rendered MD), `audit/carbon/v3.2/` (audit, remediation, editorial JSON + rendered MD)
+- Keys renamed in v3.2 production files:
+  - `3.1_component_description_coverage` → `3.1_functional_intent_coverage`
+  - `3.2_documentation_structure_machine_readability` → `3.2_documentation_indexing`
+  - `3.4_usage_guidance_formalisation` → `3.4_usage_guidance_structure`
+  - `3.5_documentation_frame_metadata` → `3.5_in_file_documentation_structure`
+  - Cluster 3 display name: "Documentation and Intent" → "Documentation Readiness"
+- Historical audit files (v2.0–v3.1): old keys retained; these are immutable records produced before ADR 010
+- Known gap: `_notebooklm-export/` (6 files, untracked, v3.1-vintage) — still carries old keys; these are not part of the versioned pipeline and require a separate regeneration decision
+- Zero hits for old keys in active v3.2 source files confirmed by grep
+- Verified: 2026-05-04

@@ -31,8 +31,8 @@
     "phase_readiness_detail": {
       "blocking_dimensions": [
         "1.6_token_documentation",
-        "3.1_component_description_coverage",
-        "3.5_documentation_frame_metadata",
+        "3.1_functional_intent_coverage",
+        "3.5_in_file_documentation_structure",
         "4.7_motion_duration_ranges",
         "4.12_empty_state_coverage",
         "6.6_documentation_of_parity_gaps"
@@ -81,11 +81,11 @@
       "2.2_component_api_composability": 100,
       "2.3_variant_completeness": 100,
       "2.4_escape_hatch_usage": 75,
-      "3.1_component_description_coverage": 0,
-      "3.2_documentation_structure_machine_readability": 50,
+      "3.1_functional_intent_coverage": 0,
+      "3.2_documentation_indexing": 50,
       "3.3_intent_quality": 50,
-      "3.4_usage_guidance_formalisation": 100,
-      "3.5_documentation_frame_metadata": 25,
+      "3.4_usage_guidance_structure": 100,
+      "3.5_in_file_documentation_structure": 25,
       "4.1_interaction_targets": 100,
       "4.2_contrast_ratios": 100,
       "4.3_type_scale_consistency": 100,
@@ -261,7 +261,7 @@
       "cluster_summary": "Usage guidance on the docs site is excellent. Figma-side documentation is nearly absent: 0% of components carry intent descriptions and 99.7% of variables lack descriptions.",
       "cluster_score": 45.0,
       "dimensions": {
-        "3.1_component_description_coverage": {
+        "3.1_functional_intent_coverage": {
           "score": 0,
           "score_max": 4,
           "severity": "blocker",
@@ -269,7 +269,7 @@
           "evidence_sources": ["Figma REST API components", "Carbon GitHub repo raw file inspection"],
           "finding_ids": ["CDC-001"]
         },
-        "3.2_documentation_structure_machine_readability": {
+        "3.2_documentation_indexing": {
           "score": 2,
           "score_max": 4,
           "severity": "warning",
@@ -285,7 +285,7 @@
           "evidence_sources": ["Carbon GitHub repo raw file inspection", "carbondesignsystem.com", "Figma REST API components"],
           "finding_ids": ["IQ-001"]
         },
-        "3.4_usage_guidance_formalisation": {
+        "3.4_usage_guidance_structure": {
           "score": 4,
           "score_max": 4,
           "severity": "pass",
@@ -293,7 +293,7 @@
           "evidence_sources": ["carbondesignsystem.com"],
           "finding_ids": []
         },
-        "3.5_documentation_frame_metadata": {
+        "3.5_in_file_documentation_structure": {
           "score": 1,
           "score_max": 4,
           "severity": "blocker",
@@ -750,7 +750,7 @@
     },
     {
       "id": "CDC-001",
-      "dimension": "3.1_component_description_coverage",
+      "dimension": "3.1_functional_intent_coverage",
       "severity": "blocker",
       "severity_rank": 3,
       "summary": "94.9% of components have no Figma description -- zero functional intent",
@@ -773,7 +773,7 @@
     },
     {
       "id": "DS-001",
-      "dimension": "3.2_documentation_structure_machine_readability",
+      "dimension": "3.2_documentation_indexing",
       "severity": "warning",
       "severity_rank": 2,
       "summary": "MDX docs lack structured metadata for agent consumption",
@@ -813,7 +813,7 @@
     },
     {
       "id": "DFM-001",
-      "dimension": "3.5_documentation_frame_metadata",
+      "dimension": "3.5_in_file_documentation_structure",
       "severity": "blocker",
       "severity_rank": 3,
       "summary": "Zero sub-component descriptions in Figma frame structure",

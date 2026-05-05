@@ -164,7 +164,31 @@ From the responses, extract counts:
 If any call fails or times out, record a data gap with reason `access_denied`
 or `timeout`.
 
-**Step 1.3 -- Produce discovery summary**
+**Step 1.3 -- Documentation-frame detection**
+
+Some design systems document components in structured Figma frames on pages
+rather than in component description fields. The `/components` endpoint does
+not return this content, so detect it explicitly:
+
+1. From the Step 1.1 file structure response, identify all pages.
+2. For each page, request child nodes at depth 2:
+
+   ```
+   GET /v1/files/{key}/nodes?ids={page_id}&depth=2
+   ```
+
+3. Flag any top-level frame whose name contains "documentation"
+   (case-insensitive).
+4. Record: count of documentation frames found, the naming convention detected,
+   and a sample of frame names.
+5. If documentation frames are found, sample 3 frames via MCP
+   `get_design_context` to inspect the internal structure (layer tree, section
+   headings, content depth).
+
+Mitigation for large files: if the page count exceeds 20, sample pages rather
+than exhaustively enumerating.
+
+**Step 1.4 -- Produce discovery summary**
 
 Output a discovery summary before proceeding to Phase 2:
 
@@ -175,6 +199,13 @@ Output a discovery summary before proceeding to Phase 2:
   "variable_count": 0,
   "style_count": 0,
   "page_list": [],
+  "documentation_frame_detection": {
+    "frames_found": 0,
+    "naming_convention": null,
+    "template_consistent": null,
+    "sample_inspected": [],
+    "content_depth": []
+  },
   "evidence_available": {
     "cluster_0": true,
     "cluster_1": true,
@@ -257,6 +288,23 @@ what a component does, when to use it, and what to expect. Current descriptions
 are code import snippets that carry no intent, requiring a human to specify
 context on every AI-driven component selection." Register three is in effect:
 domain terms expected. Name specific artefacts, counts, and evidence.
+
+**Documentation frame evidence routing.** When the Phase 1 discovery summary
+shows `documentation_frame_detection.frames_found > 0`, route evidence for
+Cluster 3 as follows:
+
+- **Dimension 3.1 (Functional intent coverage):** score against documentation
+  frame content, not only component description fields. A component with an
+  empty description but a populated documentation frame has intent coverage.
+- **Dimension 3.3 (Intent quality):** apply the six-level hierarchy to
+  documentation frame content.
+- **Dimension 3.5 (In-file documentation structure):** score the template
+  structure, consistency, and machine-parseability of the documentation frames.
+- **Component descriptions** are still scored, but as a discoverability
+  signal -- can an agent find the documentation from the component metadata? --
+  not as the sole content signal. An empty description on a component with a
+  populated documentation frame produces a discoverability finding (remediation
+  type: relocate) without penalising 3.1 or 3.3 scores.
 
 For dimensions with sub-checks, record each sub-check score in the
 `sub_check_scores` field.

@@ -1,11 +1,27 @@
 {
   "meta": {
     "schema_version": "1.0",
-    "audit_ref": "carbon-v3.2-2026-04-10"
+    "audit_ref": "carbon-v3.2-2026-04-10",
+    "last_edited_by": "Barbara",
+    "last_edited_at": "2026-04-10T15:55:40.589Z"
   },
   "report": {
     "executive_summary": "Carbon has exceptional governance and component coverage, but AI tools working from the design file cannot read any component purpose or token meaning -- everything they need is in code, not in Figma.",
     "methodology_note": "This audit checks whether the design system can explain itself to an AI agent without human intervention. It scores 56 dimensions across seven clusters using Figma and code evidence. A higher score means less manual correction when AI tools generate or select UI."
+  },
+  "tiers": {
+    "1": {
+      "label": "Agent Readability",
+      "value_framing": "Without these, the system is opaque to AI tooling. Components and tokens cannot be reliably selected, named, or reasoned about by an agent \u2014 every AI-assisted workflow downstream of the design system is blocked at the entry point. Effort is not the question here. These are the changes that make the rest of the audit's work meaningful."
+    },
+    "2": {
+      "label": "High Impact, Low Effort",
+      "value_framing": "These cost little and change a lot. Each one improves the quality of AI-assisted decisions made against the system \u2014 better selections, fewer corrections, faster iteration \u2014 without requiring structural change. The return is immediate and visible in daily work."
+    },
+    "3": {
+      "label": "Strategic Investment",
+      "value_framing": "These take real cross-functional effort and return slower than Tier 2. What they build is different: design quality, governance maturity, parity discipline \u2014 the foundations that make the system continuously better rather than just currently usable. The value grows over time."
+    }
   },
   "clusters": {
     "0_prerequisites": {
@@ -38,14 +54,8 @@
     }
   },
   "dimensions": {
-    "3.1_component_description_coverage": {
-      "narrative": "Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 147 of 2856 components (5.1%) have any description in Figma. All 147 are Tree View spec implementation notes. Zero components carry functional intent descriptions. Excellent code-side MDX documentation exists but has no declared path from Figma component metadata -- an agent reading the Figma API receives no guidance on component purpose."
-    },
     "1.6_token_documentation": {
       "narrative": "Every token variable should have a description explaining its semantic purpose so an agent can select the correct token without inference. Carbon has 5 of 1804 variables (0.3%) with descriptions -- the lowest coverage of either benchmark system. The Colors collection (135 vars), Theme semantics (548 vars), Spacing (28 vars), Type Primitives (329 vars), Breakpoint (212 vars) all have zero descriptions. Without descriptions, an agent reading the variable data cannot determine token purpose, scope, or constraints from the Figma API alone."
-    },
-    "3.5_documentation_frame_metadata": {
-      "narrative": "Figma files should contain structured documentation frames alongside component definitions so an agent reading the file gets documentation without an external lookup. Carbon has 196 COMPONENT_SET nodes with rich structural data (4047 variants, 447 variant axes) but 0 of 196 have Figma descriptions on the COMPONENT_SET node. The Slot component description (a tutorial link) is the only exception. The file has no structured documentation frame convention."
     },
     "4.7_motion_duration_ranges": {
       "narrative": "Motion duration tokens should exist in both Figma and code so design and engineering share the same timing values and agents can read motion specifications from the design file. Code defines well-structured motion durations (fast01: 70ms through slow02: 700ms) with productive/expressive variants. These do not exist as Figma Variables or styles. An agent reading only the Figma file would find no motion specifications."
@@ -55,6 +65,12 @@
     },
     "6.6_documentation_of_parity_gaps": {
       "narrative": "Known gaps between Figma and code should be documented in a parity gap register so agents can distinguish intentional differences from accidental drift. No parity register exists. The token diff reveals 518 code-only tokens and 1164 Figma-only tokens with no documentation explaining whether gaps are intentional (different architectures) or unresolved drift. The naming convention differences, motion tokens existing only in code, and grid styles existing only in Figma are all undocumented. Without this register, automated drift detection generates false positives on every gap."
+    },
+    "3.1_functional_intent_coverage": {
+      "narrative": "Component descriptions in Figma should carry functional intent -- what each component does, when to use it, and what to expect -- so an agent can select the correct component without opening code documentation. 147 of 2856 components (5.1%) have any description in Figma. All 147 are Tree View spec implementation notes. Zero components carry functional intent descriptions. Excellent code-side MDX documentation exists but has no declared path from Figma component metadata -- an agent reading the Figma API receives no guidance on component purpose."
+    },
+    "3.5_in_file_documentation_structure": {
+      "narrative": "Figma files should contain structured documentation frames alongside component definitions so an agent reading the file gets documentation without an external lookup. Carbon has 196 COMPONENT_SET nodes with rich structural data (4047 variants, 447 variant axes) but 0 of 196 have Figma descriptions on the COMPONENT_SET node. The Slot component description (a tutorial link) is the only exception. The file has no structured documentation frame convention."
     }
   },
   "findings": {
