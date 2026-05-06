@@ -37,7 +37,7 @@ There are things this instrument does not measure. Organisational capacity to op
 
 These are not gaps in the audit. They are the instrument's edges. The audit is a focused diagnostic of one layer. It does not claim to measure the team that builds the system, the judgement that shapes individual decisions, or the cultural fabric that holds brand expression together. Those questions need other tools.
 
-A score of {overall_score}/100 on this audit means the artefact is at {phase_readiness} for AI consumption. It does not mean the system is AI-ready in the broader organisational sense, and it does not relieve the team of the harder work that sits above the artefact layer.
+A score of {overall_score}/100 on this audit means the artefact is {phase_readiness} for AI consumption. It does not mean the system is AI-ready in the broader organisational sense, and it does not relieve the team of the harder work that sits above the artefact layer.
 <!-- /field -->
 
 ---
