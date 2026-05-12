@@ -55,7 +55,8 @@ Four voices anchor the methodology choices.
 ## How to navigate this repo
 
 1. Read `manifest.json` first to understand what this system contains.
-2. Read `system/index/components.index.json` to find what components exist.
+2. Read `CONTEXT.md` for the strategic rationale behind the methodology choices.
+3. Read `system/index/components.index.json` to find what components exist.
 3. Read the relevant contract in `system/contracts/` for the component you are
    working with.
 4. Read `system/tokens/` files to resolve token values.
@@ -171,7 +172,7 @@ Note: community Figma files must be published to a team library before
   time, preferring editorial content when present. Schemas:
   `audit/schema/audit-schema.json` (v3.0),
   `audit/schema/remediation-schema.json` (v1.0),
-  `audit/schema/editorial-schema.json` (v1.0).
+  `audit/schema/editorial-schema.json` (v1.1).
 
 ---
 
@@ -407,18 +408,11 @@ ds-ai-audit/
 │   ├── schema/                      # Audit output schema definitions
 │   │   ├── audit-schema.json        # v3.0 -- immutable scores and findings
 │   │   ├── remediation-schema.json  # v1.0 -- living remediation plan
-│   │   └── editorial-schema.json    # v1.0 -- human prose overrides
-│   ├── toimi/                       # Toimi library audits (initial POC)
-│   │   ├── v1.0/
-│   │   └── v1.2/
+│   │   └── editorial-schema.json    # v1.1 -- human prose overrides
 │   ├── material-ui/                 # Material UI audits (current test vehicle)
-│   │   ├── v1.3/
-│   │   └── v3.1/                    # Latest: audit + remediation + editorial JSON
-│   ├── carbon/                      # Carbon Design System audits (benchmark)
-│   │   └── v3.1/                    # Latest: audit + remediation + editorial JSON
-│   ├── baseline/                    # Baseline run for diff comparison
-│   ├── latest/                      # Most recent run
-│   └── diffs/                       # Diff reports between runs
+│   │   └── v3.2/                    # Latest: audit + remediation + editorial JSON
+│   └── carbon/                      # Carbon Design System audits (benchmark)
+│       └── v3.2/                    # Latest: audit + remediation + editorial JSON
 ├── prompts/                         # Audit prompt files
 │   └── audit-prompt.md
 ├── config/                          # Configurable parameters
@@ -433,13 +427,19 @@ ds-ai-audit/
 │   ├── 007-release-2.2-scope-and-impact.md
 │   ├── 008-mui-fresh-rerun-handoff.md
 │   ├── 009-remediation-framework.md
-│   └── 010-cluster-3-taxonomy-and-naming.md
+│   ├── 010-cluster-3-taxonomy-and-naming.md
+│   ├── 011-client-facing-content-and-display.md
+│   ├── 012-documentation-frame-evidence-gathering.md
+│   └── 013-editorial-schema-v1.1.md
 ├── data/                            # Static data for front-end and agent consumption
-│   └── dimension-reference.json     # All dimensions with score levels, keyed by ID
+│   ├── dimension-reference.json     # All dimensions with score levels, keyed by ID
+│   └── benchmarks/
+│       └── benchmarks-manifest.json # Available audit runs for benchmark comparison
 ├── scripts/                         # API scripts and editorial workflow
-│   ├── output/                      # Cached Figma API responses
+│   ├── output/                      # Cached Figma API responses (committed)
 │   ├── render-editorial.mjs         # Generate editable Markdown from editorial JSON
 │   ├── compile-editorial.mjs        # Compile edited Markdown back to editorial JSON
+│   ├── extract-mui-theme.mjs        # Extracts MUI default theme to JSON (requires node_modules)
 │   └── *.mjs                        # REST API call scripts and token diff
 ├── docs/                            # Documentation
 │   ├── release-plan.md              # Full release plan
@@ -449,7 +449,8 @@ ds-ai-audit/
 ├── CONTEXT.md                       # Strategic context and reasoning
 ├── CHANGELOG.md                     # What changed and when
 ├── manifest.json                    # System manifest -- read this first
-└── README.md
+├── package.json                     # Node deps for extract-mui-theme.mjs (@mui/material)
+└── node_modules/                    # Required by extract-mui-theme.mjs only
 ```
 
 ---
@@ -516,7 +517,7 @@ dimension narratives (`dimensions[key].narrative`), finding prose (`summary`,
 `description`, `recommendation`), and remediation prose (`action`, `value_framing`).
 When the editorial JSON is absent or a specific override is missing, the data JSON
 content is used as-is. The editorial JSON is stored alongside the data JSON in audit
-output directories (e.g. `audit/material-ui/v3.1/mui-editorial-v3.1.json`), not in `/data`.
+output directories (e.g. `audit/material-ui/v3.2/mui-editorial-v3.2.json`), not in `/data`.
 
 ---
 
