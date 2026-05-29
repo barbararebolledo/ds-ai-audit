@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft-07/schema",
   "$id": "audit-schema.json",
-  "title": "AI-Readiness Audit v3.0",
-  "$comment": "v3.0: remediation block removed from audit file. Three-file output architecture: audit (immutable scores), remediation (prioritised plan, remediation-schema.json v1.0), editorial (prose overrides). Files joined by audit_id. v2.2: added system_name, audit_date, run_id to meta; added summary to findings; added id, value_framing, impact_categories to RemediationItem; added component_count to Summary; editorial JSON schema added as companion file. v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
+  "title": "AI-Readiness Audit v3.1",
+  "$comment": "v3.1: Finding gains optional `mode` field for per-mode Cluster 6 (parity) findings. Cross-mode-identical findings use mode='*'. v3.0: remediation block removed from audit file. Three-file output architecture: audit (immutable scores), remediation (prioritised plan, remediation-schema.json v1.0), editorial (prose overrides). Files joined by audit_id. v2.2: added system_name, audit_date, run_id to meta; added summary to findings; added id, value_framing, impact_categories to RemediationItem; added component_count to Summary; editorial JSON schema added as companion file. v2.1: schema aligned with v2.0 cluster-based output structure. Breaking change from v1.4 flat dimensions. New in v2.1: remediation section, severity_rank on findings, cluster_summary on clusters, recommendation mandatory on all findings. v1.4 schema preserved in git history (tag v2.0).",
 
   "type": "object",
   "required": ["meta", "summary", "clusters", "findings", "data_gaps", "config_ref"],
@@ -402,6 +402,11 @@
         "node_name": {
           "type": ["string", "null"],
           "$comment": "Optional. Human-readable Figma node name. Null when node_id is null."
+        },
+
+        "mode": {
+          "type": "string",
+          "$comment": "New in v3.1. Mode name this finding applies to. Set on findings from per-mode Cluster 6 (parity) comparisons (e.g. 'light', 'dark', 'white', 'g100'). Use '*' for cross-mode-identical findings. Absent for findings that are not mode-scoped."
         },
 
         "summary": {

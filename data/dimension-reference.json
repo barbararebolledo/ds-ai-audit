@@ -732,8 +732,8 @@
     "6.1_token_value_parity": {
       "name": "Token Value Parity",
       "cluster": "6_design_to_code_parity",
-      "description": "Do the token values in code match those in the Figma Variables? Drift means an agent working from one source will generate incorrect code.",
-      "plain_description": "Whether the actual values assigned to tokens in code match those in Figma, so an AI tool working from either source produces the same result.",
+      "description": "Do the token values in code match those in the Figma Variables? Drift means an agent working from one source will generate incorrect code. Scored per mode (e.g. light, dark, white, g100) and reported as both a per-mode breakdown and an overall figure aggregated across modes.",
+      "plain_description": "Whether the actual values assigned to tokens in code match those in Figma, so an AI tool working from either source produces the same result. Compared independently for every theme or mode the system supports.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No matched tokens or widespread value divergence.",
@@ -747,8 +747,8 @@
     "6.2_token_naming_parity": {
       "name": "Token Naming Parity",
       "cluster": "6_design_to_code_parity",
-      "description": "Do the token names in code match the Figma Variable names? Misalignment forces human translation.",
-      "plain_description": "Whether tokens are named consistently between Figma and code, so there is no manual translation step when moving between the two.",
+      "description": "Do the token names in code match the Figma Variable names? Misalignment forces human translation. Scored per mode and reported as both a per-mode breakdown and an overall figure aggregated across modes.",
+      "plain_description": "Whether tokens are named consistently between Figma and code, so there is no manual translation step when moving between the two. Compared independently for every theme or mode the system supports.",
       "evidence_sources": ["Figma", "Code"],
       "score_levels": {
         "0": "No naming alignment. Completely different naming schemes.",

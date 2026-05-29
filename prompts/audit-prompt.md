@@ -108,8 +108,10 @@ responses. This ensures:
 
 The `{target}` prefix matches the target system slug (e.g. `mui`). Existing
 cached files from v2.0 (`mui-figma-variables-raw.json`,
-`mui-figma-variables-normalised.json`, `mui-default-theme.json`,
-`mui-doc-frames.json`) remain valid and are not renamed.
+`mui-figma-variables-normalised.json`, `mui-doc-frames.json`) remain valid
+and are not renamed. v3.3 retired `mui-default-theme.json` — code-side
+tokens now live in `{target}-code-tokens.json` (mode-aware shape) produced
+by `extract-code-tokens.mjs`.
 
 Phase 1 produces the cache files. Phase 2 reads from them. If a cache file
 exists and is recent (same Figma file version), Phase 1 may skip the

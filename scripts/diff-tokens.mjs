@@ -1,25 +1,26 @@
 /**
  * diff-tokens.mjs
  *
- * Compares code-side tokens against Figma Variables (design-side tokens).
- * Produces a structured diff report flagging:
- *   - Value mismatches (same token, different values)
+ * Compares code-side tokens against Figma Variables (design-side tokens),
+ * per mode. Produces a structured diff report flagging:
+ *   - Value mismatches (same token path, different values in a mode)
  *   - Naming mismatches (same concept, different names)
  *   - Code-only tokens (present in code, absent in Figma)
  *   - Figma-only tokens (present in Figma, absent in code)
  *
  * Feeds Cluster 6 dimensions 6.1 (token value parity) and
- * 6.2 (token naming parity).
+ * 6.2 (token naming parity). Both scores reported per-mode and overall.
  *
  * Usage:
  *   node scripts/diff-tokens.mjs [system]
  *
- * Arguments:
- *   system — slug for the design system (default: 'mui')
+ * Inputs:
+ *   scripts/output/{system}-code-tokens.json
+ *   scripts/output/{system}-figma-variables-normalised.json
  *
- * Output:
+ * Outputs:
  *   scripts/output/{system}-token-diff.json
- *   audit/{system}/v2.2/token-parity-findings.json
+ *   audit/{system}/v3.3/token-parity-findings.json
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
@@ -31,25 +32,36 @@ const repoRoot = join(__dirname, '..');
 const system = process.argv[2] || 'mui';
 
 // ---------------------------------------------------------------------------
-// Load data — system-agnostic file names
+// Load data — new shape only; no legacy fallback
 // ---------------------------------------------------------------------------
 
 const figmaPath = join(__dirname, 'output', `${system}-figma-variables-normalised.json`);
 const codePath = join(__dirname, 'output', `${system}-code-tokens.json`);
 
-// For MUI backward compatibility, also check the old file names
-let rawCodeData;
-if (system === 'mui' && !existsSync(codePath) && existsSync(join(__dirname, 'output', 'mui-default-theme.json'))) {
-  // Legacy MUI path: read from mui-default-theme.json and build token map inline
-  rawCodeData = null; // Will use legacy path
-} else {
-  rawCodeData = JSON.parse(readFileSync(codePath, 'utf-8'));
+if (!existsSync(codePath)) {
+  console.error([
+    `Error: ${codePath} not found.`,
+    `Run: node scripts/extract-code-tokens.mjs ${system} [--tokens <path>]`,
+  ].join('\n'));
+  process.exit(1);
+}
+
+if (!existsSync(figmaPath)) {
+  console.error([
+    `Error: ${figmaPath} not found.`,
+    `Fetch + normalise Figma Variables first.`,
+  ].join('\n'));
+  process.exit(1);
 }
 
 const figmaData = JSON.parse(readFileSync(figmaPath, 'utf-8'));
+const codeData = JSON.parse(readFileSync(codePath, 'utf-8'));
+
+const codeModes = codeData._meta?.modes || ['default'];
+const modeAlignmentOverride = codeData._meta?.mode_alignment || null;
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Helpers — value resolution and normalisation
 // ---------------------------------------------------------------------------
 
 function resolveFigmaValue(variable, modeName, collections, seen = new Set()) {
@@ -66,7 +78,10 @@ function resolveFigmaValue(variable, modeName, collections, seen = new Set()) {
         (v) => v.name === val.aliasOf && col.name === val.aliasOfCollection
       );
       if (target) {
-        const deeper = resolveFigmaValue(target, Object.keys(target.values)[0], collections, seen);
+        const targetMode = modeName in target.values
+          ? modeName
+          : Object.keys(target.values)[0];
+        const deeper = resolveFigmaValue(target, targetMode, collections, seen);
         return {
           resolved: deeper.resolved,
           chain: [val.aliasOf, ...deeper.chain],
@@ -82,21 +97,13 @@ function resolveFigmaValue(variable, modeName, collections, seen = new Set()) {
 function parseColour(val) {
   if (typeof val !== 'string') return null;
   const s = val.trim().toLowerCase();
-
   const hexMatch = s.match(/^#([0-9a-f]+)$/);
   if (hexMatch) {
     const h = hexMatch[1];
-    if (h.length === 3) {
-      return { r: parseInt(h[0]+h[0], 16), g: parseInt(h[1]+h[1], 16), b: parseInt(h[2]+h[2], 16), a: 1 };
-    }
-    if (h.length === 6) {
-      return { r: parseInt(h.slice(0,2), 16), g: parseInt(h.slice(2,4), 16), b: parseInt(h.slice(4,6), 16), a: 1 };
-    }
-    if (h.length === 8) {
-      return { r: parseInt(h.slice(0,2), 16), g: parseInt(h.slice(2,4), 16), b: parseInt(h.slice(4,6), 16), a: parseInt(h.slice(6,8), 16) / 255 };
-    }
+    if (h.length === 3) return { r: parseInt(h[0]+h[0], 16), g: parseInt(h[1]+h[1], 16), b: parseInt(h[2]+h[2], 16), a: 1 };
+    if (h.length === 6) return { r: parseInt(h.slice(0,2), 16), g: parseInt(h.slice(2,4), 16), b: parseInt(h.slice(4,6), 16), a: 1 };
+    if (h.length === 8) return { r: parseInt(h.slice(0,2), 16), g: parseInt(h.slice(2,4), 16), b: parseInt(h.slice(4,6), 16), a: parseInt(h.slice(6,8), 16) / 255 };
   }
-
   const rgbaMatch = s.match(/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+)\s*)?\)$/);
   if (rgbaMatch) {
     return {
@@ -106,7 +113,6 @@ function parseColour(val) {
       a: rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1,
     };
   }
-
   return null;
 }
 
@@ -127,179 +133,118 @@ function remToPx(val) {
 }
 
 // ---------------------------------------------------------------------------
-// Build Figma token map
+// Build a complete Figma token map for a given primary mode
+//
+// For each variable, picks the value from the requested mode if its
+// collection has it; otherwise falls back to the collection's first mode.
+// This restores the v1.x single-mode behaviour for collections that don't
+// participate in the code-side mode dimension (single-mode collections like
+// spacing, or collections with a different mode axis like responsive).
 // ---------------------------------------------------------------------------
 
-const figmaTokens = new Map();
-const figmaCollections = figmaData.collections;
-
-for (const [colKey, col] of Object.entries(figmaCollections)) {
-  if (col.remote) continue;
-
-  for (const variable of col.variables) {
-    const primaryMode = col.modes[0];
-    const { resolved, chain } = resolveFigmaValue(
-      variable, primaryMode, figmaCollections
-    );
-
-    const tokenPath = `${col.name}/${variable.name}`;
-    figmaTokens.set(tokenPath, {
-      name: variable.name,
-      collection: col.name,
-      resolvedType: variable.resolvedType,
-      rawValue: variable.values[primaryMode],
-      resolvedValue: resolved,
-      aliasChain: chain,
-      description: variable.description,
-    });
+function buildFigmaTokenMapForMode(figmaCollections, primaryMode) {
+  const map = new Map();
+  for (const col of Object.values(figmaCollections)) {
+    if (col.remote) continue;
+    const figmaMode = col.modes.includes(primaryMode) ? primaryMode : col.modes[0];
+    for (const variable of col.variables) {
+      const { resolved, chain } = resolveFigmaValue(variable, figmaMode, figmaCollections);
+      const tokenPath = `${col.name}/${variable.name}`;
+      map.set(tokenPath, {
+        name: variable.name,
+        collection: col.name,
+        resolvedType: variable.resolvedType,
+        rawValue: variable.values[figmaMode],
+        resolvedValue: resolved,
+        aliasChain: chain,
+        description: variable.description,
+        sourceMode: figmaMode,
+      });
+    }
   }
+  return map;
+}
+
+function listAllFigmaModes(figmaCollections) {
+  const set = new Set();
+  for (const col of Object.values(figmaCollections)) {
+    if (col.remote) continue;
+    for (const m of col.modes) set.add(m);
+  }
+  return [...set];
 }
 
 // ---------------------------------------------------------------------------
-// Build code token map
+// Build per-mode code token maps from new broadcast shape
 // ---------------------------------------------------------------------------
 
-const codeTokens = new Map();
-
-if (rawCodeData && rawCodeData.tokens) {
-  // New normalised format from extract-code-tokens.mjs
-  for (const [path, data] of Object.entries(rawCodeData.tokens)) {
-    codeTokens.set(path, { value: data.value, category: data.category });
-  }
-} else if (system === 'mui') {
-  // Legacy MUI path: read from mui-default-theme.json
-  const legacyData = JSON.parse(
-    readFileSync(join(__dirname, 'output', 'mui-default-theme.json'), 'utf-8')
-  );
-  const theme = legacyData.theme;
-  const materialColors = legacyData.materialColors;
-
-  const paletteGroups = [
-    'common', 'primary', 'secondary', 'error', 'warning', 'info', 'success',
-    'text', 'divider', 'background', 'action',
-  ];
-  for (const group of paletteGroups) {
-    const entry = theme.palette[group];
-    if (!entry) continue;
-    if (typeof entry === 'string') {
-      codeTokens.set(`palette/${group}`, { value: entry, category: 'palette' });
-    } else if (typeof entry === 'object') {
-      for (const [key, val] of Object.entries(entry)) {
-        if (typeof val === 'string' && !val.startsWith('[Function')) {
-          codeTokens.set(`palette/${group}/${key}`, { value: val, category: 'palette' });
-        } else if (typeof val === 'number') {
-          codeTokens.set(`palette/${group}/${key}`, { value: val, category: 'palette' });
-        }
+function buildCodeTokenMapsByMode(codeData, modes) {
+  const byMode = {};
+  for (const mode of modes) byMode[mode] = new Map();
+  for (const [path, entry] of Object.entries(codeData.tokens)) {
+    if (!entry.values) continue;
+    for (const mode of modes) {
+      if (mode in entry.values) {
+        byMode[mode].set(path, { value: entry.values[mode], category: entry.category });
       }
     }
   }
+  return byMode;
+}
 
-  if (theme.palette.grey) {
-    for (const [key, val] of Object.entries(theme.palette.grey)) {
-      codeTokens.set(`palette/grey/${key}`, { value: val, category: 'palette' });
+// ---------------------------------------------------------------------------
+// Mode alignment
+// ---------------------------------------------------------------------------
+
+function alignModes(codeModes, figmaModes, alignmentOverride) {
+  const pairs = [];
+  const unalignedCode = [];
+  const matchedFigma = new Set();
+
+  for (const codeMode of codeModes) {
+    let figmaMode = null;
+    if (alignmentOverride && alignmentOverride[codeMode]
+        && figmaModes.includes(alignmentOverride[codeMode])) {
+      figmaMode = alignmentOverride[codeMode];
+    }
+    if (!figmaMode) {
+      const lc = codeMode.toLowerCase();
+      figmaMode = figmaModes.find((m) => m.toLowerCase() === lc) || null;
+    }
+    if (figmaMode) {
+      pairs.push({ code: codeMode, figma: figmaMode });
+      matchedFigma.add(figmaMode);
+    } else {
+      unalignedCode.push(codeMode);
     }
   }
-
-  for (const [hueName, hueObj] of Object.entries(materialColors)) {
-    if (typeof hueObj !== 'object') continue;
-    for (const [shade, val] of Object.entries(hueObj)) {
-      codeTokens.set(`material/colors/${hueName}/${shade}`, { value: val, category: 'material/colors' });
-    }
-  }
-
-  const typographyVariants = [
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'subtitle1', 'subtitle2', 'body1', 'body2',
-    'button', 'caption', 'overline',
-  ];
-  for (const variant of typographyVariants) {
-    const entry = theme.typography[variant];
-    if (!entry) continue;
-    for (const [prop, val] of Object.entries(entry)) {
-      if (typeof val === 'string' || typeof val === 'number') {
-        codeTokens.set(`typography/${variant}/${prop}`, { value: val, category: 'typography' });
-      }
-    }
-  }
-  for (const prop of ['fontFamily', 'fontSize', 'htmlFontSize', 'fontWeightLight', 'fontWeightRegular', 'fontWeightMedium', 'fontWeightBold']) {
-    if (theme.typography[prop] !== undefined) {
-      codeTokens.set(`typography/${prop}`, { value: theme.typography[prop], category: 'typography' });
-    }
-  }
-
-  for (const [key, val] of Object.entries(theme.breakpoints.values)) {
-    codeTokens.set(`breakpoints/${key}`, { value: val, category: 'breakpoints' });
-  }
-
-  codeTokens.set('spacing/base', { value: 8, category: 'spacing' });
-  for (let i = 1; i <= 12; i++) {
-    codeTokens.set(`spacing/${i}`, { value: i * 8, category: 'spacing' });
-  }
-
-  codeTokens.set('shape/borderRadius', { value: theme.shape.borderRadius, category: 'shape' });
-
-  if (theme.shadows) {
-    theme.shadows.forEach((val, i) => {
-      codeTokens.set(`shadows/${i}`, { value: val, category: 'shadows' });
-    });
-  }
-
-  if (theme.zIndex) {
-    for (const [key, val] of Object.entries(theme.zIndex)) {
-      codeTokens.set(`zIndex/${key}`, { value: val, category: 'zIndex' });
-    }
-  }
-
-  if (theme.transitions && theme.transitions.duration) {
-    for (const [key, val] of Object.entries(theme.transitions.duration)) {
-      if (typeof val === 'number') {
-        codeTokens.set(`transitions/duration/${key}`, { value: val, category: 'transitions' });
-      }
-    }
-  }
-  if (theme.transitions && theme.transitions.easing) {
-    for (const [key, val] of Object.entries(theme.transitions.easing)) {
-      if (typeof val === 'string') {
-        codeTokens.set(`transitions/easing/${key}`, { value: val, category: 'transitions' });
-      }
-    }
-  }
+  return {
+    pairs,
+    unalignedCode,
+    unalignedFigma: figmaModes.filter((m) => !matchedFigma.has(m)),
+  };
 }
 
 // ---------------------------------------------------------------------------
 // System-specific matching strategies
 // ---------------------------------------------------------------------------
 
-/**
- * MUI cross-collection mapping rules.
- */
 const MUI_CROSS_COLLECTION_MAPS = [
   { codePrefix: 'palette/grey/', figmaCollection: 'material/colors', figmaPrefix: 'grey/' },
   { codePrefix: 'palette/common/', figmaCollection: 'material/colors', figmaPrefix: 'common/' },
 ];
-
-/**
- * Carbon matching strategies.
- * Carbon code uses colors/{hue}/{shade}, Figma may use different collection names.
- */
-const CARBON_CROSS_COLLECTION_MAPS = [
-  // Carbon primitive colors in code map to Figma color collections
-  // These will be populated based on actual Figma collection names discovered
-];
-
+const CARBON_CROSS_COLLECTION_MAPS = [];
 const crossCollectionMaps = system === 'mui' ? MUI_CROSS_COLLECTION_MAPS : CARBON_CROSS_COLLECTION_MAPS;
 
 // ---------------------------------------------------------------------------
-// Matching logic
+// Matching pipeline — pure function, runs per (codeMode, figmaMode) pair
 // ---------------------------------------------------------------------------
 
-function findFigmaMatch(codePath) {
-  // Strategy 1: Direct match.
+function findFigmaMatch(codePath, codeTokens, figmaTokens) {
+  // Strategy 1: direct match
   if (figmaTokens.has(codePath)) {
     return { figmaPath: codePath, figmaToken: figmaTokens.get(codePath), matchType: 'direct' };
   }
-
-  // Also try matching by collection + variable name.
   const parts = codePath.split('/');
   const collection = parts[0];
   const varName = parts.slice(1).join('/');
@@ -309,7 +254,7 @@ function findFigmaMatch(codePath) {
     }
   }
 
-  // Strategy 2: Cross-collection mapping.
+  // Strategy 2: cross-collection mapping
   for (const map of crossCollectionMaps) {
     if (codePath.startsWith(map.codePrefix)) {
       const suffix = codePath.slice(map.codePrefix.length);
@@ -322,7 +267,7 @@ function findFigmaMatch(codePath) {
     }
   }
 
-  // Strategy 3: Typography structural match (MUI-specific).
+  // Strategy 3: MUI typography structural match
   if (system === 'mui' && codePath.startsWith('typography/') && codePath.endsWith('/fontSize')) {
     const variant = codePath.split('/')[1];
     const figmaVarName = `typography/${variant}`;
@@ -333,9 +278,8 @@ function findFigmaMatch(codePath) {
     }
   }
 
-  // Strategy 4: Carbon color matching — try normalised colour comparison
+  // Strategy 4: Carbon colour hex-value fallback
   if (system === 'carbon' && codePath.startsWith('colors/')) {
-    // Try to find a Figma variable with the same resolved hex value
     const codeToken = codeTokens.get(codePath);
     if (codeToken && typeof codeToken.value === 'string' && codeToken.value.startsWith('#')) {
       const normalised = normaliseColour(codeToken.value);
@@ -350,12 +294,10 @@ function findFigmaMatch(codePath) {
     }
   }
 
-  // Strategy 5: Carbon theme token matching — try name similarity
+  // Strategy 5: Carbon theme token name-normalised match
   if (system === 'carbon' && codePath.startsWith('theme/')) {
     const tokenName = codePath.replace('theme/', '');
-    // Carbon Figma may use different collection structures
     for (const [figmaPath, token] of figmaTokens) {
-      // Try case-insensitive name match
       if (token.name.replace(/[\s/\-_]/g, '').toLowerCase() === tokenName.toLowerCase()) {
         return { figmaPath, figmaToken: token, matchType: 'name_normalised' };
       }
@@ -365,141 +307,162 @@ function findFigmaMatch(codePath) {
   return null;
 }
 
-// ---------------------------------------------------------------------------
-// Perform the diff
-// ---------------------------------------------------------------------------
+function diffModePair(codeTokens, figmaTokens) {
+  const results = {
+    matches: [], valueMismatches: [], namingMismatches: [],
+    codeOnly: [], figmaOnly: [],
+  };
+  const matchedFigmaPaths = new Set();
 
-const results = {
-  matches: [],
-  valueMismatches: [],
-  namingMismatches: [],
-  codeOnly: [],
-  figmaOnly: [],
-};
+  for (const [codePath, codeToken] of codeTokens) {
+    const match = findFigmaMatch(codePath, codeTokens, figmaTokens);
+    if (!match) {
+      results.codeOnly.push({
+        codePath, value: codeToken.value, category: codeToken.category,
+      });
+      continue;
+    }
 
-const matchedFigmaPaths = new Set();
+    matchedFigmaPaths.add(match.figmaPath);
+    const { figmaPath, figmaToken, matchType } = match;
 
-for (const [codePath, codeToken] of codeTokens) {
-  const match = findFigmaMatch(codePath);
-  if (!match) {
-    results.codeOnly.push({
-      codePath,
-      value: codeToken.value,
-      category: codeToken.category,
-    });
-    continue;
-  }
+    let codeVal = codeToken.value;
+    let figmaVal = figmaToken.resolvedValue;
 
-  matchedFigmaPaths.add(match.figmaPath);
-  const { figmaPath, figmaToken, matchType } = match;
+    if (matchType === 'typography_fontSize') {
+      const codePx = remToPx(String(codeVal));
+      if (codePx !== null && typeof figmaVal === 'number') codeVal = codePx;
+    }
 
-  let codeVal = codeToken.value;
-  let figmaVal = figmaToken.resolvedValue;
+    if (figmaToken.resolvedType === 'COLOR' || (typeof codeVal === 'string' && codeVal.startsWith('#'))) {
+      codeVal = normaliseColour(String(codeVal));
+      figmaVal = normaliseColour(String(figmaVal));
+    }
 
-  // Typography fontSize: convert code rem to px for comparison.
-  if (matchType === 'typography_fontSize') {
-    const codePx = remToPx(String(codeVal));
-    if (codePx !== null && typeof figmaVal === 'number') {
-      codeVal = codePx;
+    if (typeof codeVal === 'number' && typeof figmaVal === 'string') figmaVal = parseFloat(figmaVal);
+    if (typeof codeVal === 'string' && typeof figmaVal === 'number') {
+      const parsed = parseFloat(codeVal);
+      if (!isNaN(parsed)) codeVal = parsed;
+    }
+
+    const valuesMatch = String(codeVal) === String(figmaVal);
+    const namesMatch = codePath === figmaPath;
+    const isStructuralMatch = ['cross_collection', 'typography_fontSize', 'color_value_match', 'name_normalised'].includes(matchType);
+
+    if (valuesMatch && (namesMatch || isStructuralMatch)) {
+      results.matches.push({ codePath, figmaPath, value: codeToken.value, matchType });
+    } else if (!valuesMatch) {
+      results.valueMismatches.push({
+        codePath, figmaPath,
+        codeValue: codeToken.value,
+        figmaValue: figmaToken.resolvedValue,
+        figmaRawValue: figmaToken.rawValue,
+        aliasChain: figmaToken.aliasChain,
+        category: codeToken.category,
+        matchType,
+      });
+    } else if (!namesMatch && !isStructuralMatch) {
+      results.namingMismatches.push({ codePath, figmaPath, value: codeToken.value, matchType });
     }
   }
 
-  // Normalise colours for comparison.
-  if (figmaToken.resolvedType === 'COLOR' || (typeof codeVal === 'string' && codeVal.startsWith('#'))) {
-    codeVal = normaliseColour(String(codeVal));
-    figmaVal = normaliseColour(String(figmaVal));
+  for (const [figmaPath, token] of figmaTokens) {
+    if (!matchedFigmaPaths.has(figmaPath)) {
+      results.figmaOnly.push({
+        figmaPath,
+        name: token.name,
+        collection: token.collection,
+        resolvedType: token.resolvedType,
+        resolvedValue: token.resolvedValue,
+      });
+    }
   }
 
-  // Normalise numbers.
-  if (typeof codeVal === 'number' && typeof figmaVal === 'string') {
-    figmaVal = parseFloat(figmaVal);
-  }
-  if (typeof codeVal === 'string' && typeof figmaVal === 'number') {
-    const parsed = parseFloat(codeVal);
-    if (!isNaN(parsed)) codeVal = parsed;
-  }
-
-  const valuesMatch = String(codeVal) === String(figmaVal);
-  const namesMatch = codePath === figmaPath;
-  const isStructuralMatch = matchType === 'cross_collection' || matchType === 'typography_fontSize' || matchType === 'color_value_match' || matchType === 'name_normalised';
-
-  if (valuesMatch && (namesMatch || isStructuralMatch)) {
-    results.matches.push({
-      codePath,
-      figmaPath,
-      value: codeToken.value,
-      matchType,
-    });
-  } else if (!valuesMatch) {
-    results.valueMismatches.push({
-      codePath,
-      figmaPath,
-      codeValue: codeToken.value,
-      figmaValue: figmaToken.resolvedValue,
-      figmaRawValue: figmaToken.rawValue,
-      aliasChain: figmaToken.aliasChain,
-      category: codeToken.category,
-      matchType,
-    });
-  } else if (!namesMatch && !isStructuralMatch) {
-    results.namingMismatches.push({
-      codePath,
-      figmaPath,
-      value: codeToken.value,
-      matchType,
-    });
-  }
-}
-
-// Figma-only
-for (const [figmaPath, token] of figmaTokens) {
-  if (!matchedFigmaPaths.has(figmaPath)) {
-    results.figmaOnly.push({
-      figmaPath,
-      name: token.name,
-      collection: token.collection,
-      resolvedType: token.resolvedType,
-      resolvedValue: token.resolvedValue,
-    });
-  }
+  return results;
 }
 
 // ---------------------------------------------------------------------------
-// Summary statistics
+// Run per-mode diff
 // ---------------------------------------------------------------------------
 
-const summary = {
-  codeTokenCount: codeTokens.size,
-  figmaTokenCount: figmaTokens.size,
-  matches: results.matches.length,
-  valueMismatches: results.valueMismatches.length,
-  namingMismatches: results.namingMismatches.length,
-  codeOnly: results.codeOnly.length,
-  figmaOnly: results.figmaOnly.length,
-  matchBreakdown: {},
-  parityScore_6_1: null,
-  parityScore_6_2: null,
+const figmaModeNames = listAllFigmaModes(figmaData.collections);
+const codeTokensByMode = buildCodeTokenMapsByMode(codeData, codeModes);
+const { pairs, unalignedCode, unalignedFigma } = alignModes(codeModes, figmaModeNames, modeAlignmentOverride);
+
+const dataGaps = [];
+for (const m of unalignedCode) dataGaps.push({ code_mode: m, reason: 'No aligned Figma mode' });
+for (const m of unalignedFigma) dataGaps.push({ figma_mode: m, reason: 'No aligned code mode' });
+
+if (pairs.length === 0) {
+  console.error(`No modes aligned between code (${codeModes.join(', ')}) and Figma (${figmaModeNames.join(', ')}).`);
+  console.error(`Declare mode_alignment in the manifest or rename modes to match.`);
+  process.exit(1);
+}
+
+const resultsByMode = {};
+for (const pair of pairs) {
+  console.log(`Diffing mode pair: code "${pair.code}" ↔ figma "${pair.figma}"`);
+  const figmaMap = buildFigmaTokenMapForMode(figmaData.collections, pair.figma);
+  resultsByMode[pair.code] = {
+    figmaMode: pair.figma,
+    ...diffModePair(codeTokensByMode[pair.code], figmaMap),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Aggregate
+// ---------------------------------------------------------------------------
+
+const byModeSummary = {};
+let agg = { matches: 0, valueMismatches: 0, namingMismatches: 0, codeOnly: 0, figmaOnly: 0 };
+const matchBreakdownByMode = {};
+
+for (const [codeMode, results] of Object.entries(resultsByMode)) {
+  const totalMatched = results.matches.length + results.valueMismatches.length;
+  const totalComparable = totalMatched + results.namingMismatches.length;
+  byModeSummary[codeMode] = {
+    figma_mode: results.figmaMode,
+    matches: results.matches.length,
+    valueMismatches: results.valueMismatches.length,
+    namingMismatches: results.namingMismatches.length,
+    codeOnly: results.codeOnly.length,
+    figmaOnly: results.figmaOnly.length,
+    parityScore_6_1: totalMatched > 0 ? Math.round((results.matches.length / totalMatched) * 100) : 0,
+    parityScore_6_2: totalComparable > 0 ? Math.round(((results.matches.length + results.valueMismatches.length) / totalComparable) * 100) : 0,
+  };
+  agg.matches += results.matches.length;
+  agg.valueMismatches += results.valueMismatches.length;
+  agg.namingMismatches += results.namingMismatches.length;
+  agg.codeOnly += results.codeOnly.length;
+  agg.figmaOnly += results.figmaOnly.length;
+
+  matchBreakdownByMode[codeMode] = {};
+  for (const m of results.matches) {
+    matchBreakdownByMode[codeMode][m.matchType] = (matchBreakdownByMode[codeMode][m.matchType] || 0) + 1;
+  }
+}
+
+const overallTotalMatched = agg.matches + agg.valueMismatches;
+const overallTotalComparable = overallTotalMatched + agg.namingMismatches;
+const overall = {
+  ...agg,
+  parityScore_6_1: overallTotalMatched > 0 ? Math.round((agg.matches / overallTotalMatched) * 100) : 0,
+  parityScore_6_2: overallTotalComparable > 0 ? Math.round(((agg.matches + agg.valueMismatches) / overallTotalComparable) * 100) : 0,
 };
 
-// Count match types
-for (const m of results.matches) {
-  summary.matchBreakdown[m.matchType] = (summary.matchBreakdown[m.matchType] || 0) + 1;
+// ---------------------------------------------------------------------------
+// Token counts (distinct paths, not multiplied by modes)
+// ---------------------------------------------------------------------------
+
+const codeTokenCount = Object.keys(codeData.tokens).length;
+let figmaTokenCount = 0;
+for (const col of Object.values(figmaData.collections)) {
+  if (col.remote) continue;
+  figmaTokenCount += col.variables.length;
 }
 
-// Dimension 6.1: Token value parity.
-const totalMatched = results.matches.length + results.valueMismatches.length;
-summary.parityScore_6_1 = totalMatched > 0
-  ? Math.round((results.matches.length / totalMatched) * 100)
-  : 0;
-
-// Dimension 6.2: Token naming parity.
-const totalComparable = totalMatched + results.namingMismatches.length;
-summary.parityScore_6_2 = totalComparable > 0
-  ? Math.round(((results.matches.length + results.valueMismatches.length) / totalComparable) * 100)
-  : 0;
-
 // ---------------------------------------------------------------------------
-// Output: detailed diff
+// Diff output
 // ---------------------------------------------------------------------------
 
 const diffOutput = {
@@ -508,92 +471,139 @@ const diffOutput = {
     generatedAt: new Date().toISOString(),
     codeSource: `scripts/output/${system}-code-tokens.json`,
     figmaSource: `scripts/output/${system}-figma-variables-normalised.json`,
-    description: `Token parity diff between ${system} code tokens and Figma Variables. Feeds Cluster 6 dimensions 6.1 and 6.2.`,
+    description: `Token parity diff between ${system} code tokens and Figma Variables. Feeds Cluster 6 dimensions 6.1 and 6.2. Multi-mode aware.`,
   },
-  summary,
-  results,
+  summary: {
+    codeTokenCount,
+    figmaTokenCount,
+    modes_compared: pairs,
+    by_mode: byModeSummary,
+    overall,
+    match_breakdown_by_mode: matchBreakdownByMode,
+    data_gaps: dataGaps,
+  },
+  results: { by_mode: resultsByMode },
 };
 
 const diffPath = join(__dirname, 'output', `${system}-token-diff.json`);
 writeFileSync(diffPath, JSON.stringify(diffOutput, null, 2), 'utf-8');
 
 // ---------------------------------------------------------------------------
-// Output: audit findings
+// Findings — with cross-mode dedup
 // ---------------------------------------------------------------------------
 
 const findings = [];
 let findingCounter = 1;
+const fid = (n) => `TVP-${String(n).padStart(3, '0')}`;
+const sig = (codeVal, figmaVal) => `${JSON.stringify(codeVal)}::${JSON.stringify(figmaVal)}`;
 
-function fid(n) {
-  return `TVP-${String(n).padStart(3, '0')}`;
-}
-
-// Value mismatches
-for (const m of results.valueMismatches) {
-  let recommendation;
-  if (system === 'mui') {
-    if (m.codePath.includes('fontFamily')) {
-      recommendation = 'Figma stores only the primary font family; code includes the full fallback stack. This is a structural scope difference, not a bug. Document the fallback stack in the Figma variable description for parity.';
-    } else if (m.codePath === 'breakpoints/xs') {
-      recommendation = 'Code defines xs as the minimum bound (0px); Figma defines it as a design breakpoint (444px). These are different semantic uses of the same name. Align on the meaning or rename the Figma variable to avoid confusion.';
-    } else if (m.category === 'palette') {
-      recommendation = `Colour value drift between code and Figma. Code has ${m.codeValue}, Figma resolves to ${m.figmaValue}${m.aliasChain.length > 0 ? ' via alias chain ' + m.aliasChain.join(' -> ') : ''}. Determine the authoritative source and correct the other.`;
-    } else {
-      recommendation = 'Align the token value between code and Figma. Determine which source is authoritative and update the other.';
-    }
-  } else {
-    recommendation = `Token value mismatch: code has "${m.codeValue}", Figma has "${m.figmaValue}". Determine the authoritative source and align.`;
+// Value mismatches: dedup identical (codeVal, figmaVal) across modes
+const vmByCodePath = {};
+for (const [codeMode, results] of Object.entries(resultsByMode)) {
+  for (const m of results.valueMismatches) {
+    if (!vmByCodePath[m.codePath]) vmByCodePath[m.codePath] = [];
+    vmByCodePath[m.codePath].push({ mode: codeMode, ...m });
   }
+}
+
+for (const [codePath, entries] of Object.entries(vmByCodePath)) {
+  const signatures = new Set(entries.map((e) => sig(e.codeValue, e.figmaValue)));
+  const allModesCovered = entries.length === pairs.length;
+  const collapseToInvariant = signatures.size === 1 && allModesCovered;
+
+  const groups = collapseToInvariant
+    ? [{ mode: '*', sample: entries[0], allModes: entries.map((e) => e.mode) }]
+    : entries.map((e) => ({ mode: e.mode, sample: e, allModes: [e.mode] }));
+
+  for (const g of groups) {
+    const m = g.sample;
+    const modeLabel = g.mode === '*' ? 'all modes' : `${g.mode} mode`;
+
+    let recommendation;
+    if (system === 'mui') {
+      if (m.codePath.includes('fontFamily')) {
+        recommendation = 'Figma stores only the primary font family; code includes the full fallback stack. Structural scope difference. Document the fallback stack in the Figma variable description for parity.';
+      } else if (m.codePath === 'breakpoints/xs') {
+        recommendation = 'Code defines xs as the minimum bound (0px); Figma defines it as a design breakpoint. Different semantic uses of the same name. Align on meaning or rename the Figma variable.';
+      } else if (m.category === 'palette') {
+        recommendation = `Colour value drift in ${modeLabel}. Code has ${m.codeValue}, Figma resolves to ${m.figmaValue}${m.aliasChain.length > 0 ? ' via alias chain ' + m.aliasChain.join(' -> ') : ''}. Determine the authoritative source and correct the other.`;
+      } else {
+        recommendation = `Align the token value between code and Figma in ${modeLabel}. Determine which source is authoritative and update the other.`;
+      }
+    } else {
+      recommendation = `Token value mismatch in ${modeLabel}: code has "${m.codeValue}", Figma has "${m.figmaValue}". Determine the authoritative source and align.`;
+    }
+
+    findings.push({
+      id: fid(findingCounter++),
+      dimension: 'token_value_parity',
+      mode: g.mode,
+      severity: 'warning',
+      severity_rank: 2,
+      node_id: null,
+      node_name: null,
+      summary: `Value mismatch (${modeLabel}): ${m.codePath}`,
+      description: `Token value mismatch for "${m.codePath}" in ${modeLabel}: code value "${m.codeValue}" vs Figma "${m.figmaValue}".`,
+      evidence: [
+        `Code: ${m.codePath} = ${JSON.stringify(m.codeValue)}`,
+        `Figma: ${m.figmaPath} = ${JSON.stringify(m.figmaValue)}`,
+        m.aliasChain.length > 0 ? `Alias chain: ${m.aliasChain.join(' -> ')}` : 'No alias chain (direct value)',
+        `Match type: ${m.matchType}`,
+        `Modes affected: ${g.allModes.join(', ')}`,
+      ],
+      recommendation,
+      contract_ref: {
+        type: 'token_definition',
+        level: 'primitive',
+        path: null,
+        field: m.codePath,
+      },
+      auto_fixable: false,
+    });
+  }
+}
+
+// Code-only tokens: group by category, collapse to * when present in every mode
+const codeOnlyAcrossModes = {};
+for (const [codeMode, results] of Object.entries(resultsByMode)) {
+  for (const t of results.codeOnly) {
+    if (!codeOnlyAcrossModes[t.codePath]) codeOnlyAcrossModes[t.codePath] = { token: t, modes: [] };
+    codeOnlyAcrossModes[t.codePath].modes.push(codeMode);
+  }
+}
+
+const codeOnlyByCategoryMode = {};
+for (const [codePath, entry] of Object.entries(codeOnlyAcrossModes)) {
+  const isInvariant = entry.modes.length === pairs.length;
+  const modeKey = isInvariant ? '*' : entry.modes.join('+');
+  const bucket = `${entry.token.category}::${modeKey}`;
+  if (!codeOnlyByCategoryMode[bucket]) {
+    codeOnlyByCategoryMode[bucket] = {
+      category: entry.token.category,
+      mode: isInvariant ? '*' : entry.modes[0],
+      allModes: entry.modes,
+      paths: [],
+    };
+  }
+  codeOnlyByCategoryMode[bucket].paths.push(codePath);
+}
+
+for (const bucket of Object.values(codeOnlyByCategoryMode)) {
+  const severity = ['shadows', 'zIndex', 'transitions', 'material/colors', 'motion'].includes(bucket.category) ? 'note' : 'warning';
+  const modeLabel = bucket.mode === '*' ? 'all modes' : `${bucket.allModes.join(', ')} mode${bucket.allModes.length > 1 ? 's' : ''}`;
 
   findings.push({
     id: fid(findingCounter++),
     dimension: 'token_value_parity',
-    severity: 'warning',
-    severity_rank: 2,
-    node_id: null,
-    node_name: null,
-    summary: `Value mismatch: ${m.codePath}`,
-    description: `Token value mismatch: "${m.codePath}" has value "${m.codeValue}" in code but resolves to "${m.figmaValue}" in Figma.`,
-    evidence: [
-      `Code: ${m.codePath} = ${JSON.stringify(m.codeValue)}`,
-      `Figma: ${m.figmaPath} = ${JSON.stringify(m.figmaValue)}`,
-      m.aliasChain.length > 0
-        ? `Alias chain: ${m.aliasChain.join(' -> ')}`
-        : 'No alias chain (direct value)',
-      `Match type: ${m.matchType}`,
-    ],
-    recommendation,
-    contract_ref: {
-      type: 'token_definition',
-      level: 'primitive',
-      path: null,
-      field: m.codePath,
-    },
-    auto_fixable: false,
-  });
-}
-
-// Code-only tokens grouped by category.
-const codeOnlyByCategory = {};
-for (const t of results.codeOnly) {
-  if (!codeOnlyByCategory[t.category]) codeOnlyByCategory[t.category] = [];
-  codeOnlyByCategory[t.category].push(t.codePath);
-}
-
-for (const [category, paths] of Object.entries(codeOnlyByCategory)) {
-  const severity = (category === 'shadows' || category === 'zIndex' || category === 'transitions' || category === 'material/colors') ? 'note' : 'warning';
-
-  findings.push({
-    id: fid(findingCounter++),
-    dimension: 'token_value_parity',
+    mode: bucket.mode,
     severity,
     severity_rank: severity === 'warning' ? 2 : 1,
     node_id: null,
     node_name: null,
-    summary: `${paths.length} ${category} tokens exist in code only`,
-    description: `${paths.length} ${category} tokens exist in code but have no Figma Variable counterpart.`,
-    evidence: paths.length <= 10 ? paths : [...paths.slice(0, 10), `... and ${paths.length - 10} more`],
-    recommendation: `Create Figma Variables for ${category} tokens, or document the gap as intentional in the parity gap register (Dimension 6.6).`,
+    summary: `${bucket.paths.length} ${bucket.category} tokens exist in code only (${modeLabel})`,
+    description: `${bucket.paths.length} ${bucket.category} tokens exist in code but have no Figma Variable counterpart in ${modeLabel}.`,
+    evidence: bucket.paths.length <= 10 ? bucket.paths : [...bucket.paths.slice(0, 10), `... and ${bucket.paths.length - 10} more`],
+    recommendation: `Create Figma Variables for ${bucket.category} tokens, or document the gap as intentional in the parity gap register (Dimension 6.6).`,
     contract_ref: {
       type: 'token_definition',
       level: 'primitive',
@@ -604,41 +614,48 @@ for (const [category, paths] of Object.entries(codeOnlyByCategory)) {
   });
 }
 
-// Figma-only summary (grouped by collection).
-const figmaOnlyByCollection = {};
-for (const t of results.figmaOnly) {
-  if (!figmaOnlyByCollection[t.collection]) figmaOnlyByCollection[t.collection] = [];
-  figmaOnlyByCollection[t.collection].push(t.name);
+// Figma-only tokens: group by (collection, mode)
+for (const [codeMode, results] of Object.entries(resultsByMode)) {
+  const byCollection = {};
+  for (const t of results.figmaOnly) {
+    if (!byCollection[t.collection]) byCollection[t.collection] = [];
+    byCollection[t.collection].push(t.name);
+  }
+  for (const [collection, names] of Object.entries(byCollection)) {
+    findings.push({
+      id: fid(findingCounter++),
+      dimension: 'token_naming_parity',
+      mode: codeMode,
+      severity: 'note',
+      severity_rank: 1,
+      node_id: null,
+      node_name: null,
+      summary: `${names.length} Figma-only variables in "${collection}" (${codeMode} mode)`,
+      description: `${names.length} variables in Figma collection "${collection}" have no code token counterpart in ${codeMode} mode.`,
+      evidence: names.length <= 10 ? names : [...names.slice(0, 10), `... and ${names.length - 10} more`],
+      recommendation: 'Determine whether these variables map to a different code path or are Figma-only design tokens. Document the mapping or the gap.',
+      contract_ref: {
+        type: 'token_definition',
+        level: 'primitive',
+        path: null,
+        field: null,
+      },
+      auto_fixable: false,
+    });
+  }
 }
-for (const [collection, names] of Object.entries(figmaOnlyByCollection)) {
-  findings.push({
-    id: fid(findingCounter++),
-    dimension: 'token_naming_parity',
-    severity: 'note',
-    severity_rank: 1,
-    node_id: null,
-    node_name: null,
-    summary: `${names.length} Figma-only variables in "${collection}"`,
-    description: `${names.length} variables in Figma collection "${collection}" have no direct code token counterpart.`,
-    evidence: names.length <= 10 ? names : [...names.slice(0, 10), `... and ${names.length - 10} more`],
-    recommendation: 'Determine whether these variables map to a different code path or are Figma-only design tokens. Document the mapping or the gap.',
-    contract_ref: {
-      type: 'token_definition',
-      level: 'primitive',
-      path: null,
-      field: null,
-    },
-    auto_fixable: false,
-  });
-}
+
+// ---------------------------------------------------------------------------
+// Findings output
+// ---------------------------------------------------------------------------
 
 const auditDir = system === 'mui' ? 'material-ui' : system;
 const findingsOutput = {
   _meta: {
     generatedAt: new Date().toISOString(),
-    schema_version: '2.2',
+    schema_version: '3.1',
     system,
-    description: `Token parity findings for ${system}. Cluster 6 dimensions 6.1 and 6.2. Generated by diff-tokens.mjs.`,
+    description: `Token parity findings for ${system}. Cluster 6 dimensions 6.1 and 6.2. Multi-mode aware. Generated by diff-tokens.mjs.`,
   },
   summary: {
     total_findings: findings.length,
@@ -648,14 +665,22 @@ const findingsOutput = {
       note: findings.filter((f) => f.severity === 'note').length,
     },
     parity_scores: {
-      '6.1_token_value_parity': summary.parityScore_6_1,
-      '6.2_token_naming_parity': summary.parityScore_6_2,
+      '6.1_token_value_parity': {
+        by_mode: Object.fromEntries(Object.entries(byModeSummary).map(([m, s]) => [m, s.parityScore_6_1])),
+        overall: overall.parityScore_6_1,
+      },
+      '6.2_token_naming_parity': {
+        by_mode: Object.fromEntries(Object.entries(byModeSummary).map(([m, s]) => [m, s.parityScore_6_2])),
+        overall: overall.parityScore_6_2,
+      },
     },
+    modes_compared: pairs,
+    data_gaps: dataGaps,
   },
   findings,
 };
 
-const findingsDir = join(repoRoot, 'audit', auditDir, 'v2.2');
+const findingsDir = join(repoRoot, 'audit', auditDir, 'v3.3');
 mkdirSync(findingsDir, { recursive: true });
 const findingsPath = join(findingsDir, 'token-parity-findings.json');
 writeFileSync(findingsPath, JSON.stringify(findingsOutput, null, 2), 'utf-8');
@@ -664,20 +689,23 @@ writeFileSync(findingsPath, JSON.stringify(findingsOutput, null, 2), 'utf-8');
 // Console output
 // ---------------------------------------------------------------------------
 
-console.log(`=== ${system.toUpperCase()} Token Parity Diff ===`);
-console.log(`Code tokens:       ${summary.codeTokenCount}`);
-console.log(`Figma tokens:      ${summary.figmaTokenCount}`);
-console.log(`Matched (same):    ${summary.matches}`);
-for (const [type, count] of Object.entries(summary.matchBreakdown)) {
-  console.log(`  ${type}: ${count}`);
+console.log(`\n=== ${system.toUpperCase()} Token Parity Diff ===`);
+console.log(`Code tokens:   ${codeTokenCount}`);
+console.log(`Figma tokens:  ${figmaTokenCount}`);
+console.log(`Modes:         ${pairs.map((p) => `${p.code}↔${p.figma}`).join(', ')}`);
+if (dataGaps.length > 0) {
+  console.log(`Data gaps:     ${dataGaps.length}`);
+  for (const g of dataGaps) console.log(`  - ${JSON.stringify(g)}`);
 }
-console.log(`Value mismatches:  ${summary.valueMismatches}`);
-console.log(`Naming mismatches: ${summary.namingMismatches}`);
-console.log(`Code-only:         ${summary.codeOnly}`);
-console.log(`Figma-only:        ${summary.figmaOnly}`);
 console.log('');
-console.log(`Dimension 6.1 (value parity):  ${summary.parityScore_6_1}%`);
-console.log(`Dimension 6.2 (naming parity): ${summary.parityScore_6_2}%`);
+for (const [mode, s] of Object.entries(byModeSummary)) {
+  console.log(`Mode "${mode}" (↔ "${s.figma_mode}"):`);
+  console.log(`  matches: ${s.matches}, value-mm: ${s.valueMismatches}, naming-mm: ${s.namingMismatches}, code-only: ${s.codeOnly}, figma-only: ${s.figmaOnly}`);
+  console.log(`  6.1: ${s.parityScore_6_1}%   6.2: ${s.parityScore_6_2}%`);
+}
+console.log('');
+console.log(`Overall 6.1 (value parity):  ${overall.parityScore_6_1}%`);
+console.log(`Overall 6.2 (naming parity): ${overall.parityScore_6_2}%`);
 console.log('');
 console.log(`Diff output:     ${diffPath}`);
 console.log(`Findings output: ${findingsPath}`);
